@@ -1,0 +1,6 @@
+# Claves de API para Foursquare
+# Reemplaza estos valores con tus propias claves obtenidas en https://developer.foursquare.com
+FQCLIENT_ID = "1ZOGANKSM04GWUR0EXLBAUSEUYHVZQLDTXFYKBGAR5ID5Z4I"
+FQCLIENT_SECRET = "I4CUBJMXWBOA3JLKQ14XKCZEOGOXOSLKNZ2E0AP3PP5GLBR1"
+
+OPENWEATHER_API_KEY = "4893e17e8f19139e0bc20ad48e0085a6"
