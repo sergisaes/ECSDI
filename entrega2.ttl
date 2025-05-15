@@ -1,0 +1,582 @@
+@prefix : <http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@base <http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/> .
+
+<http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2> rdf:type owl:Ontology ;
+                                                               dcterms:title "\"Ontología de Transporte – Entrega 2\"@es" .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/terms/title
+dcterms:title rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#cambiaPor
+:cambiaPor rdf:type owl:ObjectProperty ;
+           rdfs:domain :RespuestaAlternativa ;
+           rdfs:range :Actividad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#comoDestino
+:comoDestino rdf:type owl:ObjectProperty ;
+             rdfs:domain :PeticionPlan ;
+             rdfs:range :Ciudad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#comoOrigen
+:comoOrigen rdf:type owl:ObjectProperty ;
+            rdfs:domain :PeticionPlan ;
+            rdfs:range :Ciudad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#comoPedidor
+:comoPedidor rdf:type owl:ObjectProperty ;
+             rdfs:domain :PeticionPlan ;
+             rdfs:range :Usuario .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#comoRestriccionLocalidad
+:comoRestriccionLocalidad rdf:type owl:ObjectProperty ;
+                          rdfs:domain :PeticionActividad ,
+                                      :PeticionAlojamiento ;
+                          rdfs:range :Ciudad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#formadoPorActividades
+:formadoPorActividades rdf:type owl:ObjectProperty ;
+                       rdfs:domain :RespuestaActividad ;
+                       rdfs:range :Actividad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#formadoPorAlojamientos
+:formadoPorAlojamientos rdf:type owl:ObjectProperty ;
+                        rdfs:domain :RespuestaAlojamiento ;
+                        rdfs:range :Alojamiento .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#formadoPorPlan
+:formadoPorPlan rdf:type owl:ObjectProperty ;
+                rdfs:domain :RespuestaPlan ;
+                rdfs:range :PlanGeneral .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#formadoPorTransportes
+:formadoPorTransportes rdf:type owl:ObjectProperty ;
+                       rdfs:domain :RespuestaTransporte ;
+                       rdfs:range :Transporte .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#porMotivoDe
+:porMotivoDe rdf:type owl:ObjectProperty ;
+             rdfs:domain :PeticionReplanificacion ;
+             rdfs:range :TiempoMeteorologico .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#sustituyeA
+:sustituyeA rdf:type owl:ObjectProperty ;
+            rdfs:domain :PeticionReplanificacion ;
+            rdfs:range :Actividad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#tieneComoPlan
+:tieneComoPlan rdf:type owl:ObjectProperty ;
+               rdfs:domain :PeticionPago ;
+               rdfs:range :PlanGeneral .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#tiene_como_precio
+:tiene_como_precio rdf:type owl:ObjectProperty ;
+                   rdfs:domain :PeticionPlan ;
+                   rdfs:range :IntervaloPrecio .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/alojaminetoEn
+:alojaminetoEn rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf owl:topObjectProperty ;
+               rdfs:domain :Alojamiento ;
+               rdfs:range :Ciudad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/duranteUnTiempo
+:duranteUnTiempo rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf owl:topObjectProperty ;
+                 rdfs:domain :Alojamiento ;
+                 rdfs:range :Rango .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/esRealizadoPor
+:esRealizadoPor rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf owl:topObjectProperty ;
+                rdfs:domain :Plan ;
+                rdfs:range :Usuario .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/estaCompuestoPor
+:estaCompuestoPor rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf owl:topObjectProperty ;
+                  rdfs:domain :PlanGeneral ;
+                  rdfs:range :PlanDe1Dia .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/estaEn
+:estaEn rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf owl:topObjectProperty ;
+        rdfs:domain :Ciudad ;
+        rdfs:range :Pais .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/hasTransport
+:hasTransport rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf owl:topObjectProperty ;
+              rdfs:domain :PeticionTransporte ,
+                          :PlanGeneral ;
+              rdfs:range :Transporte .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/llegaA
+:llegaA rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf owl:topObjectProperty ;
+        rdfs:domain :Transporte ;
+        rdfs:range :Ciudad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/saleDe
+:saleDe rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf owl:topObjectProperty ;
+        rdfs:domain :Transporte ;
+        rdfs:range :Ciudad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/seRealizan
+:seRealizan rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty ;
+            rdfs:domain :PlanDe1Dia ;
+            rdfs:range :Actividad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/sehaceEn
+:sehaceEn rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf owl:topObjectProperty ;
+          rdfs:domain :Actividad ,
+                      :PlanGeneral ;
+          rdfs:range :Ciudad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tieneAlojamiento
+:tieneAlojamiento rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf owl:topObjectProperty ;
+                  rdfs:domain :PlanGeneral ;
+                  rdfs:range :Alojamiento .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tieneValoracion
+:tieneValoracion rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf owl:topObjectProperty ;
+                 rdfs:domain :PeticionValoracion ,
+                             :PlanGeneral ;
+                 rdfs:range :Valoracion .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/transporteVuelta
+:transporteVuelta rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf owl:topObjectProperty ;
+                  rdfs:domain :PlanGeneral ;
+                  rdfs:range :Transporte .
+
+
+###  http://www.w3.org/2002/07/owl#topObjectProperty
+owl:topObjectProperty rdfs:domain :Usuario ;
+                      rdfs:range :PlanGeneral .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#ActividadCancelada
+:ActividadCancelada rdf:type owl:DatatypeProperty ;
+                    rdfs:subPropertyOf owl:topDataProperty .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#TemporalPerjudicial
+:TemporalPerjudicial rdf:type owl:DatatypeProperty ;
+                     rdfs:subPropertyOf owl:topDataProperty .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#importe
+:importe rdf:type owl:DatatypeProperty ;
+         rdfs:domain :RespuestaPagoContrato .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/CuentaBancaria
+:CuentaBancaria rdf:type owl:DatatypeProperty ;
+                rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Exterior
+:Exterior rdf:type owl:DatatypeProperty ;
+          rdfs:domain :Actividad ;
+          rdfs:range xsd:boolean .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdPlan
+:IdPlan rdf:type owl:DatatypeProperty ;
+        rdfs:subPropertyOf owl:topDataProperty ;
+        rdfs:domain :RespuestaPagoContrato ,
+                    :RespuestaPagoJustificacion ,
+                    :RespuestaPagoRecibido ,
+                    :Plan ;
+        rdfs:range xsd:int .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdTren
+:IdTren rdf:type owl:DatatypeProperty ;
+        rdfs:subPropertyOf owl:topDataProperty ;
+        rdfs:domain :Tren ;
+        rdfs:range xsd:int .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdVuelo
+:IdVuelo rdf:type owl:DatatypeProperty ;
+         rdfs:domain :Avion ;
+         rdfs:range xsd:int .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/ImportePago
+:ImportePago rdf:type owl:DatatypeProperty ;
+             rdfs:subPropertyOf owl:topDataProperty ;
+             rdfs:domain :PeticionPago ;
+             rdfs:range xsd:float .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Llegada
+:Llegada rdf:type owl:DatatypeProperty ;
+         rdfs:domain :Rango ,
+                     :Transporte ;
+         rdfs:range xsd:dateTime .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombreCiudad
+:NombreCiudad rdf:type owl:DatatypeProperty ;
+              rdfs:domain :Ciudad ;
+              rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombrePais
+:NombrePais rdf:type owl:DatatypeProperty ;
+            rdfs:domain :Pais ;
+            rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombreUsuario
+:NombreUsuario rdf:type owl:DatatypeProperty ;
+               rdfs:domain :Usuario ;
+               rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Precio
+:Precio rdf:type owl:DatatypeProperty ;
+        rdfs:domain :Actividad ,
+                    :Alojamiento ,
+                    :Transporte ;
+        rdfs:range xsd:float .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PrecioMax
+:PrecioMax rdf:type owl:DatatypeProperty ;
+           rdfs:domain :IntervaloPrecio ,
+                       :PeticionActividad ,
+                       :PeticionAlojamiento ,
+                       :PeticionTransporte ;
+           rdfs:range xsd:float .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PrecioMin
+:PrecioMin rdf:type owl:DatatypeProperty ;
+           rdfs:domain :IntervaloPrecio ,
+                       :PeticionActividad ,
+                       :PeticionAlojamiento ,
+                       :PeticionTransporte ;
+           rdfs:range xsd:float .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Puntuacion
+:Puntuacion rdf:type owl:DatatypeProperty ;
+            rdfs:domain :Valoracion ;
+            rdfs:range xsd:int .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RadioAlojamiento
+:RadioAlojamiento rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PeticionAlojamiento ;
+                  rdfs:range xsd:int ;
+                  rdfs:comment "Radio del alojamiento respeto al centro de la ciudad en KMs" .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Salida
+:Salida rdf:type owl:DatatypeProperty ;
+        rdfs:domain :Rango ,
+                    :Transporte ;
+        rdfs:range xsd:dateTime .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ubicacion
+:Ubicacion rdf:type owl:DatatypeProperty ;
+           rdfs:domain :Alojamiento ;
+           rdfs:range xsd:string .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#IntervaloPrecio
+:IntervaloPrecio rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#Lluvioso
+:Lluvioso rdf:type owl:Class ;
+          rdfs:subClassOf :TiempoMeteorologico .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#Nevado
+:Nevado rdf:type owl:Class ;
+        rdfs:subClassOf :TiempoMeteorologico .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#Nublado
+:Nublado rdf:type owl:Class ;
+         rdfs:subClassOf :TiempoMeteorologico .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#PeticionMeteorologica
+:PeticionMeteorologica rdf:type owl:Class ;
+                       rdfs:subClassOf :Peticion .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#PeticionReplanificacion
+:PeticionReplanificacion rdf:type owl:Class ;
+                         rdfs:subClassOf :Peticion .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#PeticionValoracion
+:PeticionValoracion rdf:type owl:Class ;
+                    rdfs:subClassOf :Peticion .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#Recomendacion
+:Recomendacion rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#Respuesta
+:Respuesta rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#RespuestaActividad
+:RespuestaActividad rdf:type owl:Class ;
+                    rdfs:subClassOf :Respuesta .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#RespuestaAlojamiento
+:RespuestaAlojamiento rdf:type owl:Class ;
+                      rdfs:subClassOf :Respuesta .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#RespuestaAlternativa
+:RespuestaAlternativa rdf:type owl:Class ;
+                      rdfs:subClassOf :Respuesta .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#RespuestaMeteorologica
+:RespuestaMeteorologica rdf:type owl:Class ;
+                        rdfs:subClassOf :Respuesta .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#RespuestaPagoContrato
+:RespuestaPagoContrato rdf:type owl:Class ;
+                       rdfs:subClassOf :Respuesta .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#RespuestaPagoJustificacion
+:RespuestaPagoJustificacion rdf:type owl:Class ;
+                            rdfs:subClassOf :Respuesta .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#RespuestaPagoRecibido
+:RespuestaPagoRecibido rdf:type owl:Class ;
+                       rdfs:subClassOf :Respuesta .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#RespuestaPlan
+:RespuestaPlan rdf:type owl:Class ;
+               rdfs:subClassOf :Respuesta .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#RespuestaRecomendacion
+:RespuestaRecomendacion rdf:type owl:Class ;
+                        rdfs:subClassOf :Respuesta .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#RespuestaTransporte
+:RespuestaTransporte rdf:type owl:Class ;
+                     rdfs:subClassOf :Respuesta .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#Soleado
+:Soleado rdf:type owl:Class ;
+         rdfs:subClassOf :TiempoMeteorologico .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#TiempoMeteorologico
+:TiempoMeteorologico rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2#Tormentoso
+:Tormentoso rdf:type owl:Class ;
+            rdfs:subClassOf :TiempoMeteorologico .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad
+:Actividad rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento
+:Alojamiento rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Aventura
+:Aventura rdf:type owl:Class ;
+          rdfs:subClassOf :Actividad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Avion
+:Avion rdf:type owl:Class ;
+       rdfs:subClassOf :Transporte .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad
+:Ciudad rdf:type owl:Class ;
+        rdfs:subClassOf :Lugar .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Cultural
+:Cultural rdf:type owl:Class ;
+          rdfs:subClassOf :Actividad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Exterior
+:Exterior rdf:type owl:Class ;
+          rdfs:subClassOf :Actividad ;
+          owl:disjointWith :Interior .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Gastronomica
+:Gastronomica rdf:type owl:Class ;
+              rdfs:subClassOf :Actividad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Interior
+:Interior rdf:type owl:Class ;
+          rdfs:subClassOf :Actividad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lugar
+:Lugar rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Naturaleza
+:Naturaleza rdf:type owl:Class ;
+            rdfs:subClassOf :Actividad .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Pais
+:Pais rdf:type owl:Class ;
+      rdfs:subClassOf :Lugar .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion
+:Peticion rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionActividad
+:PeticionActividad rdf:type owl:Class ;
+                   rdfs:subClassOf :Peticion .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento
+:PeticionAlojamiento rdf:type owl:Class ;
+                     rdfs:subClassOf :Peticion .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago
+:PeticionPago rdf:type owl:Class ;
+              rdfs:subClassOf :Peticion .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPagoPorContrato
+:PeticionPagoPorContrato rdf:type owl:Class ;
+                         rdfs:subClassOf :PeticionPago .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPagoPorPasarela
+:PeticionPagoPorPasarela rdf:type owl:Class ;
+                         rdfs:subClassOf :PeticionPago .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan
+:PeticionPlan rdf:type owl:Class ;
+              rdfs:subClassOf :Peticion .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte
+:PeticionTransporte rdf:type owl:Class ;
+                    rdfs:subClassOf :Peticion .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan
+:Plan rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia
+:PlanDe1Dia rdf:type owl:Class ;
+            rdfs:subClassOf :Plan .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral
+:PlanGeneral rdf:type owl:Class ;
+             rdfs:subClassOf :Plan .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Rango
+:Rango rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte
+:Transporte rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Tren
+:Tren rdf:type owl:Class ;
+      rdfs:subClassOf :Transporte .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario
+:Usuario rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Valoracion
+:Valoracion rdf:type owl:Class .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
