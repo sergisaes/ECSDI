@@ -17,13 +17,14 @@ import requests
 import logging
 
 from rdflib import Namespace, Graph, Literal, URIRef
-from rdflib.namespace import RDF, RDFS, XSD
+from rdflib.namespace import RDF, RDFS, XSD, FOAF  # Añadir FOAF aquí
 from flask import Flask, request, Response
 
 from AgentUtil.FlaskServer import shutdown_server
 from AgentUtil.Agent import Agent
 from AgentUtil.ACLMessages import build_message, send_message, get_message_properties
-from AgentUtil.OntoNamespaces import ACL, DSO
+from AgentUtil.ACL import ACL
+from AgentUtil.DSO import DSO
 from APIKeys import OPENWEATHER_API_KEY
 
 # Configurar logging
@@ -361,21 +362,24 @@ def agentbehavior1(cola):
     global mss_cnt
     # Registrar el agente en el servicio de directorio
     gmess = Graph()
-    gmess.bind('foaf', Namespace('http://xmlns.com/foaf/0.1/'))
+    gmess.bind('foaf', FOAF)
     gmess.bind('dso', DSO)
-    reg_obj = agn[f'AgenteClima-{str(uuid.uuid4())}']
-    gmess.add((reg_obj, RDF.type, DSO.Agent))
-    gmess.add((reg_obj, DSO.hasName, Literal('AgenteClima')))
-    gmess.add((reg_obj, DSO.hasURI, URIRef(AgenteClima.uri)))
-    gmess.add((reg_obj, DSO.hasServiceURI, URIRef(AgenteClima.address)))
-    gmess.add((reg_obj, DSO.hasServiceURI, URIRef(AgenteClima.stop)))
+    reg_obj = agn[AgenteClima.name + '-Register']
+    gmess.add((reg_obj, RDF.type, DSO.Register))
+    gmess.add((reg_obj, DSO.Uri, AgenteClima.uri))
+    gmess.add((reg_obj, FOAF.name, Literal(AgenteClima.name)))
+    gmess.add((reg_obj, DSO.Address, Literal(AgenteClima.address)))
+    gmess.add((reg_obj, DSO.AgentType, DSO.WeatherAgent))
 
     # Lo metemos en el registro de servicios
-    send_message(build_message(gmess, ACL.register,
-                              sender=AgenteClima.uri,
-                              receiver=DirectoryAgent.uri,
-                              content=reg_obj,
-                              msgcnt=mss_cnt))
+    send_message(
+        build_message(gmess, ACL.request,
+                     sender=AgenteClima.uri,
+                     receiver=DirectoryAgent.uri,
+                     content=reg_obj,
+                     msgcnt=mss_cnt),
+        DirectoryAgent.address  # Añadir la dirección del agente directorio
+    )
     mss_cnt += 1
     
     logger.info("Agente registrado en el directorio")
@@ -391,6 +395,197 @@ def agentbehavior1(cola):
         except Exception as e:
             logger.error(f"Error en el comportamiento del agente: {e}")
             break
+
+
+@app.route("/test", methods=['GET', 'POST'])
+def test_interface():
+    """
+    Interfaz web para probar el agente del clima
+    """
+    if request.method == 'GET':
+        # Mostrar un formulario simple para introducir la ciudad y el país
+        return '''
+        <html>
+            <head>
+                <title>Test Agente Clima</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 20px; }
+                    .form-group { margin-bottom: 15px; }
+                    label { display: block; margin-bottom: 5px; }
+                    input, select { padding: 8px; width: 300px; }
+                    button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+                </style>
+            </head>
+            <body>
+                <h1>Test Agente Clima</h1>
+                <form method="post">
+                    <div class="form-group">
+                        <label>Ciudad:</label>
+                        <input type="text" name="ciudad" required placeholder="Ej: Barcelona">
+                    </div>
+                    <div class="form-group">
+                        <label>País:</label>
+                        <select name="pais">
+                            <option value="es">España</option>
+                            <option value="fr">Francia</option>
+                            <option value="it">Italia</option>
+                            <option value="gb">Reino Unido</option>
+                            <option value="de">Alemania</option>
+                            <option value="pt">Portugal</option>
+                            <option value="nl">Países Bajos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Días de previsión:</label>
+                        <input type="number" name="dias" min="1" max="5" value="3">
+                    </div>
+                    <button type="submit">Consultar clima</button>
+                </form>
+            </body>
+        </html>
+        '''
+    else:
+        # Procesar la petición POST
+        ciudad = request.form['ciudad']
+        pais = request.form['pais']
+        dias = int(request.form['dias'])
+        
+        # Obtener datos del clima
+        datos_clima = obtener_datos_clima(ciudad, pais, dias)
+        
+        # Construir una respuesta HTML con los resultados
+        html = f'''
+        <html>
+            <head>
+                <title>Resultados del Clima para {ciudad}</title>
+                <style>
+                    body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                    h1, h2 {{ color: #333; }}
+                    .clima-box {{ background: #f9f9f9; padding: 15px; margin: 10px 0; border-radius: 5px; }}
+                    .prevision {{ display: flex; flex-wrap: wrap; }}
+                    .dia-prevision {{ margin: 10px; padding: 15px; background: #f0f0f0; border-radius: 5px; width: 200px; }}
+                    .warning {{ color: #ff6600; }}
+                    .back-btn {{ margin-top: 20px; padding: 10px; background: #4CAF50; color: white; text-decoration: none; display: inline-block; border-radius: 5px; }}
+                </style>
+            </head>
+            <body>
+                <h1>Datos meteorológicos para {ciudad}</h1>
+        '''
+        
+        if datos_clima['actual']:
+            html += f'''
+                <div class="clima-box">
+                    <h2>Clima Actual</h2>
+                    <p><strong>Temperatura:</strong> {datos_clima['actual']['temperatura']}°C</p>
+                    <p><strong>Humedad:</strong> {datos_clima['actual']['humedad']}%</p>
+                    <p><strong>Descripción:</strong> {datos_clima['actual']['descripcion']}</p>
+                    <p><strong>Velocidad del viento:</strong> {datos_clima['actual']['viento']} m/s</p>
+                </div>
+            '''
+        
+        if 'prevision_diaria' in datos_clima and datos_clima['prevision_diaria']:
+            html += '<h2>Previsión para los próximos días</h2><div class="prevision">'
+            for dia in datos_clima['prevision_diaria']:
+                warning = ""
+                if dia['temporal_perjudicial']:
+                    warning = '<p class="warning">⚠️ Condiciones adversas para actividades al aire libre</p>'
+                
+                html += f'''
+                <div class="dia-prevision">
+                    <h3>{dia['fecha']}</h3>
+                    <p><strong>Temperatura media:</strong> {dia['temperatura_media']}°C</p>
+                    <p><strong>Humedad media:</strong> {dia['humedad_media']}%</p>
+                    <p><strong>Descripción:</strong> {dia['descripcion']}</p>
+                    {warning}
+                </div>
+                '''
+            html += '</div>'
+        
+        html += '''
+                <a href="/test" class="back-btn">Volver a consultar</a>
+            </body>
+        </html>
+        '''
+        return html
+
+
+@app.route("/test_peticion")
+def test_peticion():
+    """
+    Crea y envía una petición RDF de prueba al propio agente
+    """
+    # Crear grafo para la petición
+    g = Graph()
+    g.bind('rdf', RDF)
+    g.bind('onto', onto)
+    g.bind('agn', agn)
+    
+    # Crear la petición
+    peticion_id = URIRef('peticion_clima_' + str(uuid.uuid4()))
+    g.add((peticion_id, RDF.type, onto.PeticionClima))
+    
+    # Añadir ciudad (por defecto Barcelona)
+    ciudad_param = request.args.get('ciudad', 'Barcelona')
+    pais_param = request.args.get('pais', 'España')
+    dias_param = request.args.get('dias', '3')
+    
+    # Crear nodo para la localidad
+    ciudad_id = URIRef('ciudad_' + str(uuid.uuid4()))
+    g.add((ciudad_id, onto.NombreCiudad, Literal(ciudad_param)))
+    g.add((ciudad_id, onto.NombrePais, Literal(pais_param)))
+    
+    # Vincular con la petición
+    g.add((peticion_id, onto.comoRestriccionLocalidad, ciudad_id))
+    g.add((peticion_id, onto.duranteUnTiempo, Literal(dias_param)))
+    
+    # Construir mensaje ACL
+    msg = build_message(g, 
+                        ACL.request,
+                        sender=URIRef('http://test-sender'),
+                        receiver=AgenteClima.uri,
+                        content=peticion_id,
+                        msgcnt=0)
+    
+    # Mostrar petición y resultado
+    xml_msg = msg.serialize(format='xml')
+    
+    # Hacer la petición al agente
+    import requests
+    resp = requests.get(AgenteClima.address, params={'content': xml_msg})
+    
+    html = f'''
+    <html>
+        <head>
+            <title>Prueba de Petición RDF</title>
+            <style>
+                body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                h2 {{ margin-top: 20px; }}
+                pre {{ background: #f5f5f5; padding: 10px; overflow-x: auto; }}
+                .success {{ color: green; }}
+                .error {{ color: red; }}
+            </style>
+        </head>
+        <body>
+            <h1>Prueba de Petición RDF al Agente del Clima</h1>
+            <p>Ciudad: <strong>{ciudad_param}</strong>, País: <strong>{pais_param}</strong>, Días: <strong>{dias_param}</strong></p>
+            
+            <h2>Petición RDF enviada:</h2>
+            <pre>{xml_msg}</pre>
+            
+            <h2>Estado de la respuesta: 
+                <span class="{'success' if resp.status_code == 200 else 'error'}">
+                    {resp.status_code}
+                </span>
+            </h2>
+            
+            <h2>Respuesta recibida:</h2>
+            <pre>{resp.text if resp.status_code == 200 else "Error en la petición"}</pre>
+            
+            <p><a href="/test">Volver al formulario de pruebas</a></p>
+        </body>
+    </html>
+    '''
+    return html
 
 
 if __name__ == '__main__':
