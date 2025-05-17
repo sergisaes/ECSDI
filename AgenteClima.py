@@ -17,7 +17,7 @@ import requests
 import logging
 
 from rdflib import Namespace, Graph, Literal, URIRef
-from rdflib.namespace import RDF, RDFS, XSD, FOAF  # Añadir FOAF aquí
+from rdflib.namespace import RDF, RDFS, XSD, FOAF  
 from flask import Flask, request, Response
 
 from AgentUtil.FlaskServer import shutdown_server
