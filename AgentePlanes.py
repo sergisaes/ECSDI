@@ -16,6 +16,7 @@ import datetime
 import uuid
 import logging
 import time
+import random
 
 from rdflib import Namespace, Graph, Literal, URIRef
 from rdflib.namespace import RDF, RDFS, XSD, FOAF
@@ -224,7 +225,7 @@ def tidyup():
 
 def buscar_agente_transportes():
     """
-    Busca el agente de transportes en el directorio
+    Busca el agente de transportes en el directorio con mejor manejo de errores
     """
     global mss_cnt
 
@@ -238,38 +239,88 @@ def buscar_agente_transportes():
     gmess.add((search_obj, RDF.type, DSO.Search))
     gmess.add((search_obj, DSO.AgentType, DSO.TransportAgent))
     
-    # Enviar petición al directorio
+    # Construir el mensaje
     msg = build_message(gmess, ACL.request,
-                        sender=AgentePlanes.uri,
-                        receiver=DirectoryAgent.uri,
-                        content=search_obj,
-                        msgcnt=mss_cnt)
+                       sender=AgentePlanes.uri,
+                       receiver=DirectoryAgent.uri,
+                       content=search_obj,
+                       msgcnt=mss_cnt)
     mss_cnt += 1
     
-    # Enviar el mensaje
-    gr = send_message(msg, DirectoryAgent.address)
-    
-    # Procesar la respuesta
-    msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
-    content = gr.value(subject=msg, predicate=ACL.content)
-    
-    # Obtener la dirección del agente de transportes
-    agentes_encontrados = []
-    for s, p, o in gr.triples((content, DSO.Address, None)):
-        uri = gr.value(subject=s, predicate=DSO.Uri)
-        name = gr.value(subject=s, predicate=FOAF.name)
+    # Mejor manejo de errores
+    try:
+        # Enviar el mensaje
+        gr = send_message(msg, DirectoryAgent.address)
         
-        agentes_encontrados.append({
-            'name': name,
-            'uri': uri,
-            'address': o
-        })
-    
-    if agentes_encontrados:
-        logger.info(f"Encontrado agente de transportes: {agentes_encontrados[0]['name']}")
-        return agentes_encontrados[0]
-    else:
-        logger.warning("No se encontró ningún agente de transportes")
+        # Verificación básica de la respuesta
+        if not isinstance(gr, Graph):
+            logger.error(f"La respuesta del directorio no es un grafo válido: {gr}")
+            return None
+            
+        # Contar el número de tripletas en la respuesta
+        num_triples = len(gr)
+        logger.info(f"La respuesta del directorio tiene {num_triples} tripletas")
+        
+        if num_triples == 0:
+            logger.error("La respuesta del directorio está vacía")
+            return None
+            
+        # Imprimir la respuesta completa para diagnóstico
+        logger.debug("Respuesta completa del directorio:")
+        for s, p, o in gr:
+            logger.debug(f"{s} {p} {o}")
+        
+        # Procesar la respuesta
+        msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
+        if not msg:
+            logger.error("No se encontró un mensaje FIPA ACL en la respuesta")
+            return None
+            
+        content = gr.value(subject=msg, predicate=ACL.content)
+        if not content:
+            logger.error("No se encontró el contenido del mensaje")
+            return None
+        
+        # Buscar todos los agentes en la respuesta
+        agentes_encontrados = []
+        for s, p, o in gr.triples((None, DSO.AgentType, DSO.TransportAgent)):
+            uri = gr.value(subject=s, predicate=DSO.Uri)
+            name = gr.value(subject=s, predicate=FOAF.name)
+            address = gr.value(subject=s, predicate=DSO.Address)
+            
+            if uri and address:
+                logger.info(f"Encontrado agente: {name} en {address}")
+                agentes_encontrados.append({
+                    'name': name if name else "Desconocido",
+                    'uri': uri,
+                    'address': address
+                })
+        
+        # Si no se encontraron agentes con ese método, intentar con el método original
+        if not agentes_encontrados:
+            logger.info("Intentando método alternativo de búsqueda...")
+            for s, p, o in gr.triples((content, DSO.Address, None)):
+                uri = gr.value(subject=s, predicate=DSO.Uri)
+                name = gr.value(subject=s, predicate=FOAF.name)
+                
+                logger.info(f"Encontrado agente (alt): {name} en {o}")
+                agentes_encontrados.append({
+                    'name': name if name else "Desconocido",
+                    'uri': uri,
+                    'address': o
+                })
+        
+        if agentes_encontrados:
+            logger.info(f"Total de agentes de transporte encontrados: {len(agentes_encontrados)}")
+            return agentes_encontrados[0]
+        else:
+            logger.warning("No se encontró ningún agente de transportes")
+            return None
+            
+    except Exception as e:
+        logger.error(f"Error al buscar agente de transportes: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
         return None
 
 
@@ -289,7 +340,14 @@ def solicitar_transportes(origen, destino, fecha_ida, fecha_vuelta, precio_max):
     # Buscar el agente de transportes en el directorio
     agente_transportes = buscar_agente_transportes()
     if not agente_transportes:
-        return None
+        logger.error("No se pudo encontrar el AgenteTransportes en el directorio")
+        # Intentar usar una dirección hardcodeada como fallback
+        agente_transportes = {
+            'name': 'AgenteTransportes',
+            'uri': 'http://www.agentes.org#AgenteTransportes',
+            'address': f'http://{socket.gethostname()}:9004/comm'
+        }
+        logger.info(f"Usando dirección hardcodeada: {agente_transportes['address']}")
     
     # Crear el grafo con la petición
     g = Graph()
@@ -321,20 +379,50 @@ def solicitar_transportes(origen, destino, fecha_ida, fecha_vuelta, precio_max):
     
     # Construir mensaje ACL
     msg = build_message(g, 
-                        ACL.request,
-                        sender=AgentePlanes.uri,
-                        receiver=URIRef(agente_transportes['uri']),
-                        content=peticion_id,
-                        msgcnt=mss_cnt)
+                      ACL.request,
+                      sender=AgentePlanes.uri,
+                      receiver=URIRef(agente_transportes['uri']),
+                      content=peticion_id,
+                      msgcnt=mss_cnt)
     mss_cnt += 1
     
+    # Mostrar el mensaje que vamos a enviar (para depuración)
+    xml_msg = msg.serialize(format='xml')
+    logger.debug(f"Mensaje a enviar: {xml_msg[:200]}...")
+    
     # Enviar la petición
-    logger.info(f"Enviando petición de transportes a {agente_transportes['name']}")
+    logger.info(f"Enviando petición de transportes a {agente_transportes['name']} en {agente_transportes['address']}")
     try:
-        respuesta = send_message(msg, agente_transportes['address'])
-        return respuesta
+        # Usar requests directamente para más control y mejor manejo de errores
+        import requests
+        response = requests.get(agente_transportes['address'], params={'content': xml_msg})
+        
+        if response.status_code == 200:
+            logger.info("Respuesta recibida correctamente")
+            g_resp = Graph()
+            g_resp.parse(data=response.text, format='xml')
+            
+            # Verificar si la respuesta tiene contenido útil
+            tiene_transportes = False
+            for s, p, o in g_resp.triples((None, onto.formadoPorTransportes, None)):
+                tiene_transportes = True
+                break
+                
+            if tiene_transportes:
+                logger.info("La respuesta contiene transportes")
+                return g_resp
+            else:
+                logger.warning("La respuesta NO contiene transportes")
+                logger.warning(f"Respuesta: {response.text[:200]}...")
+                return g_resp  # Devolver la respuesta de todas formas
+        else:
+            logger.error(f"Error en la respuesta: {response.status_code}")
+            logger.error(response.text[:200])
+            return None
     except Exception as e:
         logger.error(f"Error al solicitar transportes: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
         return None
 
 
@@ -813,36 +901,39 @@ problemas_pendientes = {}  # Problemas recibidos pendientes de procesar
 problemas_en_proceso = {}  # Problemas que se están procesando actualmente
 problemas_resueltos = {}   # Problemas ya resueltos con sus soluciones
 
-# Función para procesar problemas asíncronamente (como haría un solver)
+# Función para procesar problemas asíncrono (como haría un solver)
 def procesar_cola_problemas():
     """
-    Procesa la cola de problemas pendientes de forma asíncrona,
-    similar a como lo hace un solver en DistributedSolverOpen
+    Procesador de problemas asíncrono. Toma problemas de la cola pendiente y los procesa.
+    Similar al comportamiento de un solver distribuido.
     """
+    logger.info("Iniciando procesador de cola de problemas")
+    
     while True:
         try:
-            # Si hay problemas pendientes, procesarlos
-            problema_ids = list(problemas_pendientes.keys())
-            if problema_ids:
-                problema_id = problema_ids[0]  # Tomar el primer problema
-                problema = problemas_pendientes[problema_id]
+            # Si hay problemas pendientes, tomar uno
+            if problemas_pendientes:
+                # Seleccionar un problema pendiente (el más antiguo)
+                problemas_ordenados = sorted(problemas_pendientes.items(), 
+                                           key=lambda x: x[1]['timestamp'])
+                problema_id, problema = problemas_ordenados[0]
                 
-                logger.info(f"Procesando problema {problema_id}")
-                
-                # Mover a en proceso
-                problemas_en_proceso[problema_id] = problema
+                # Mover de pendiente a en proceso
                 del problemas_pendientes[problema_id]
+                problemas_en_proceso[problema_id] = problema
                 
-                # Obtener detalles del problema
+                logger.info(f"Procesando problema {problema_id}: {problema['origen']} a {problema['destino']}")
+                
+                # Extraer datos del problema
                 origen = problema['origen']
                 destino = problema['destino']
                 fecha_ida = problema['fecha_ida']
                 fecha_vuelta = problema['fecha_vuelta']
-                precio_max = problema.get('precio_max', None)
+                precio_max = problema.get('precio_max')
                 content = problema['content']
                 sender = problema['sender']
                 
-                # Procesar la solución (esto ya lo tienes implementado)
+                # Procesar el plan
                 respuesta = procesar_peticion_plan(origen, destino, fecha_ida, fecha_vuelta, 
                                               precio_max, content, sender)
                 
@@ -856,6 +947,8 @@ def procesar_cola_problemas():
                 # Eliminar de en proceso
                 del problemas_en_proceso[problema_id]
                 
+                logger.info(f"Problema {problema_id} resuelto")
+            
             # Esperar antes del siguiente ciclo
             time.sleep(0.5)
                 
@@ -875,6 +968,7 @@ if __name__ == '__main__':
         ab2.start()
 
         logger.info(f"Iniciando servidor en {hostname}:{port}")
+        # Ponemos en marcha el servidor
         app.run(host=hostname, port=port, debug=False)
 
         # Esperamos a que acaben los behaviors
