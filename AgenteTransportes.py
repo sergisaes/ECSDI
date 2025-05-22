@@ -702,6 +702,104 @@ def test_interface():
         return html
 
 
+@app.route("/test_peticion")
+def test_peticion():
+    """
+    Crea y envía una petición RDF de prueba al propio agente
+    """
+    g = Graph()
+    g.bind('rdf', RDF)
+    g.bind('onto', onto)
+    g.bind('agn', agn)
+    
+    peticion_id = URIRef('peticion_transporte_' + str(uuid.uuid4()))
+    g.add((peticion_id, RDF.type, onto.PeticionTransporte))
+    
+    origen_param = request.args.get('origen', 'Barcelona')
+    destino_param = request.args.get('destino', 'Madrid')
+    
+    fecha_ida_param = request.args.get('fecha_ida', datetime.date.today().isoformat())
+    fecha_vuelta_param = request.args.get('fecha_vuelta', (datetime.date.today() + datetime.timedelta(days=7)).isoformat())
+    
+    precio_max_param = request.args.get('precio_max')
+    
+    origen_id = URIRef('ciudad_origen_' + str(uuid.uuid4()))
+    g.add((origen_id, onto.NombreCiudad, Literal(origen_param)))
+    g.add((peticion_id, onto.comoOrigen, origen_id))
+    
+    destino_id = URIRef('ciudad_destino_' + str(uuid.uuid4()))
+    g.add((destino_id, onto.NombreCiudad, Literal(destino_param)))
+    g.add((peticion_id, onto.comoDestino, destino_id))
+    
+    g.add((peticion_id, onto.fecha_inicio, Literal(fecha_ida_param, datatype=XSD.date)))
+    
+    if fecha_vuelta_param:
+        g.add((peticion_id, onto.fecha_fin, Literal(fecha_vuelta_param, datatype=XSD.date)))
+    
+    if precio_max_param:
+        g.add((peticion_id, onto.PrecioMax, Literal(float(precio_max_param), datatype=XSD.float)))
+    
+    msg = build_message(g, 
+                        ACL.request,
+                        sender=URIRef('http://test-sender'),
+                        receiver=AgenteTransportes.uri,
+                        content=peticion_id,
+                        msgcnt=0)
+    
+    xml_msg = msg.serialize(format='xml')
+    
+    import requests
+    
+    # Modificación: usar localhost en lugar de 0.0.0.0
+    endpoint_url = f'http://127.0.0.1:{port}/comm'
+    
+    try:
+        logger.info(f"Enviando petición de prueba a {endpoint_url}")
+        resp = requests.get(endpoint_url, params={'content': xml_msg})
+        response_text = resp.text if resp.status_code == 200 else "Error en la petición"
+        response_status = resp.status_code
+    except Exception as e:
+        logger.error(f"Error en la conexión: {e}")
+        response_text = f"Error en la conexión: {str(e)}"
+        response_status = 500
+    
+    html = f'''
+    <html>
+        <head>
+            <title>Prueba de Petición RDF</title>
+            <style>
+                body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                h2 {{ margin-top: 20px; }}
+                pre {{ background: #f5f5f5; padding: 10px; overflow-x: auto; }}
+                .success {{ color: green; }}
+                .error {{ color: red; }}
+            </style>
+        </head>
+        <body>
+            <h1>Prueba de Petición RDF al Agente de Transportes (API Amadeus)</h1>
+            <p>Origen: <strong>{origen_param}</strong>, Destino: <strong>{destino_param}</strong></p>
+            <p>Fecha ida: <strong>{fecha_ida_param}</strong>, Fecha vuelta: <strong>{fecha_vuelta_param if fecha_vuelta_param else 'No especificada'}</strong></p>
+            <p>Precio máximo: <strong>{precio_max_param if precio_max_param else 'No especificado'}</strong></p>
+            
+            <h2>Petición RDF enviada:</h2>
+            <pre>{xml_msg.decode('utf-8')}</pre>
+            
+            <h2>Estado de la respuesta: 
+                <span class="{'success' if response_status == 200 else 'error'}">
+                    {response_status}
+                </span>
+            </h2>
+            
+            <h2>Respuesta recibida:</h2>
+            <pre>{response_text}</pre>
+            
+            <p><a href="/test">Volver al formulario de pruebas</a></p>
+        </body>
+    </html>
+    '''
+    return html
+
+
 
 if __name__ == '__main__':
     try:
