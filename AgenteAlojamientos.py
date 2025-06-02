@@ -205,8 +205,8 @@ def buscar_hoteles_amadeus(ciudad_code, fecha_entrada, fecha_salida, precio_max=
                 cityCode=ciudad_code
             )
             
-            # Procesar los hoteles encontrados (máximo 10)
-            hoteles_muestra = hoteles_response.data[:10]
+            # Procesar los hoteles encontrados (máximo 100)
+            hoteles_muestra = hoteles_response.data[:100]
             hoteles = []
             
             for hotel_data in hoteles_muestra:
@@ -248,7 +248,7 @@ def buscar_hoteles_amadeus(ciudad_code, fecha_entrada, fecha_salida, precio_max=
             if len(hoteles) < 3:
                 hoteles.extend(generar_hoteles_ficticios(ciudad_code, fecha_entrada, fecha_salida, precio_max, 5 - len(hoteles)))
             
-            return sorted(hoteles, key=lambda x: x['precio_noche'])[:5]
+            return sorted(hoteles, key=lambda x: x['precio_noche'])[:50]
             
         except Exception:
             return generar_hoteles_ficticios(ciudad_code, fecha_entrada, fecha_salida, precio_max, 5)
