@@ -32,6 +32,7 @@ from AgentUtil.Agent import Agent
 from AgentUtil.ACLMessages import build_message, send_message, get_message_properties
 from AgentUtil.ACL import ACL
 from AgentUtil.DSO import DSO
+from APIKeys import AMADEUS_CLIENT_ID, AMADEUS_CLIENT_SECRET
 
 # Configurar logging
 logging.basicConfig(level=logging.DEBUG)
@@ -90,8 +91,8 @@ DirectoryAgent = Agent('DirectoryAgent',
                        'http://%s:%d/Stop' % (dhostname, dport))
 
 amadeus = Client(
-    client_id='ROTATED_REDACTED',
-    client_secret='ROTATED_REDACTED'
+    client_id=AMADEUS_CLIENT_ID,
+    client_secret=AMADEUS_CLIENT_SECRET
 )
 
 dsgraph = Graph()

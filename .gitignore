@@ -1,0 +1,4 @@
+# Archivos a ignorar en el repositorio
+APIKeys.py
+__pycache__/
+*.pyc
