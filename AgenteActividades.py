@@ -281,6 +281,12 @@ def buscar_actividades_amadeus(ciudad_nombre, fecha=None, tipo_actividad=None, p
                 logger.debug(f"Actividad {activity.get('name')} no disponible en franja horaria {franja_horaria}")
                 continue
             
+            # Determinar si la actividad es interior o exterior
+            tipo_ubicacion = determinar_tipo_ubicacion(
+                activity.get('name', ''), 
+                activity.get('shortDescription', '')
+            )
+
             # Construir objeto de actividad
             act = {
                 'uri': URIRef(f"http://www.amadeus.com/activity/{activity['id']}"),
@@ -299,7 +305,8 @@ def buscar_actividades_amadeus(ciudad_nombre, fecha=None, tipo_actividad=None, p
                 'horarios': horarios_disponibles,
                 'horario_seleccionado': franja_horaria if franja_horaria else horarios_disponibles[0],
                 'fuente': 'amadeus',
-                'fecha': fecha
+                'fecha': fecha,
+                'tipo_ubicacion': tipo_ubicacion  # Añadimos el tipo de ubicación
             }
             
             activities.append(act)
@@ -448,6 +455,10 @@ def test_interface():
                     input, select { padding: 8px; width: 300px; }
                     button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
                     h2 { margin-top: 30px; }
+                    
+                    .ubicacion {{ display: inline-block; padding: 3px 8px; border-radius: 3px; margin-top: 5px; }}
+                    .ubicacion.Exterior {{ background: #81C784; color: white; }}
+                    .ubicacion.Interior {{ background: #64B5F6; color: white; }}
                 </style>
             </head>
             <body>
@@ -548,6 +559,10 @@ def test_interface():
                     .image {{ max-width: 300px; margin-top: 10px; }}
                     .description {{ margin-top: 10px; color: #555; }}
                     .rating {{ color: #F9A825; }}
+                    .ubicacion {{ font-weight: bold; }}
+                    .ubicacion {{ display: inline-block; padding: 3px 8px; border-radius: 3px; margin-top: 5px; }}
+                    .ubicacion.Exterior {{ background: #81C784; color: white; }}
+                    .ubicacion.Interior {{ background: #64B5F6; color: white; }}
                 </style>
             </head>
             <body>
@@ -610,6 +625,11 @@ def test_interface():
                         <p><a href="{act['booking_link']}" target="_blank">Reservar</a></p>
                     '''
                 
+                # Mostrar tipo de ubicación
+                html += f'''
+                    <p><strong>Ubicación:</strong> <span class="ubicacion">{act['tipo_ubicacion']}</span></p>
+                '''
+                
                 html += f'''
                         <p class="source">Fuente: API Amadeus</p>
                     </div>
@@ -622,6 +642,46 @@ def test_interface():
         '''
         
         return html
+
+
+def determinar_tipo_ubicacion(nombre, descripcion):
+    """
+    Determina si una actividad es de interior o exterior basándose en palabras clave
+    en el nombre y la descripción.
+    
+    :param nombre: Nombre de la actividad
+    :param descripcion: Descripción de la actividad
+    :return: "Exterior" o "Interior"
+    """
+    texto = (nombre + " " + (descripcion or "")).lower()
+    
+    # Palabras clave para actividades de exterior
+    keywords_exterior = [
+        "walking tour", "tour a pie", "outdoor", "plaza", "plaça", "paseo", "parque", "jardín", 
+        "jardines", "garden", "park", "montaña", "mountain", "playa", "beach",
+        "lago", "lake", "ruta", "route", "trekking", "hiking", "senderismo",
+        "excursión", "excursion", "calle", "street", "visita guiada", "guided tour"
+    ]
+    
+    # Palabras clave para actividades de interior
+    keywords_interior = [
+        "museo", "museum", "galería", "gallery", "teatro", "theatre", "theater",
+        "interior", "indoor", "exposición", "exhibition", "restaurante", "restaurant",
+        "café", "cafetería", "cafeteria", "palacio", "palace", "sala"
+    ]
+    
+    # Verificar si hay coincidencias con palabras clave de exterior
+    for keyword in keywords_exterior:
+        if keyword in texto:
+            return "Exterior"
+    
+    # Verificar si hay coincidencias con palabras clave de interior
+    for keyword in keywords_interior:
+        if keyword in texto:
+            return "Interior"
+    
+    # Por defecto, si no se puede determinar, asumimos que es interior
+    return "Interior"
 
 
 def agentbehavior1(cola):
