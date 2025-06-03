@@ -276,39 +276,84 @@ def verificar_pagos_pendientes():
     
     logger.info("Verificando pagos pendientes")
     
-    # Buscar planes listos sin pago procesado
-    planes_listos = []
+    # Cargar planes desde el archivo planes_aceptados.ttl
+    planes_graph = Graph()
+    planes_graph.bind('rdf', RDF)
+    planes_graph.bind('onto', onto)
+    planes_graph.bind('xsd', XSD)
     
-    for s, p, o in pagos_db.triples((None, onto.estado, Literal("listo"))):
-        # Verificar si ya tiene un pago asociado
-        tiene_pago = False
-        for s1, p1, o1 in pagos_db.triples((None, onto.paraPlan, s)):
-            tiene_pago = True
-            break
+    try:
+        # Intentar cargar el archivo de planes aceptados
+        planes_graph.parse("planes_aceptados.ttl", format="turtle")
+        logger.info("Archivo de planes aceptados cargado correctamente")
         
-        if not tiene_pago:
-            planes_listos.append(s)
-    
-    # Procesar cada plan listo
-    for plan_uri in planes_listos:
-        logger.info(f"Procesando pago pendiente para plan: {plan_uri}")
+        # Buscar planes listos sin pago procesado
+        planes_listos = []
         
-        # Obtener precio del plan
-        plan_precio = None
-        for s, p, o in pagos_db.triples((plan_uri, onto.PrecioTotal, None)):
-            plan_precio = float(o)
-            break
-        
-        if plan_precio:
-            # Crear un pago automático
-            pago_id = URIRef(f'pago_auto_{str(uuid.uuid4())}')
-            pagos_db.add((pago_id, RDF.type, onto.Pago))
-            pagos_db.add((pago_id, onto.paraPlan, plan_uri))
-            pagos_db.add((pago_id, onto.estado, Literal("Pendiente")))
-            pagos_db.add((pago_id, onto.fechaCreacion, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
-            pagos_db.add((pago_id, onto.importe, Literal(plan_precio, datatype=XSD.float)))
+        for s, p, o in planes_graph.triples((None, onto.estado, Literal("listo"))):
+            # Verificar si ya tiene un pago asociado en nuestra base de datos
+            tiene_pago = False
+            for s1, p1, o1 in pagos_db.triples((None, onto.paraPlan, s)):
+                tiene_pago = True
+                break
             
-            logger.info(f"Pago pendiente creado para el plan {plan_uri} - Importe: {plan_precio}")
+            if not tiene_pago:
+                planes_listos.append(s)
+                # Añadir el plan a nuestra base de datos de pagos
+                for s2, p2, o2 in planes_graph.triples((s, None, None)):
+                    pagos_db.add((s2, p2, o2))
+        
+        # Procesar cada plan listo
+        for plan_uri in planes_listos:
+            logger.info(f"Procesando pago pendiente para plan: {plan_uri}")
+            
+            # Obtener precio del plan
+            plan_precio = None
+            for s, p, o in planes_graph.triples((plan_uri, onto.PrecioTotal, None)):
+                plan_precio = float(o)
+                break
+            
+            # Si no encontramos en el grafo cargado, buscar en nuestra BD local
+            if not plan_precio:
+                for s, p, o in pagos_db.triples((plan_uri, onto.PrecioTotal, None)):
+                    plan_precio = float(o)
+                    break
+            
+            if plan_precio:
+                # Crear un pago automático
+                pago_id = URIRef(f'pago_auto_{str(uuid.uuid4())}')
+                pagos_db.add((pago_id, RDF.type, onto.Pago))
+                pagos_db.add((pago_id, onto.paraPlan, plan_uri))
+                pagos_db.add((pago_id, onto.estado, Literal("Completado")))  # Automáticamente lo marcamos como completado
+                pagos_db.add((pago_id, onto.fechaCreacion, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+                pagos_db.add((pago_id, onto.fechaPago, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+                pagos_db.add((pago_id, onto.importe, Literal(plan_precio, datatype=XSD.float)))
+                
+                # Actualizar estado del plan
+                pagos_db.remove((plan_uri, onto.estado, None))
+                pagos_db.add((plan_uri, onto.estado, Literal("pagado")))
+                
+                # También actualizar el archivo original
+                try:
+                    planes_graph.remove((plan_uri, onto.estado, None))
+                    planes_graph.add((plan_uri, onto.estado, Literal("pagado")))
+                    with open("planes_aceptados.ttl", 'wb') as f:
+                        serialized_data = planes_graph.serialize(format='turtle')
+                        if isinstance(serialized_data, str):
+                            serialized_data = serialized_data.encode('utf-8')
+                        f.write(serialized_data)
+                except Exception as e:
+                    logger.error(f"Error al actualizar archivo de planes aceptados: {e}")
+                
+                logger.info(f"Pago completado para el plan {plan_uri} - Importe: {plan_precio}€")
+            else:
+                logger.warning(f"No se encontró precio para el plan {plan_uri}")
+    
+    except Exception as e:
+        if "No such file or directory" in str(e):
+            logger.info("No se encontró archivo de planes aceptados. Esperando...")
+        else:
+            logger.error(f"Error al procesar pagos pendientes: {e}")
 
 
 def agentbehavior1(cola):

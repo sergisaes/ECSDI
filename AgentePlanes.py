@@ -1481,6 +1481,9 @@ def test_interface():
         except:
             dias_estancia = 3
         
+        # Asegurarnos de tener un ID de plan consistente
+        plan_id = str(uuid.uuid4())
+        
         # Solicitar transportes y alojamientos
         grafo_transportes = solicitar_transportes(origen, destino, fecha_ida, fecha_vuelta,
                                              precio_max * 0.6 if precio_max else None)
@@ -1692,408 +1695,205 @@ def test_interface():
                     
                     <div class="seccion">
                         <h2>Resumen de Precios</h2>
-                        <p>Vuelos: <span class="precio">{:.2f}€</span></p>
-                        <p>Alojamiento: <span class="precio">{:.2f}€</span></p>
-                        <p>Actividades: <span class="precio">{:.2f}€</span></p>
-                        <p class="total">Precio total: <span class="precio">{:.2f}€</span></p>
+                        <p>Vuelos: <span class="precio">{0:.2f}€</span></p>
+                        <p>Alojamiento: <span class="precio">{1:.2f}€</span></p>
+                        <p>Actividades: <span class="precio">{2:.2f}€</span></p>
+                        <p class="total">Precio total: <span class="precio">{3:.2f}€</span></p>
+                        
+                        <form method="post" action="/aceptar_plan">
+                            <input type="hidden" name="plan_id" value="{4}">
+                            <input type="hidden" name="precio_total" value="{3:.2f}">
+                            <input type="hidden" name="origen" value="{5}">
+                            <input type="hidden" name="destino" value="{6}">
+                            <input type="hidden" name="fecha_ida" value="{7}">
+                            <input type="hidden" name="fecha_vuelta" value="{8}">
+                            <button type="submit" class="pay-button" style="padding: 12px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px;">Aceptar Plan</button>
+                        </form>
                     </div>
                     
                     <a href="/test" class="back-btn">Volver</a>
                 </div>
             </body>
         </html>
-        '''.format(precio_transporte, precio_alojamiento, precio_actividades, precio_total)
-        
-        return html
+        '''.format(precio_transporte, precio_alojamiento, precio_actividades, precio_total, 
+                  plan_id, origen, destino, fecha_ida, fecha_vuelta)
 
-@app.route("/status")
-def status():
-    """
-    Muestra el estado del agente y la información de depuración
-    """
-
-    # Verificar conexiones con otros agentes
-    transporte_info = "No comprobado"
-
-    try:
-       
-        agente_transporte = buscar_agente_transportes()
-        if agente_transporte:
-            transporte_info = f"Encontrado: {agente_transporte['name']} en {agente_transporte['address']}"
-        else:
-            transporte_info = "No encontrado en directorio"
-    except Exception as e:
-        transporte_info = f"Error al buscar: {str(e)}"
-    
-    alojamiento_info = "No comprobado"
-    try:
-        agente_alojamiento = buscar_agente_alojamientos()
-        if agente_alojamiento:
-            alojamiento_info = f"Encontrado: {agente_alojamiento['name']} en {agente_alojamiento['address']}"
-        else:
-            alojamiento_info = "No encontrado en directorio"
-    except Exception as e:
-        alojamiento_info = f"Error al buscar: {str(e)}"
-    
-    # Preparar HTML
-    html = f"""
-    <html>
-        <head>
-            <title>Estado del Agente de Planes</title>
-            <style>
-                body {{ font-family: Arial, sans-serif; margin: 20px; }}
-                h1, h2 {{ color: #333; }}
-                .status-box {{ background: #f5f5f5; padding: 15px; margin: 15px 0; border-radius: 5px; }}
-                .success {{ color: green; }}
-                .warning {{ color: orange; }}
-                .error {{ color: red; }}
-                table {{ border-collapse: collapse; width: 100%; margin: 15px 0; }}
-                th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
-                th {{ background-color: #f2f2f2; }}
-                .btn {{ padding: 10px; background: #4CAF50; color: white; text-decoration: none; display: inline-block; border-radius: 5px; margin: 10px 0; }}
-            </style>
-        </head>
-        <body>
-            <h1>Estado del Agente de Planes</h1>
-            
-            <div class="status-box">
-                <h2>Información del agente</h2>
-                <p><strong>Nombre:</strong> {AgentePlanes.name}</p>
-                <p><strong>URI:</strong> {AgentePlanes.uri}</p>
-                <p><strong>Dirección:</strong> {AgentePlanes.address}</p>
-            </div>
-            
-            <div class="status-box">
-                <h2>Conexiones con otros agentes</h2>
-                <p><strong>Directorio:</strong> {DirectoryAgent.address}</p>
-                <p><strong>AgenteTransportes:</strong> <span class="{'success' if 'Encontrado' in transporte_info else 'warning'}">{transporte_info}</span></p>
-                <p><strong>AgenteAlojamientos:</strong> <span class="{'success' if 'Encontrado' in alojamiento_info else 'warning'}">{alojamiento_info}</span></p>
-            </div>
-            
-            <div class="status-box">
-                <h2>Estado de los problemas</h2>
-                <p><strong>Pendientes:</strong> {len(problemas_pendientes)}</p>
-                <p><strong>En proceso:</strong> {len(problemas_en_proceso)}</p>
-                <p><strong>Resueltos:</strong> {len(problemas_resueltos)}</p>
-            </div>
-            
-            <h2>Problemas resueltos recientes</h2>
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Origen</th>
-                    <th>Destino</th>
-                    <th>Fecha</th>
-                </tr>
-    """
-    
-    # Mostrar los últimos 5 problemas resueltos
-    for problema_id, problema in list(problemas_resueltos.items())[-5:]:
-        html += f"""
-                <tr>
-                    <td>{problema_id[:8]}...</td>
-                    <td>{problema['problema']['origen']}</td>
-                    <td>{problema['problema']['destino']}</td>
-                    <td>{problema['timestamp'].strftime('%Y-%m-%d %H:%M:%S')}</td>
-                </tr>
-        """
-    
-    html += """
-            </table>
-            
-            <div>
-                <a href="/test" class="btn">Ir al formulario de prueba</a>
-            </div>
-        </body>
-    </html>
-    """
-    
-    return html
-
-# Estructuras para manejar problemas en proceso
-problemas_pendientes = {}  # Problemas recibidos pendientes de procesar
-problemas_en_proceso = {}  # Problemas que se están procesando actualmente
-problemas_resueltos = {}   # Problemas ya resueltos con sus soluciones
-
-# Función para procesar problemas asíncrono (como haría un solver)
-def procesar_cola_problemas():
-    """
-    Procesador de problemas asíncrono. Toma problemas de la cola pendiente y los procesa.
-    Similar al comportamiento de un solver distribuido.
-    """
-    logger.info("Iniciando procesador de cola de problemas")
-    
-    while True:
-        try:
-            # Si hay problemas pendientes, tomar uno
-            if problemas_pendientes:
-                # Seleccionar un problema pendiente (el más antiguo)
-                problemas_ordenados = sorted(problemas_pendientes.items(), 
-                                           key=lambda x: x[1]['timestamp'])
-                problema_id, problema = problemas_ordenados[0]
-                
-                # Mover de pendiente a en proceso
-                del problemas_pendientes[problema_id]
-                problemas_en_proceso[problema_id] = problema
-                
-                logger.info(f"Procesando problema {problema_id}: {problema['origen']} a {problema['destino']}")
-                
-                # Extraer datos del problema
-                origen = problema['origen']
-                destino = problema['destino']
-                fecha_ida = problema['fecha_ida']
-                fecha_vuelta = problema['fecha_vuelta']
-                precio_max = problema.get('precio_max')
-                content = problema['content']
-                sender = problema['sender']
-                
-                # Procesar el plan completo (transporte + alojamiento)
-                respuesta = procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, 
-                                                     precio_max, content, sender)
-                
-                # Guardar la solución
-                problemas_resueltos[problema_id] = {
-                    'problema': problema,
-                    'solucion': respuesta,
-                    'timestamp': datetime.datetime.now()
-                }
-                
-                # Eliminar de en proceso
-                del problemas_en_proceso[problema_id]
-                
-                logger.info(f"Problema {problema_id} resuelto")
-            
-            # Esperar antes del siguiente ciclo
-            time.sleep(0.5)
-                
-        except Exception as e:
-            logger.error(f"Error procesando cola de problemas: {e}")
-            import traceback
-            logger.error(traceback.format_exc())
-            time.sleep(1)
+        return html 
 
 
-def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, precio_max=None, preferencias=None, content=None, sender=None):
+@app.route("/aceptar_plan", methods=['POST'])
+def aceptar_plan():
     """
-    Procesa una petición de plan completo incluyendo transporte, alojamiento y actividades
+    Procesa la aceptación de un plan por parte del usuario y
+    lo guarda para que sea procesado por el AgentePagos
+    """
+    # Extraer datos del formulario
+    plan_id = request.form['plan_id']
+    precio_total = float(request.form['precio_total'])
+    origen = request.form['origen']
+    destino = request.form['destino']
+    fecha_ida = request.form['fecha_ida']
+    fecha_vuelta = request.form['fecha_vuelta']
     
-    :param origen: Ciudad de origen
-    :param destino: Ciudad de destino
+    # Guardar el plan como aceptado
+    exito = guardar_plan_aceptado(plan_id, precio_total, origen, destino, fecha_ida, fecha_vuelta)
+    
+    if exito:
+        return f'''
+        <html>
+            <head>
+                <title>Plan Aceptado</title>
+                <style>
+                    body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                    .success-box {{ background: #d4edda; color: #155724; padding: 15px; margin: 20px 0; border-radius: 5px; }}
+                    .back-btn {{ margin-top: 20px; padding: 10px; background: #4CAF50; color: white; text-decoration: none; display: inline-block; border-radius: 5px; }}
+                    table {{ border-collapse: collapse; width: 100%; margin: 20px 0; }}
+                    th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
+                    th {{ background-color: #f2f2f2; }}
+                </style>
+            </head>
+            <body>
+                <h1>Plan Aceptado Correctamente</h1>
+                
+                <div class="success-box">
+                    <p>Su plan de viaje ha sido aceptado y enviado para procesamiento de pago.</p>
+                    <p>El sistema procesará automáticamente el pago en breve.</p>
+                </div>
+                
+                <h2>Detalles del Plan:</h2>
+                <table>
+                    <tr>
+                        <th>Identificador</th>
+                        <td>{plan_id}</td>
+                    </tr>
+                    <tr>
+                        <th>Origen</th>
+                        <td>{origen}</td>
+                    </tr>
+                    <tr>
+                        <th>Destino</th>
+                        <td>{destino}</td>
+                    </tr>
+                    <tr>
+                        <th>Fecha Ida</th>
+                        <td>{fecha_ida}</td>
+                    </tr>
+                    <tr>
+                        <th>Fecha Vuelta</th>
+                        <td>{fecha_vuelta}</td>
+                    </tr>
+                    <tr>
+                        <th>Importe Total</th>
+                        <td>{precio_total:.2f}€</td>
+                    </tr>
+                </table>
+                
+                <p>Puedes consultar el estado de tu pago más adelante a través del panel de usuario.</p>
+                
+                <a href="/test" class="back-btn">Volver al buscador</a>
+            </body>
+        </html>
+        '''
+    else:
+        return f'''
+        <html>
+            <head>
+                <title>Error</title>
+                <style>body {{ font-family: Arial, sans-serif; margin: 20px; }}</style>
+            </head>
+            <body>
+                <h1>Error al procesar el plan</h1>
+                <p>No se pudo guardar el plan seleccionado. Por favor, inténtelo de nuevo.</p>
+                <p><a href="/test">Volver al buscador</a></p>
+            </body>
+        </html>
+        '''
+
+
+def guardar_plan_aceptado(plan_id, precio_total, origen, destino, fecha_ida, fecha_vuelta):
+    """
+    Guarda un plan aceptado por el usuario para que el AgentePagos pueda procesarlo
+    
+    :param plan_id: Identificador del plan
+    :param precio_total: Precio total del plan
+    :param origen: Ciudad origen
+    :param destino: Ciudad destino
     :param fecha_ida: Fecha de ida
     :param fecha_vuelta: Fecha de vuelta
-    :param precio_max: Precio máximo total (opcional)
-    :param preferencias: Lista de preferencias de actividades
-    :param content: URI del contenido para responder
-    :param sender: URI del remitente
-    :return: Mensaje XML con la respuesta completa
+    :return: True si se ha guardado correctamente
     """
-    global mss_cnt
-    
-    logger.info(f"Procesando plan completo desde {origen} hacia {destino}")
-    
-    # Si no hay preferencias, inicializar como lista vacía
-    if not preferencias:
-        preferencias = []
-    
-    # Calcular precio máximo para cada componente
-    precio_max_transporte = None
-    precio_max_alojamiento = None
-    precio_max_actividades = None
-    
-    if precio_max:
-        precio_max_transporte = precio_max * 0.5
-        precio_max_alojamiento = precio_max * 0.3
-        precio_max_actividades = precio_max * 0.2
-    
-    # Calcular días de estancia
     try:
-        fecha_ida_dt = datetime.datetime.fromisoformat(fecha_ida)
-        fecha_vuelta_dt = datetime.datetime.fromisoformat(fecha_vuelta)
-        dias_estancia = (fecha_vuelta_dt - fecha_ida_dt).days
-        if dias_estancia < 1:
-            dias_estancia = 1
-    except Exception as e:
-        logger.error(f"Error al calcular días de estancia: {e}")
-        dias_estancia = 3  # Valor por defecto
-    
-    # Solicitar transportes, alojamientos y actividades en paralelo
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-        future_transportes = executor.submit(solicitar_transportes, origen, destino, fecha_ida, fecha_vuelta, precio_max_transporte)
-        future_alojamientos = executor.submit(solicitar_alojamientos, destino, fecha_ida, fecha_vuelta, precio_max_alojamiento/dias_estancia)
-        future_actividades = executor.submit(solicitar_actividades, destino, fecha_ida, fecha_vuelta, preferencias, precio_max_actividades)
+        # Crear grafo para almacenar el plan
+        planes_db = Graph()
+        planes_db.bind('rdf', RDF)
+        planes_db.bind('rdfs', RDFS)
+        planes_db.bind('onto', onto)
+        planes_db.bind('xsd', XSD)
         
-        # Obtener resultados
-        grafo_transportes = future_transportes.result()
-        grafo_alojamientos = future_alojamientos.result()
-        grafo_actividades, actividades_por_dia = future_actividades.result()
-    
-    # Verificar que tenemos respuestas válidas
-    if not grafo_transportes:
-        logger.warning("No se pudieron obtener opciones de transporte")
-        return crear_respuesta_error("No se pudieron obtener opciones de transporte", content, sender)
-    
-    if not grafo_alojamientos:
-        logger.warning("No se pudieron obtener opciones de alojamiento")
-        return crear_respuesta_error("No se pudieron obtener opciones de alojamiento", content, sender)
-    
-    # Evaluar transportes y alojamientos
-    mejor_ida, mejor_vuelta = evaluar_transportes(grafo_transportes, content, precio_max_transporte)
-    mejor_alojamiento = evaluar_alojamientos(grafo_alojamientos, precio_max_alojamiento/dias_estancia)
-    
-    # Evaluar actividades si existen
-    plan_actividades = None
-    precio_actividades = 0
-    
-    if grafo_actividades and actividades_por_dia:
-        plan_actividades, precio_actividades = evaluar_actividades(
-            grafo_actividades, 
-            actividades_por_dia, 
-            dias_estancia,
-            preferencias,
-            precio_max_actividades
-        )
-    
-    # Verificar componentes críticos
-    if not mejor_ida or not mejor_vuelta:
-        logger.warning("No se encontraron transportes adecuados")
-        return crear_respuesta_error("No se encontraron transportes adecuados", content, sender)
-    
-    if not mejor_alojamiento:
-        logger.warning("No se encontraron alojamientos adecuados")
-        return crear_respuesta_error("No se encontraron alojamientos adecuados", content, sender)
-    
-    # Calcular precio total del plan
-    precio_transporte = mejor_ida['precio'] + mejor_vuelta['precio']
-    precio_alojamiento = mejor_alojamiento['precio'] * dias_estancia
-    precio_total = precio_transporte + precio_alojamiento + precio_actividades
-    
-    # Crear respuesta con el plan completo
-    g = Graph()
-    g.bind('rdf', RDF)
-    g.bind('rdfs', RDFS)
-    g.bind('onto', onto)
-    g.bind('xsd', XSD)
-    
-    # Crear el plan
-    plan_id = URIRef(f'plan_{str(uuid.uuid4())}')
-    g.add((plan_id, RDF.type, onto.Plan))
-    g.add((plan_id, RDF.type, onto.PlanGeneral))
-    
-    # Añadir transportes y alojamiento
-    g.add((plan_id, onto.hasTransport, mejor_ida['uri']))
-    g.add((plan_id, onto.transporteVuelta, mejor_vuelta['uri']))
-    g.add((plan_id, onto.tieneAlojamiento, mejor_alojamiento['uri']))
-    
-    # Añadir origen, destino y fechas
-    origen_uri = URIRef(f'ciudad_origen_{str(uuid.uuid4())}')
-    g.add((origen_uri, RDF.type, onto.Ciudad))
-    g.add((origen_uri, onto.NombreCiudad, Literal(origen)))
-    g.add((plan_id, onto.saleDe, origen_uri))
-    
-    destino_uri = URIRef(f'ciudad_destino_{str(uuid.uuid4())}')
-    g.add((destino_uri, RDF.type, onto.Ciudad))
-    g.add((destino_uri, onto.NombreCiudad, Literal(destino)))
-    g.add((plan_id, onto.llegaA, destino_uri))
-    
-    g.add((plan_id, onto.fecha_inicio, Literal(fecha_ida, datatype=XSD.date)))
-    g.add((plan_id, onto.fecha_fin, Literal(fecha_vuelta, datatype=XSD.date)))
-    
-    # Añadir precios
-    g.add((plan_id, onto.Precio, Literal(precio_total, datatype=XSD.float)))
-    
-    # Añadir actividades al plan si existen
-    if plan_actividades:
-        for dia, datos_dia in plan_actividades.items():
-            dia_id = URIRef(f'dia_{dia}_{str(uuid.uuid4())}')
-            g.add((dia_id, RDF.type, onto.PlanDe1Dia))
-            g.add((dia_id, RDFS.label, Literal(f"Día {dia}: {datos_dia['fecha']}")))
-            g.add((respuesta_completa_id, onto.estaCompuestoPor, dia_id))
+        # Intentar cargar datos existentes
+        try:
+            planes_db.parse("planes_aceptados.ttl", format="turtle")
+        except:
+            # Si el archivo no existe, se creará uno nuevo
+            logger.info("Creando nuevo archivo de planes aceptados")
+        
+        # Crear el plan
+        plan_uri = URIRef(f'plan_{plan_id}')
+        
+        # Verificar si ya existe
+        for s, p, o in planes_db.triples((plan_uri, None, None)):
+            # Ya existe, actualizamos
+            logger.info(f"El plan {plan_id} ya existe, actualizando")
+            return True
+        
+        # Añadir datos básicos del plan
+        planes_db.add((plan_uri, RDF.type, onto.Plan))
+        planes_db.add((plan_uri, onto.Precio, Literal(precio_total, datatype=XSD.float)))
+        planes_db.add((plan_uri, onto.PrecioTotal, Literal(precio_total, datatype=XSD.float)))
+        planes_db.add((plan_uri, onto.estado, Literal("listo")))
+        
+        # Ciudades
+        planes_db.add((plan_uri, RDFS.comment, 
+                     Literal(f"Viaje de {origen} a {destino} del {fecha_ida} al {fecha_vuelta}")))
+        
+        # Fecha de creación
+        planes_db.add((plan_uri, onto.fechaCreacion, 
+                     Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+        
+        # Guardar en archivo
+        with open("planes_aceptados.ttl", 'wb') as f:
+            serialized_data = planes_db.serialize(format='turtle')
+            if isinstance(serialized_data, str):
+                serialized_data = serialized_data.encode('utf-8')
+            f.write(serialized_data)
             
-            for franja, actividades in datos_dia['franjas'].items():
-                for act in actividades:
-                    g.add((dia_id, onto.seRealizan, act['uri']))
-                    
-                    # Copiar todos los detalles de la actividad del grafo original
-                    for s, p, o in grafo_actividades.triples((act['uri'], None, None)):
-                        g.add((s, p, o))
-    
-    # Crear la respuesta
-    respuesta_id = URIRef(f'respuesta_plan_{str(uuid.uuid4())}')
-    g.add((respuesta_id, RDF.type, onto.RespuestaPlan))
-    g.add((respuesta_id, onto.formadoPorPlan, plan_id))
-    
-    if content:
-        g.add((respuesta_id, onto.respuestaA, content))
-    
-    # Añadir los detalles de los transportes y alojamiento
-    for s, p, o in grafo_transportes.triples((mejor_ida['uri'], None, None)):
-        g.add((s, p, o))
-    
-    for s, p, o in grafo_transportes.triples((mejor_vuelta['uri'], None, None)):
-        g.add((s, p, o))
-    
-    for s, p, o in grafo_alojamientos.triples((mejor_alojamiento['uri'], None, None)):
-        g.add((s, p, o))
-    
-    # Construir mensaje completo siguiendo la especificación FIPA ACL
-    mss_cnt += 1
-    return build_message(g, ACL.inform,
-                        sender=AgentePlanes.uri,
-                        receiver=sender if sender else AgentePlanes.uri,
-                        content=respuesta_id,
-                        msgcnt=mss_cnt).serialize(format='xml')
+        logger.info(f"Plan {plan_id} guardado como aceptado con precio {precio_total}€")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error al guardar el plan aceptado: {e}")
+        logger.error(traceback.format_exc())
+        return False
 
-
-def crear_respuesta_error(mensaje_error, content=None, sender=None):
-    """
-    Crea una respuesta de error
-    """
-    global mss_cnt
-    
-    g = Graph()
-    g.bind('rdf', RDF)
-    g.bind('rdfs', RDFS)
-    g.bind('onto', onto)
-    
-    respuesta_id = URIRef(f'respuesta_plan_{str(uuid.uuid4())}')
-    g.add((respuesta_id, RDF.type, onto.RespuestaPlan))
-    g.add((respuesta_id, RDFS.comment, Literal(mensaje_error)))
-    
-    if content:
-        g.add((respuesta_id, onto.respuestaA, content))
-    
-    # Construir mensaje completo
-    mss_cnt += 1
-    return build_message(g, ACL.inform,
-                        sender=AgentePlanes.uri,
-                        receiver=sender if sender else AgentePlanes.uri,
-                        content=respuesta_id,
-                        msgcnt=mss_cnt).serialize(format='xml')
 if __name__ == '__main__':
+    # Diccionario para almacenar problemas pendientes de resolución
+    problemas_pendientes = {}
+    
     try:
-        # Iniciar el comportamiento de registro en el directorio
+        # Poner en marcha los behaviors
         ab1 = Process(target=agentbehavior1, args=(cola1,))
         ab1.start()
-        
-        # Iniciar el procesador de cola de problemas como un proceso independiente
-        ab2 = Process(target=procesar_cola_problemas)
-        ab2.start()
-        
-        # Informar sobre la configuración
-        logger.info(f"AgentePlanes iniciándose en {hostname}:{port}")
-        logger.info(f"Directorio en {dhostname}:{dport}")
-        
-        # Iniciar el servidor Flask
+
+        logger.info(f"Iniciando servidor en {hostname}:{port}")
+        # Ponemos en marcha el servidor Flask
         app.run(host=hostname, port=port, debug=False)
-        
-        # Esperar a que terminen los procesos
+
+        # Esperamos a que acaben los behaviors
         ab1.join()
-        ab2.join()
+        logger.info('Agente de Planes finalizado')
         
     except Exception as e:
         logger.error(f"Error al iniciar el agente: {e}")
-        if 'ab1' in locals() and ab1.is_alive():
+        if 'ab1' in locals():
             ab1.terminate()
-        if 'ab2' in locals() and ab2.is_alive():
-            ab2.terminate()
-        logger.info('Agente terminado debido a un error')
+        print('Error en el Agente de Planes')
