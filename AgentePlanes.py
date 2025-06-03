@@ -1195,6 +1195,9 @@ def procesar_respuesta_transportes(grafo_respuesta, respuesta_uri, peticion_orig
     if peticion_original:
         g.add((respuesta_id, onto.respuestaA, peticion_original))
     
+    # Registrar el plan en el AgenteMantenedorPlanes
+    registrar_plan_en_mantenedor(plan_id, g)
+
     # Construir mensaje completo
     mss_cnt += 1
     return build_message(g, ACL.inform,
@@ -2017,7 +2020,12 @@ def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, pr
                     for s, p, o in grafo_actividades.triples((act['uri'], None, None)):
                         g.add((s, p, o))
     
-    # Crear la respuesta
+    # Crear respuesta de éxito
+    g.bind('rdf', RDF)
+    g.bind('rdfs', RDFS)
+    g.bind('onto', onto)
+    g.bind('xsd', XSD)
+    
     respuesta_id = URIRef(f'respuesta_plan_{str(uuid.uuid4())}')
     g.add((respuesta_id, RDF.type, onto.RespuestaPlan))
     g.add((respuesta_id, onto.formadoPorPlan, plan_id))
@@ -2035,6 +2043,9 @@ def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, pr
     for s, p, o in grafo_alojamientos.triples((mejor_alojamiento['uri'], None, None)):
         g.add((s, p, o))
     
+    # Registrar el plan en el AgenteMantenedorPlanes
+    registrar_plan_en_mantenedor(plan_id, g)
+
     # Construir mensaje completo siguiendo la especificación FIPA ACL
     mss_cnt += 1
     return build_message(g, ACL.inform,
@@ -2069,6 +2080,58 @@ def crear_respuesta_error(mensaje_error, content=None, sender=None):
                         receiver=sender if sender else AgentePlanes.uri,
                         content=respuesta_id,
                         msgcnt=mss_cnt).serialize(format='xml')
+
+def registrar_plan_en_mantenedor(plan_uri, grafo_plan):
+    """
+    Registra un plan en el AgenteMantenedorPlanes
+    
+    :param plan_uri: URI del plan a registrar
+    :param grafo_plan: Grafo RDF con todos los datos del plan
+    :return: True si se registró correctamente, False en caso contrario
+    """
+    global mss_cnt
+    
+    # Buscar el agente mantenedor de planes
+    agente_mantenedor = buscar_agente_por_tipo(DSO.PlanAgent)
+    if not agente_mantenedor:
+        logger.error("No se pudo encontrar el AgenteMantenedorPlanes")
+        return False
+    
+    # Crear petición de registro
+    g = Graph()
+    g.bind('rdf', RDF)
+    g.bind('onto', onto)
+    
+    registro_id = URIRef('registro_plan_' + str(uuid.uuid4()))
+    g.add((registro_id, RDF.type, onto.RegistroPlan))
+    g.add((registro_id, onto.planARegistrar, plan_uri))
+    
+    # Copiar todo el grafo del plan
+    for s, p, o in grafo_plan:
+        g.add((s, p, o))
+    
+    # Construir mensaje ACL
+    msg = build_message(g, ACL.request,
+                      sender=AgentePlanes.uri,
+                      receiver=URIRef(agente_mantenedor['uri']),
+                      content=registro_id,
+                      msgcnt=mss_cnt)
+    mss_cnt += 1
+    
+    # Enviar la petición
+    try:
+        response = requests.get(agente_mantenedor['address'], params={'content': msg.serialize(format='xml')})
+        
+        if response.status_code == 200:
+            logger.info(f"Plan {plan_uri} registrado correctamente en AgenteMantenedorPlanes")
+            return True
+        else:
+            logger.error(f"Error al registrar plan: {response.status_code}")
+            return False
+    except Exception as e:
+        logger.error(f"Error al registrar plan: {e}")
+        return False
+
 if __name__ == '__main__':
     try:
         # Iniciar el comportamiento de registro en el directorio
