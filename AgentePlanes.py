@@ -2131,6 +2131,72 @@ def registrar_plan_en_mantenedor(plan_uri, grafo_plan):
     except Exception as e:
         logger.error(f"Error al registrar plan: {e}")
         return False
+    
+def guardar_plan_aceptado(plan_id, precio_total, origen, destino, fecha_ida, fecha_vuelta):
+    """
+    Guarda un plan aceptado por el usuario para que el AgentePagos pueda procesarlo
+    
+    :param plan_id: Identificador del plan
+    :param precio_total: Precio total del plan
+    :param origen: Ciudad origen
+    :param destino: Ciudad destino
+    :param fecha_ida: Fecha de ida
+    :param fecha_vuelta: Fecha de vuelta
+    :return: True si se ha guardado correctamente
+    """
+    try:
+        # Crear grafo para almacenar el plan
+        planes_db = Graph()
+        planes_db.bind('rdf', RDF)
+        planes_db.bind('rdfs', RDFS)
+        planes_db.bind('onto', onto)
+        planes_db.bind('xsd', XSD)
+        
+        # Intentar cargar datos existentes
+        try:
+            planes_db.parse("planes_aceptados.ttl", format="turtle")
+        except:
+            # Si el archivo no existe, se creará uno nuevo
+            logger.info("Creando nuevo archivo de planes aceptados")
+        
+        # Crear el plan
+        plan_uri = URIRef(f'plan_{plan_id}')
+        
+        # Verificar si ya existe
+        for s, p, o in planes_db.triples((plan_uri, None, None)):
+            # Ya existe, actualizamos
+            logger.info(f"El plan {plan_id} ya existe, actualizando")
+            return True
+        
+        # Añadir datos básicos del plan
+        planes_db.add((plan_uri, RDF.type, onto.Plan))
+        planes_db.add((plan_uri, onto.Precio, Literal(precio_total, datatype=XSD.float)))
+        planes_db.add((plan_uri, onto.PrecioTotal, Literal(precio_total, datatype=XSD.float)))
+        planes_db.add((plan_uri, onto.estado, Literal("listo")))
+        
+        # Ciudades
+        planes_db.add((plan_uri, RDFS.comment, 
+                     Literal(f"Viaje de {origen} a {destino} del {fecha_ida} al {fecha_vuelta}")))
+        
+        # Fecha de creación
+        planes_db.add((plan_uri, onto.fechaCreacion, 
+                     Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+        
+        # Guardar en archivo
+        with open("planes_aceptados.ttl", 'wb') as f:
+            serialized_data = planes_db.serialize(format='turtle')
+            if isinstance(serialized_data, str):
+                serialized_data = serialized_data.encode('utf-8')
+            f.write(serialized_data)
+            
+        logger.info(f"Plan {plan_id} guardado como aceptado con precio {precio_total}€")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error al guardar el plan aceptado: {e}")
+        logger.error(traceback.format_exc())
+        return False
+
 
 if __name__ == '__main__':
     try:
