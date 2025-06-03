@@ -19,6 +19,7 @@ import time
 import random
 import traceback
 import requests
+import concurrent.futures
 
 from rdflib import Namespace, Graph, Literal, URIRef
 from rdflib.namespace import RDF, RDFS, XSD, FOAF
@@ -604,123 +605,45 @@ def solicitar_actividades(ciudad, fecha_inicio, fecha_fin, preferencias=None, pr
     actividades_por_dia = {}
     fecha_actual = fecha_inicio_dt
     
+    # Preparar tareas para ejecutar en paralelo
+    tareas = []
+    
     for dia in range(1, dias_estancia + 1):
         fecha_str = fecha_actual.strftime('%Y-%m-%d')
         actividades_por_dia[dia] = {'fecha': fecha_str, 'franjas': {}}
         
         # Para cada franja horaria (mañana, tarde, noche)
         for franja in ["mañana", "tarde", "noche"]:
-            # Solicitar actividades para esta franja específica
-            g_peticion = Graph()
-            g_peticion.bind('rdf', RDF)
-            g_peticion.bind('onto', onto)
-            g_peticion.bind('xsd', XSD)
-            
-            # Crear la petición de actividad
-            peticion_id = URIRef('peticion_actividad_' + str(uuid.uuid4()))
-            g_peticion.add((peticion_id, RDF.type, onto.PeticionActividad))
-            
-            # Crear nodo para la ciudad
-            ciudad_id = URIRef('ciudad_' + str(uuid.uuid4()))
-            g_peticion.add((ciudad_id, onto.NombreCiudad, Literal(ciudad)))
-            g_peticion.add((peticion_id, onto.comoRestriccionLocalidad, ciudad_id))
-            
-            # Añadir fecha y franja horaria
-            g_peticion.add((peticion_id, onto.fecha_inicio, Literal(fecha_str, datatype=XSD.date)))
-            g_peticion.add((peticion_id, onto.franjaHoraria, Literal(franja)))
-            
-            # Precio máximo para esta franja
-            if precio_max_dia:
-                # Distribuir el presupuesto diario entre las franjas
-                g_peticion.add((peticion_id, onto.PrecioMax, Literal(precio_max_dia/3, datatype=XSD.float)))
-            
-            # Añadir preferencias del usuario (si existen)
-            if preferencias and len(preferencias) > 0:
-                for pref in preferencias:
-                    if hasattr(onto, pref):
-                        tipo_uri = getattr(onto, pref)
-                        g_peticion.add((peticion_id, onto.tipoPreferido, tipo_uri))
-            
-            # Construir mensaje ACL
-            msg = build_message(g_peticion, 
-                              ACL.request,
-                              sender=AgentePlanes.uri,
-                              receiver=URIRef(agente_actividades['uri']),
-                              content=peticion_id,
-                              msgcnt=mss_cnt)
-            mss_cnt += 1
-            
-            # Enviar la petición
-            logger.info(f"Enviando petición de actividades para día {dia}, franja {franja} a {agente_actividades['address']}")
-            try:
-                response = requests.get(agente_actividades['address'], params={'content': msg.serialize(format='xml')})
-                
-                if response.status_code == 200:
-                    logger.info(f"Respuesta recibida para día {dia}, franja {franja}")
-                    g_resp = Graph()
-                    g_resp.parse(data=response.text, format='xml')
-                    
-                    # Verificar si la respuesta tiene contenido útil
-                    tiene_actividades = False
-                    for s, p, o in g_resp.triples((None, RDF.type, onto.RespuestaActividad)):
-                        tiene_actividades = True
-                        break
-                        
-                    if tiene_actividades:
-                        # Extraer las actividades y añadirlas al grafo completo
-                        actividades_franja = []
-                        for s, p, o in g_resp.triples((None, onto.formadoPorActividades, None)):
-                            actividad_uri = o
-                            # Copiar todos los triples relacionados con esta actividad
-                            for s2, p2, o2 in g_resp.triples((actividad_uri, None, None)):
-                                g_completo.add((s2, p2, o2))
-                            
-                            # Extraer datos básicos para nuestra organización interna
-                            actividad_data = {'uri': actividad_uri}
-                            
-                            # Nombre/etiqueta
-                            for s2, p2, o2 in g_resp.triples((actividad_uri, RDFS.label, None)):
-                                actividad_data['nombre'] = str(o2)
-                            
-                            # Precio
-                            for s2, p2, o2 in g_resp.triples((actividad_uri, onto.Precio, None)):
-                                actividad_data['precio'] = float(o2)
-                            
-                            # Tipo de actividad
-                            actividad_data['tipo'] = 'General'
-                            for tipo in ['Aventura', 'Cultural', 'Exterior', 'Gastronomica', 'Interior', 'Naturaleza']:
-                                tipo_uri = getattr(onto, tipo)
-                                if (actividad_uri, RDF.type, tipo_uri) in g_resp:
-                                    actividad_data['tipo'] = tipo
-                                    break
-                            
-                            # Descripción
-                            for s2, p2, o2 in g_resp.triples((actividad_uri, RDFS.comment, None)):
-                                actividad_data['descripcion'] = str(o2)
-                            
-                            # Ubicación
-                            actividad_data['ubicacion'] = ciudad
-                            for s2, p2, o2 in g_resp.triples((actividad_uri, onto.Ubicacion, None)):
-                                actividad_data['ubicacion'] = str(o2)
-                            
-                            # Añadir a la lista de esta franja
-                            actividades_franja.append(actividad_data)
-                        
-                        # Guardar en nuestro diccionario organizado
-                        actividades_por_dia[dia]['franjas'][franja] = actividades_franja
-                        logger.info(f"Encontradas {len(actividades_franja)} actividades para día {dia}, franja {franja}")
-                    else:
-                        logger.warning(f"No se encontraron actividades para día {dia}, franja {franja}")
-                        actividades_por_dia[dia]['franjas'][franja] = []
-                else:
-                    logger.error(f"Error en la respuesta: {response.status_code}")
-                    actividades_por_dia[dia]['franjas'][franja] = []
-            except Exception as e:
-                logger.error(f"Error al solicitar actividades: {e}")
-                actividades_por_dia[dia]['franjas'][franja] = []
+            # Añadir tarea para esta combinación de día y franja
+            tareas.append((dia, fecha_str, franja))
         
         # Avanzar al siguiente día
         fecha_actual += datetime.timedelta(days=1)
+    
+    # Ejecutar tareas en paralelo (máximo 10 hilos o el número de tareas si es menor)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=min(10, len(tareas))) as executor:
+        # Mapear cada tarea a la función correspondiente
+        future_to_task = {
+            executor.submit(solicitar_actividad_franja, ciudad, fecha_str, franja, precio_max_dia, agente_actividades): 
+            (dia, franja) for dia, fecha_str, franja in tareas
+        }
+        
+        # Procesar resultados
+        for future in concurrent.futures.as_completed(future_to_task):
+            dia, franja = future_to_task[future]
+            try:
+                actividades_franja, g_resp = future.result()
+                
+                # Guardar actividades en el diccionario
+                actividades_por_dia[dia]['franjas'][franja] = actividades_franja
+                
+                # Añadir triples al grafo completo
+                for s, p, o in g_resp.triples((None, None, None)):
+                    g_completo.add((s, p, o))
+                
+            except Exception as e:
+                logger.error(f"Error procesando resultado para día {dia}, franja {franja}: {e}")
+                actividades_por_dia[dia]['franjas'][franja] = []
     
     # Estructurar días y franjas en el grafo RDF
     for dia, datos_dia in actividades_por_dia.items():
@@ -741,6 +664,124 @@ def solicitar_actividades(ciudad, fecha_inicio, fecha_fin, preferencias=None, pr
     return g_completo, actividades_por_dia
 
 
+
+def solicitar_actividad_franja(ciudad, fecha_str, franja, precio_max_dia, agente_actividades):
+    """
+    Solicita actividades para una franja horaria específica
+    
+    :param ciudad: Nombre de la ciudad
+    :param fecha_str: Fecha en formato YYYY-MM-DD
+    :param franja: Franja horaria (mañana, tarde, noche)
+    :param precio_max_dia: Precio máximo por día (se dividirá por 3 para la franja)
+    :param agente_actividades: Información del agente de actividades
+    :return: Tupla (actividades_franja, grafo_respuesta)
+    """
+    global mss_cnt
+    
+    # Crear grafo para la petición
+    g_peticion = Graph()
+    g_peticion.bind('rdf', RDF)
+    g_peticion.bind('onto', onto)
+    g_peticion.bind('xsd', XSD)
+    
+    # Crear la petición de actividad
+    peticion_id = URIRef('peticion_actividad_' + str(uuid.uuid4()))
+    g_peticion.add((peticion_id, RDF.type, onto.PeticionActividad))
+    
+    # Crear nodo para la ciudad
+    ciudad_id = URIRef('ciudad_' + str(uuid.uuid4()))
+    g_peticion.add((ciudad_id, onto.NombreCiudad, Literal(ciudad)))
+    g_peticion.add((peticion_id, onto.comoRestriccionLocalidad, ciudad_id))
+
+    # Añadir fecha y franja horaria
+    g_peticion.add((peticion_id, onto.fecha, Literal(fecha_str, datatype=XSD.date)))
+    g_peticion.add((peticion_id, onto.franjaHoraria, Literal(franja)))
+    
+    # Precio máximo para esta franja
+    if precio_max_dia:
+        g_peticion.add((peticion_id, onto.PrecioMax, Literal(precio_max_dia/3, datatype=XSD.float)))
+    
+    # Construir mensaje ACL
+    msg = build_message(g_peticion, 
+                      ACL.request,
+                      sender=AgentePlanes.uri,
+                      receiver=URIRef(agente_actividades['uri']),
+                      content=peticion_id,
+                      msgcnt=mss_cnt)
+    mss_cnt += 1
+    
+    # Enviar la petición
+    logger.info(f"Enviando petición de actividades para franja {franja} - {fecha_str} a {agente_actividades['address']}")
+    try:
+        response = requests.get(agente_actividades['address'], params={'content': msg.serialize(format='xml')})
+        
+        if response.status_code == 200:
+            logger.info(f"Respuesta recibida para franja {franja} - {fecha_str}")
+            g_resp = Graph()
+            g_resp.parse(data=response.text, format='xml')
+            
+            # Verificar si la respuesta tiene contenido útil
+            tiene_actividades = False
+            for s, p, o in g_resp.triples((None, RDF.type, onto.RespuestaActividad)):
+                tiene_actividades = True
+                break
+                
+            if tiene_actividades:
+                # Extraer las actividades
+                actividades_franja = []
+                for s, p, o in g_resp.triples((None, onto.formadoPorActividades, None)):
+                    actividad_uri = o
+                    
+                    # Extraer datos básicos para nuestra organización interna
+                    actividad_data = {
+                        'uri': actividad_uri,
+                        'nombre': 'Sin nombre',
+                        'precio': 0,
+                        'tipo': 'General',
+                        'ubicacion': ciudad,
+                        'descripcion': ''
+                    }
+                    
+                    # Nombre/etiqueta
+                    for s2, p2, o2 in g_resp.triples((actividad_uri, RDFS.label, None)):
+                        actividad_data['nombre'] = str(o2)
+                    
+                    # Precio
+                    for s2, p2, o2 in g_resp.triples((actividad_uri, onto.Precio, None)):
+                        actividad_data['precio'] = float(o2)
+                    
+                    # Tipo de actividad
+                    actividad_data['tipo'] = 'General'
+                    for tipo in ['Aventura', 'Cultural', 'Exterior', 'Gastronomica', 'Interior', 'Naturaleza']:
+                        tipo_uri = getattr(onto, tipo)
+                        if (actividad_uri, RDF.type, tipo_uri) in g_resp:
+                            actividad_data['tipo'] = tipo
+                            break
+                    
+                    # Descripción
+                    for s2, p2, o2 in g_resp.triples((actividad_uri, RDFS.comment, None)):
+                        actividad_data['descripcion'] = str(o2)
+                    
+                    # Ubicación
+                    actividad_data['ubicacion'] = ciudad
+                    for s2, p2, o2 in g_resp.triples((actividad_uri, onto.Ubicacion, None)):
+                        actividad_data['ubicacion'] = str(o2)
+                    
+                    # Añadir a la lista de esta franja
+                    actividades_franja.append(actividad_data)
+                
+                logger.info(f"Encontradas {len(actividades_franja)} actividades para franja {franja} - {fecha_str}")
+                return actividades_franja, g_resp
+            else:
+                logger.warning(f"No se encontraron actividades para franja {franja} - {fecha_str}")
+                return [], g_resp
+        else:
+            logger.error(f"Error en la respuesta: {response.status_code}")
+            return [], Graph()
+    except Exception as e:
+        logger.error(f"Error al solicitar actividades: {e}")
+        return [], Graph()
+    
 def evaluar_transportes(grafo_transportes, content_uri, precio_max=None):
     """
     Evalúa los transportes recibidos del AgenteTransportes y selecciona los mejores
@@ -813,7 +854,7 @@ def evaluar_transportes(grafo_transportes, content_uri, precio_max=None):
                     # Horas cómodas: 8-11 y 17-20
                     hora_salida_buena = (8 <= hora_salida <= 11) or (17 <= hora_salida <= 20)
                 else:
-                    hora_salida_buena = False
+                    hora_salida_buena = False;
                     
                 if llegada:
                     fecha_hora_llegada = datetime.datetime.fromisoformat(str(llegada).replace('Z', '+00:00'))
@@ -982,13 +1023,6 @@ def evaluar_alojamientos(grafo_alojamientos, precio_max=None):
 def evaluar_actividades(grafo_actividades, actividades_por_dia, dias_estancia, preferencias=None, precio_max=None):
     """
     Evalúa las actividades recibidas y las organiza optimizando las preferencias del usuario
-    
-    :param grafo_actividades: Grafo RDF con las actividades disponibles
-    :param actividades_por_dia: Diccionario con actividades organizadas por día y franja
-    :param dias_estancia: Número de días de estancia
-    :param preferencias: Lista de tipos de actividades preferidas ["Cultural", "Aventura", etc.]
-    :param precio_max: Precio máximo total para actividades
-    :return: Plan de actividades organizado y precio total
     """
     if not grafo_actividades or not actividades_por_dia:
         logger.warning("No hay actividades para evaluar")
@@ -1002,6 +1036,9 @@ def evaluar_actividades(grafo_actividades, actividades_por_dia, dias_estancia, p
     # Estructura para el plan final
     plan_actividades = {}
     precio_total = 0
+    
+    # Conjunto para registrar actividades ya incluidas (evitar duplicados)
+    actividades_incluidas = set()
     
     # Definir preferencias de tipo
     preferencias_ponderadas = {
@@ -1021,9 +1058,9 @@ def evaluar_actividades(grafo_actividades, actividades_por_dia, dias_estancia, p
     
     # Número máximo de actividades por día y franja
     max_actividades_por_franja = {
-        'mañana': 2,  # Máximo 2 actividades por la mañana
-        'tarde': 2,   # Máximo 2 actividades por la tarde
-        'noche': 1    # Máximo 1 actividad por la noche
+        'mañana': 3,
+        'tarde': 3,
+        'noche': 3
     }
     
     # Aplicar heurística para seleccionar actividades
@@ -1052,13 +1089,8 @@ def evaluar_actividades(grafo_actividades, actividades_por_dia, dias_estancia, p
             # Ordenar actividades por preferencia y relación calidad/precio
             actividades = datos_dia['franjas'][franja]
             for act in actividades:
-                # Normalización de precio (más barato es mejor)
                 precio_norm = min(1.0, 50.0 / max(act.get('precio', 50.0), 10.0))
-                
-                # Bonus por tipo de actividad según preferencias
                 tipo_bonus = preferencias_ponderadas.get(act.get('tipo', ''), 0.0)
-                
-                # Puntuación final
                 act['puntuacion'] = precio_norm + tipo_bonus
             
             # Ordenar por puntuación (mayor primero)
@@ -1069,12 +1101,18 @@ def evaluar_actividades(grafo_actividades, actividades_por_dia, dias_estancia, p
             max_acts = max_actividades_por_franja[franja]
             
             for act in actividades_ordenadas:
+                # Verificar si la actividad ya está incluida en cualquier parte del plan
+                if str(act['uri']) in actividades_incluidas:
+                    continue  # Saltar esta actividad
+                
                 if len(actividades_seleccionadas) >= max_acts:
                     break
                     
                 precio = act.get('precio', 0)
                 if precio <= presupuesto_franja:
                     actividades_seleccionadas.append(act)
+                    # Agregar la URI a las actividades ya incluidas
+                    actividades_incluidas.add(str(act['uri']))
                     presupuesto_franja -= precio
                     presupuesto_dia -= precio
                     precio_total += precio
@@ -1623,8 +1661,7 @@ def test_interface():
                                     html += f'''
                                     <li>
                                         <strong>{act['nombre']}</strong>
-                                        <span class="precio"> - {act['precio']:.2f}€</span>
-                                        <p class="actividad-tipo">Tipo: {act['tipo']} ({act['ubicacion']})</p>
+                                        <span class="precio"> - {act.get('precio', 0):.2f}€</span>                                        <p class="actividad-tipo">Tipo: {act['tipo']} ({act['ubicacion']})</p>
                                         {f'<p class="actividad-desc">{act["descripcion"]}</p>' if act.get('descripcion') else ''}
                                     </li>
                                     '''
@@ -1677,6 +1714,7 @@ def status():
 
     # Verificar conexiones con otros agentes
     transporte_info = "No comprobado"
+
     try:
        
         agente_transporte = buscar_agente_transportes()
@@ -1857,7 +1895,7 @@ def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, pr
     if not preferencias:
         preferencias = []
     
-    # Calcular precio máximo para cada componente (50% transporte, 30% alojamiento, 20% actividades)
+    # Calcular precio máximo para cada componente
     precio_max_transporte = None
     precio_max_alojamiento = None
     precio_max_actividades = None
@@ -1878,11 +1916,16 @@ def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, pr
         logger.error(f"Error al calcular días de estancia: {e}")
         dias_estancia = 3  # Valor por defecto
     
-    # Solicitar transportes, alojamientos y actividades
-    grafo_transportes = solicitar_transportes(origen, destino, fecha_ida, fecha_vuelta, precio_max_transporte)
-    grafo_alojamientos = solicitar_alojamientos(destino, fecha_ida, fecha_vuelta, precio_max_alojamiento/dias_estancia)
-    grafo_actividades, actividades_por_dia = solicitar_actividades(destino, fecha_ida, fecha_vuelta, 
-                                                            preferencias, precio_max_actividades)
+    # Solicitar transportes, alojamientos y actividades en paralelo
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+        future_transportes = executor.submit(solicitar_transportes, origen, destino, fecha_ida, fecha_vuelta, precio_max_transporte)
+        future_alojamientos = executor.submit(solicitar_alojamientos, destino, fecha_ida, fecha_vuelta, precio_max_alojamiento/dias_estancia)
+        future_actividades = executor.submit(solicitar_actividades, destino, fecha_ida, fecha_vuelta, preferencias, precio_max_actividades)
+        
+        # Obtener resultados
+        grafo_transportes = future_transportes.result()
+        grafo_alojamientos = future_alojamientos.result()
+        grafo_actividades, actividades_por_dia = future_actividades.result()
     
     # Verificar que tenemos respuestas válidas
     if not grafo_transportes:
@@ -1964,7 +2007,7 @@ def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, pr
             dia_id = URIRef(f'dia_{dia}_{str(uuid.uuid4())}')
             g.add((dia_id, RDF.type, onto.PlanDe1Dia))
             g.add((dia_id, RDFS.label, Literal(f"Día {dia}: {datos_dia['fecha']}")))
-            g.add((plan_id, onto.estaCompuestoPor, dia_id))
+            g.add((respuesta_completa_id, onto.estaCompuestoPor, dia_id))
             
             for franja, actividades in datos_dia['franjas'].items():
                 for act in actividades:
