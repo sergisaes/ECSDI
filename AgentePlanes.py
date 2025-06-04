@@ -230,12 +230,12 @@ def obtener_plan(plan_id):
         logger.error(f"Error al obtener plan: {e}")
         logger.error(traceback.format_exc())
         return None
+
     
 @app.route("/verificar_plan/<plan_id>")
 def verificar_plan(plan_id):
-    """
-    Verifica el estado de un plan específico en el AgenteMantenedorPlanes
-    """
+    """Verifica el estado de un plan específico en el AgenteMantenedorPlanes"""
+    global mss_cnt
     try:
         # Buscar el agente mantenedor de planes
         agente_mantenedor = buscar_agente_por_tipo(DSO.PlanAgent)
@@ -261,9 +261,11 @@ def verificar_plan(plan_id):
                           receiver=URIRef(agente_mantenedor['uri']),
                           content=consulta_id,
                           msgcnt=mss_cnt)
+        mss_cnt += 1
         
         # Enviar consulta
-        response = requests.get(agente_mantenedor['address'], params={'content': msg.serialize(format='xml')})
+        logger.info(f"[DEPURACIÓN] Enviando consulta de plan {plan_id} al AgenteMantenedorPlanes")
+        response = requests.post(agente_mantenedor['address'], params={'content': msg.serialize(format='xml')})
         
         if response.status_code == 200:
             # Parsear respuesta
@@ -276,10 +278,14 @@ def verificar_plan(plan_id):
                     <title>Estado del Plan</title>
                     <style>
                         body { font-family: Arial, sans-serif; margin: 20px; }
-                        h1 { color: #2c3e50; }
-                        .plan-box { background: #f5f5f5; padding: 15px; margin: 15px 0; border-radius: 5px; }
+                        h1, h2, h3 { color: #333; }
+                        .plan-box { background: #f9f9f9; padding: 20px; margin: 20px 0; border-radius: 5px; }
+                        .item-box { background: #ffffff; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
                         .property { margin: 5px 0; }
                         .title { font-weight: bold; }
+                        .precio { font-weight: bold; color: #4CAF50; }
+                        .actividad { background: #f5f5f5; padding: 10px; margin: 5px 0; border-radius: 5px; }
+                        .franja { margin-top: 15px; border-top: 1px solid #ddd; padding-top: 10px; }
                     </style>
                 </head>
                 <body>
@@ -305,20 +311,145 @@ def verificar_plan(plan_id):
                     fecha_fin = g_resp.value(subject=plan_uri, predicate=onto.fecha_fin)
                     html += f'<div class="property"><span class="title">Fechas:</span> {fecha_inicio} a {fecha_fin}</div>'
                     
-                    # Destino
-                    for s3, p3, o3 in g_resp.triples((plan_uri, onto.llegaA, None)):
-                        ciudad = g_resp.value(subject=o3, predicate=onto.NombreCiudad)
-                        html += f'<div class="property"><span class="title">Destino:</span> {ciudad}</div>'
+                    # Destino - Búsqueda mejorada
+                    destino = "No especificado"
+                    ciudad_destino_uri = g_resp.value(subject=plan_uri, predicate=onto.llegaA)
+                    if ciudad_destino_uri:
+                        # Intentar método 1: Buscar propiedad NombreCiudad
+                        ciudad = g_resp.value(subject=ciudad_destino_uri, predicate=onto.NombreCiudad)
+                        
+                        # Intentar método 2: Buscar label
+                        if not ciudad:
+                            ciudad = g_resp.value(subject=ciudad_destino_uri, predicate=RDFS.label)
+                        
+                        # Intentar método 3: Ver si la URI contiene información útil
+                        if not ciudad and "ciudad_destino" in str(ciudad_destino_uri):
+                            ciudad = str(ciudad_destino_uri).split('_')[-1]
+                            ciudad = "Ciudad " + ciudad
+                        
+                        if ciudad:
+                            destino = str(ciudad)
+                    html += f'<div class="property"><span class="title">Destino:</span> {destino}</div>'
+                    
+                    # Origen
+                    origen = "No especificado"
+                    ciudad_origen_uri = g_resp.value(subject=plan_uri, predicate=onto.saleDe)
+                    if ciudad_origen_uri:
+                        # Intentar método 1: Buscar propiedad NombreCiudad
+                        ciudad = g_resp.value(subject=ciudad_origen_uri, predicate=onto.NombreCiudad)
+                        
+                        # Intentar método 2: Buscar label
+                        if not ciudad:
+                            ciudad = g_resp.value(subject=ciudad_origen_uri, predicate=RDFS.label)
+                        
+                        # Intentar método 3: Ver si la URI contiene información útil
+                        if not ciudad and "ciudad_origen" in str(ciudad_origen_uri):
+                            ciudad = str(ciudad_origen_uri).split('_')[-1]
+                            ciudad = "Ciudad " + ciudad
+                        
+                        if ciudad:
+                            origen = str(ciudad)
+                    html += f'<div class="property"><span class="title">Origen:</span> {origen}</div>'
+                    
+                    # Precio
+                    precio = g_resp.value(subject=plan_uri, predicate=onto.Precio)
+                    if precio:
+                        html += f'<div class="property"><span class="title">Precio total:</span> <span class="precio">{float(precio):.2f}€</span></div>'
                     
                     # Timestamp
                     timestamp = g_resp.value(subject=plan_uri, predicate=onto.timestamp)
                     html += f'<div class="property"><span class="title">Registrado:</span> {timestamp}</div>'
                     
-                    html += '</div>'
+                    # Sección de actividades
+                    html += '<h3>Actividades planificadas:</h3>'
+                    
+                    # Buscar días del plan
+                    dias_encontrados = 0
+                    for dia_uri in g_resp.objects(subject=plan_uri, predicate=onto.estaCompuestoPor):
+                        dias_encontrados += 1
+                        dia_label = g_resp.value(subject=dia_uri, predicate=RDFS.label)
+                        
+                        html += f'<div class="item-box">'
+                        html += f'<h3>{dia_label}</h3>'
+                        
+                        # Método 1: Buscar franjas horarias usando incluyeFranja
+                        franjas_uris = list(g_resp.objects(subject=dia_uri, predicate=onto.incluyeFranja))
+                        
+                        # Método 2: Si no hay franjas, intentar recuperar actividades directamente del día
+                        actividades_dia = list(g_resp.objects(subject=dia_uri, predicate=onto.seRealizan))
+                        
+                        # Si hay actividades pero no franjas, crear franjas virtuales
+                        if not franjas_uris and actividades_dia:
+                            # Agrupar actividades por su atributo franjaHoraria
+                            franjas_virtuales = {"mañana": [], "tarde": [], "noche": []}
+                            
+                            for act_uri in actividades_dia:
+                                # Obtener franjas de cada actividad
+                                for franja_literal in g_resp.objects(subject=act_uri, predicate=URIRef(f"{onto}franjaHoraria")):
+                                    franja_nombre = str(franja_literal)
+                                    if franja_nombre in franjas_virtuales:
+                                        if act_uri not in franjas_virtuales[franja_nombre]:
+                                            franjas_virtuales[franja_nombre].append(act_uri)
+                            
+                            # Mostrar actividades agrupadas por franja virtual
+                            for franja_nombre, acts in franjas_virtuales.items():
+                                if acts:  # Solo mostrar franjas con actividades
+                                    html += f'<div class="franja">'
+                                    html += f'<h4>Franja: {franja_nombre}</h4>'
+                                    
+                                    for act_uri in acts:
+                                        nombre = g_resp.value(subject=act_uri, predicate=RDFS.label) or "Sin nombre"
+                                        precio = g_resp.value(subject=act_uri, predicate=onto.Precio) or "0.00"
+                                        
+                                        html += f'<div class="actividad">'
+                                        html += f'<div><strong>{nombre}</strong></div>'
+                                        html += f'<div>Precio: <span class="precio">{float(precio) if precio != "0.00" else 0.00:.2f}€</span></div>'
+                                        html += f'</div>'
+                                    
+                                    html += '</div>'  # fin franja
+                        
+                        # Método 1: Procesar franjas encontradas normalmente
+                        else:
+                            for franja_uri in franjas_uris:
+                                franja_label = g_resp.value(subject=franja_uri, predicate=RDFS.label) or "Sin etiqueta"
+                                
+                                html += f'<div class="franja">'
+                                html += f'<h4>Franja: {franja_label}</h4>'
+                                
+                                # Obtener actividades de esta franja
+                                actividades = list(g_resp.objects(subject=franja_uri, predicate=onto.seRealizan))
+                                
+                                if actividades:
+                                    for act_uri in actividades:
+                                        nombre = g_resp.value(subject=act_uri, predicate=RDFS.label) or "Sin nombre"
+                                        precio = g_resp.value(subject=act_uri, predicate=onto.Precio) or "0.00"
+                                        
+                                        html += f'<div class="actividad">'
+                                        html += f'<div><strong>{nombre}</strong></div>'
+                                        html += f'<div>Precio: <span class="precio">{float(precio) if precio != "0.00" else 0.00:.2f}€</span></div>'
+                                        html += f'</div>'
+                                else:
+                                    html += '<p>No hay actividades en esta franja</p>'
+                                
+                                html += '</div>'  # fin franja
+                        
+                        if not franjas_uris:
+                            html += '<p>No hay franjas horarias definidas para este día</p>'
+                        
+                        # Añadir información de depuración
+                        html += f'<div style="margin-top: 20px; padding: 10px; background-color: #f8f9fa; border-radius: 5px; font-size: 12px;">'
+                        html += f'<p><strong>Información técnica:</strong></p>'
+                        html += f'<p>URI del día: {dia_uri}</p>'
+                        html += f'<p>Actividades directas: {len(actividades_dia)}</p>'
+                        html += f'<p>Franjas explícitas: {len(franjas_uris)}</p>'
+                        html += '</div>'
+                        
+                        html += '</div>'  # fin día
             
             if planes_encontrados == 0:
                 html += '<p>No se encontró el plan especificado en el mantenedor.</p>'
             
+
             html += """
                 </body>
             </html>
@@ -329,6 +460,8 @@ def verificar_plan(plan_id):
             return f"Error al consultar el plan: {response.status_code}"
     
     except Exception as e:
+        logger.error(f"Error al verificar plan: {e}")
+        logger.error(traceback.format_exc())
         return f"Error al verificar plan: {str(e)}"
     
 @app.route("/comm")
@@ -1381,10 +1514,9 @@ def procesar_respuesta_transportes(grafo_respuesta, respuesta_uri, peticion_orig
         # Crear respuesta de error
         g = Graph()
         g.bind('rdf', RDF)
-        g.bind('rdfs', RDFS)
         g.bind('onto', onto)
         
-        respuesta_id = URIRef(f'respuesta_plan_{str(uuid.uuid4())}')
+        respuesta_id = URIRef(f'aceptacion_{str(uuid.uuid4())}')
         g.add((respuesta_id, RDF.type, onto.AceptacionPeticion))
         g.add((respuesta_id, RDFS.comment, Literal("No se pudieron encontrar transportes adecuados")))
         
@@ -1402,7 +1534,6 @@ def procesar_respuesta_transportes(grafo_respuesta, respuesta_uri, peticion_orig
     # Crear respuesta con el plan seleccionado
     g = Graph()
     g.bind('rdf', RDF)
-    g.bind('rdfs', RDFS)
     g.bind('onto', onto)
     g.bind('xsd', XSD)
     
@@ -1586,7 +1717,7 @@ def agentbehavior1(cola):
         logger.warning(f"No se pudo conectar con el DirectoryAgent: {e}")
         logger.warning("El agente continuará funcionando sin registro en el directorio")
     
-    # Bucle principal del comportamiento
+
     while True:
         try:
             # Esperar a un mensaje en la cola
@@ -1605,7 +1736,7 @@ def test_interface():
     Interfaz web para probar el agente de planes
     """
     if request.method == 'GET':
-        # Mostrar un formulario para pruebas
+               # Mostrar un formulario para pruebas
         return '''
         <html>
             <head>
@@ -1860,7 +1991,7 @@ def test_interface():
         g.add((plan_id, onto.Precio, Literal(precio_total, datatype=XSD.float)))
         g.add((plan_id, onto.estado, Literal("activo")))
 
-        # Añadir actividades
+        # Añadir actividades al plan si existen
         if plan_actividades:
             for dia, datos_dia in plan_actividades.items():
                 dia_id = URIRef(f'dia_{dia}_{str(uuid.uuid4())}')
@@ -1869,21 +2000,32 @@ def test_interface():
                 g.add((plan_id, onto.estaCompuestoPor, dia_id))
                 
                 for franja, actividades in datos_dia['franjas'].items():
+                    # Crear franja horaria
+                    franja_id = URIRef(f'franja_{franja}_{str(uuid.uuid4())}')
+                    g.add((franja_id, RDF.type, onto.FranjaHoraria))
+                    g.add((franja_id, RDFS.label, Literal(franja)))
+                    g.add((dia_id, onto.incluyeFranja, franja_id))
+                    
+                    # Añadir actividades a la franja
                     for act in actividades:
-                        g.add((dia_id, onto.seRealizan, act['uri']))
+                        g.add((franja_id, onto.seRealizan, act['uri']))
+                        
+                        # Copiar todos los detalles de la actividad del grafo original
+                        for s, p, o in grafo_actividades.triples((act['uri'], None, None)):
+                            g.add((s, p, o))
+    
+    # Guardar el plan en la base de datos
+    registrar_plan_en_mantenedor(plan_id, g)
+    guardar_plan_en_db(plan_id, g)
 
-        # Guardar el plan en la base de datos
-        registrar_plan_en_mantenedor(plan_id, g)
-        guardar_plan_en_db(plan_id, g)
-
-        # Extraer el ID del plan para referencia
-        plan_id_str = str(plan_id).split('_')[-1]
+    # Extraer el ID del plan para referencia
+    plan_id_str = str(plan_id).split('_')[-1]
 
         
 
         
         # Construir respuesta HTML
-        html = f'''
+    html = f'''
         <html>
             <head>
                 <title>Plan Completo Creado</title>
@@ -1956,9 +2098,12 @@ def test_interface():
                     
                     <div class="seccion">
                         <h2>Actividades</h2>
-'''
+                        <div class="item-box">
+                            <h3>Actividades planificadas:</h3>
+                            <div class="actividades-lista">
+    '''
 
-        if plan_actividades:
+    if plan_actividades:
             for dia in range(1, dias_estancia + 1):
                 if dia in plan_actividades:
                     tiene_actividades = False
@@ -2014,12 +2159,12 @@ def test_interface():
                             <p>No hay actividades planificadas para este día.</p>
                         </div>
                         '''
-        else:
+    else:
             html += '''
             <p>No se pudieron encontrar actividades para este destino.</p>
             '''
 
-        html += '''
+    html += '''
                     </div>
                     
                     <div class="seccion">
@@ -2043,7 +2188,7 @@ def test_interface():
         </html>
         '''.format(precio_transporte, precio_alojamiento, precio_actividades, precio_total, plan_id_str=plan_id_str)
         
-        return html
+    return html
         
         
 @app.route("/status")
@@ -2334,7 +2479,7 @@ def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, pr
     g.add((destino_uri, RDF.type, onto.Ciudad))
     g.add((destino_uri, onto.NombreCiudad, Literal(destino)))
     g.add((plan_id, onto.llegaA, destino_uri))
-    
+
     g.add((plan_id, onto.fecha_inicio, Literal(fecha_ida, datatype=XSD.date)))
     g.add((plan_id, onto.fecha_fin, Literal(fecha_vuelta, datatype=XSD.date)))
     
@@ -2350,8 +2495,15 @@ def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, pr
             g.add((plan_id, onto.estaCompuestoPor, dia_id))
             
             for franja, actividades in datos_dia['franjas'].items():
+                # Crear franja horaria
+                franja_id = URIRef(f'franja_{franja}_{str(uuid.uuid4())}')
+                g.add((franja_id, RDF.type, onto.FranjaHoraria))
+                g.add((franja_id, RDFS.label, Literal(franja)))
+                g.add((dia_id, onto.incluyeFranja, franja_id))
+                
+                # Añadir actividades a la franja
                 for act in actividades:
-                    g.add((dia_id, onto.seRealizan, act['uri']))
+                    g.add((franja_id, onto.seRealizan, act['uri']))
                     
                     # Copiar todos los detalles de la actividad del grafo original
                     for s, p, o in grafo_actividades.triples((act['uri'], None, None)):
@@ -2423,100 +2575,83 @@ def crear_respuesta_error(mensaje_error, content=None, sender=None):
                         content=respuesta_id,
                         msgcnt=mss_cnt).serialize(format='xml')
 
-def registrar_plan_en_mantenedor(plan_uri, grafo_plan):
+def registrar_plan_en_mantenedor(plan_id, g):
     """
     Registra un plan en el AgenteMantenedorPlanes
-    
-    :param plan_uri: URI del plan a registrar
-    :param grafo_plan: Grafo RDF con todos los datos del plan
-    :return: True si se registró correctamente, False en caso contrario
     """
     global mss_cnt
-    
-    logger.info(f"[DEPURACIÓN] Iniciando registro del plan {plan_uri} en AgenteMantenedorPlanes")
     
     # Buscar el agente mantenedor de planes
     agente_mantenedor = buscar_agente_por_tipo(DSO.PlanAgent)
     if not agente_mantenedor:
-        logger.error("[DEPURACIÓN] No se pudo encontrar el AgenteMantenedorPlanes en el directorio")
+        logger.error("No se pudo encontrar el AgenteMantenedorPlanes")
         return False
     
-    logger.info(f"[DEPURACIÓN] Agente Mantenedor encontrado en: {agente_mantenedor['address']}")
-    
     # Crear petición de registro
-    g = Graph()
-    g.bind('rdf', RDF)
-    g.bind('onto', onto)
+    g_registro = Graph()
+    g_registro.bind('rdf', RDF)
+    g_registro.bind('rdfs', RDFS)
+    g_registro.bind('onto', onto)
+    g_registro.bind('xsd', XSD)
     
     registro_id = URIRef('registro_plan_' + str(uuid.uuid4()))
-    g.add((registro_id, RDF.type, onto.RegistroPlan))
-    g.add((registro_id, onto.planARegistrar, plan_uri))
+    g_registro.add((registro_id, RDF.type, onto.RegistroPlan))
+    g_registro.add((registro_id, onto.planARegistrar, plan_id))
     
-    # Copiar todo el grafo del plan
-    triples_count = 0
-    for s, p, o in grafo_plan:
-        g.add((s, p, o))
-        triples_count += 1
+    # IMPORTANTE: Copiar TODOS los triples relacionados con el plan y sus componentes
+    nodos_procesados = set()
+    nodos_pendientes = [plan_id]
     
-    logger.info(f"[DEPURACIÓN] Creada petición de registro con {triples_count} triples")
+    # Procesar recursivamente todos los nodos conectados al plan
+    while nodos_pendientes:
+        nodo_actual = nodos_pendientes.pop(0)
+        if nodo_actual in nodos_procesados:
+            continue
+            
+        nodos_procesados.add(nodo_actual)
+        
+        # Copiar todos los triples donde este nodo es sujeto
+        for s, p, o in g.triples((nodo_actual, None, None)):
+            g_registro.add((s, p, o))
+            
+            # Si el objeto es otro nodo (URI), añadirlo a los pendientes
+            if isinstance(o, URIRef):
+                nodos_pendientes.append(o)
     
-    # Extraer información básica del plan para logs
-    origen = None
-    destino = None
-    fecha_inicio = None
-    fecha_fin = None
-    
-    for s, p, o in grafo_plan.triples((plan_uri, onto.saleDe, None)):
-        for s2, p2, o2 in grafo_plan.triples((o, onto.NombreCiudad, None)):
-            origen = str(o2)
-    
-    for s, p, o in grafo_plan.triples((plan_uri, onto.llegaA, None)):
-        for s2, p2, o2 in grafo_plan.triples((o, onto.NombreCiudad, None)):
-            destino = str(o2)
-    
-    for s, p, o in grafo_plan.triples((plan_uri, onto.fecha_inicio, None)):
-        fecha_inicio = str(o)
-    
-    for s, p, o in grafo_plan.triples((plan_uri, onto.fecha_fin, None)):
-        fecha_fin = str(o)
-    
-    logger.info(f"[DEPURACIÓN] Plan a registrar: {origen} → {destino}, {fecha_inicio} a {fecha_fin}")
+    logger.info(f"[DEPURACIÓN] Creada petición de registro con {len(g_registro)} triples")
+    logger.info(f"[DEPURACIÓN] Plan a registrar: {g.value(subject=plan_id, predicate=onto.saleDe)} → {g.value(subject=plan_id, predicate=onto.llegaA)}, {g.value(subject=plan_id, predicate=onto.fecha_inicio)} a {g.value(subject=plan_id, predicate=onto.fecha_fin)}")
     
     # Construir mensaje ACL
-    msg = build_message(g, ACL.request,
+    msg = build_message(g_registro, ACL.request,
                       sender=AgentePlanes.uri,
                       receiver=URIRef(agente_mantenedor['uri']),
                       content=registro_id,
                       msgcnt=mss_cnt)
     mss_cnt += 1
     
-    # Enviar la petición
+    # Enviar petición de registro
     try:
         logger.info(f"[DEPURACIÓN] Enviando petición de registro al AgenteMantenedorPlanes: {agente_mantenedor['address']}")
-        response = requests.get(agente_mantenedor['address'], params={'content': msg.serialize(format='xml')})
+        response = requests.post(agente_mantenedor['address'], params={'content': msg.serialize(format='xml')})
         
         if response.status_code == 200:
-            logger.info(f"[DEPURACIÓN] Plan {plan_uri} registrado correctamente. Respuesta: {response.text[:100]}...")
+            logger.info(f"[DEPURACIÓN] Plan {plan_id} registrado correctamente. Respuesta: {response.text[:200]}...")
             
-            # Intentar analizar la respuesta
-            try:
-                g_resp = Graph()
-                g_resp.parse(data=response.text, format='xml')
+            # Verificar respuesta
+            g_resp = Graph()
+            g_resp.parse(data=response.text, format='xml')
+            
+            for s, p, o in g_resp.triples((None, RDF.type, onto.ConfirmacionRegistro)):
+                logger.info(f"[DEPURACIÓN] Recibida confirmación de registro: {s}")
+                return True
                 
-                # Verificar si es una confirmación
-                for s, p, o in g_resp.triples((None, RDF.type, onto.ConfirmacionRegistro)):
-                    logger.info(f"[DEPURACIÓN] Recibida confirmación de registro: {s}")
-                    break
-            except Exception as parse_err:
-                logger.warning(f"[DEPURACIÓN] No se pudo analizar la respuesta: {parse_err}")
-            
-            return True
+            logger.warning(f"No se recibió confirmación de registro del plan {plan_id}")
+            return False
         else:
-            logger.error(f"[DEPURACIÓN] Error al registrar plan: {response.status_code}. Respuesta: {response.text[:100]}...")
+            logger.error(f"Error al registrar plan: {response.status_code}")
             return False
     except Exception as e:
-        logger.error(f"[DEPURACIÓN] Excepción al registrar plan: {e}")
-        logger.error(traceback.format_exc())
+        logger.error(f"Error al registrar plan en mantenedor: {e}")
         return False
 
 

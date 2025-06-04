@@ -3,10 +3,534 @@
    xmlns="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/"
    xmlns:dcterms="http://purl.org/dc/terms/"
    xmlns:ns1="http://www.nuin.org/ontology/fipa/"
+   xmlns:ns2="http://www.amadeus.com/ontology#"
    xmlns:owl="http://www.w3.org/2002/07/owl#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 >
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_4e761707-22dc-4d94-974b-f859dff11749">
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_67696f0d-0713-40ef-a010-2c30cc2a49c2"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_028ef166-0b21-411c-9a8b-348175f60924"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_e784ea7b-ee71-4910-9c67-e8ceebe1f3bf"/>
+    <rdfs:label>Día 3: 2025-06-08</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/28273">
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-10</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-12</fecha>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_61db8fb6-a642-4130-98fe-ebda59d96132"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_96c3cb3e-1470-4887-802a-341585d4738b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46dc1eaa-cdfb-4186-bcc6-b9131598807c"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_d78d2199-7f22-44b4-a15d-fe8dc77f7cec"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_c7669f26-9b81-46a8-a35f-cba30241e2e6"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_75abdad8-77c5-449a-a776-9503f411e235"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_95492b1f-eb27-4c6d-9469-97442176ce02"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_199b8981-7def-464e-a2e6-beabb7007957"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_79c20d9a-f564-4363-8f3e-c11ae3ce9a35"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_219a90d0-a3b6-4255-ad35-8bec1f807507"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_063be783-0102-45b2-8436-f1d61428855e"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_eaf3bf7d-c33b-4de2-9f74-2cc21f532ed5"/>
+    <sehaceEn rdf:resource="ciudad_44e60077-06a4-41ae-bb48-5a697cc32462"/>
+    <sehaceEn rdf:resource="ciudad_b7806537-d868-4a74-ac0f-4967ba87b4f8"/>
+    <sehaceEn rdf:resource="ciudad_3394a36a-a2e6-4085-89a3-f5d6d153a1b8"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/28273/horario_2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/28273/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/28273/horario_1"/>
+    <rdfs:label>Cilindro Restaurante</rdfs:label>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <ns2:rating rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.5</ns2:rating>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/28273/geo"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/3044967">
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/3044967/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/3044967/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/3044967/horario_2"/>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-10</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-12</fecha>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46dc1eaa-cdfb-4186-bcc6-b9131598807c"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_61db8fb6-a642-4130-98fe-ebda59d96132"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_96c3cb3e-1470-4887-802a-341585d4738b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_d78d2199-7f22-44b4-a15d-fe8dc77f7cec"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_c7669f26-9b81-46a8-a35f-cba30241e2e6"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_75abdad8-77c5-449a-a776-9503f411e235"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_95492b1f-eb27-4c6d-9469-97442176ce02"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_199b8981-7def-464e-a2e6-beabb7007957"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_79c20d9a-f564-4363-8f3e-c11ae3ce9a35"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_219a90d0-a3b6-4255-ad35-8bec1f807507"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_063be783-0102-45b2-8436-f1d61428855e"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_eaf3bf7d-c33b-4de2-9f74-2cc21f532ed5"/>
+    <sehaceEn rdf:resource="ciudad_44e60077-06a4-41ae-bb48-5a697cc32462"/>
+    <sehaceEn rdf:resource="ciudad_b7806537-d868-4a74-ac0f-4967ba87b4f8"/>
+    <sehaceEn rdf:resource="ciudad_3394a36a-a2e6-4085-89a3-f5d6d153a1b8"/>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <ns2:rating rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.4</ns2:rating>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/3044967/geo"/>
+    <rdfs:label>Plaza de España</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_8bced976-e87f-432d-b743-99bf00ec21b1">
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1370525"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28265"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/150994"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/4731654"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28273"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/3044967"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
+    <rdfs:label>Día 1: 2025-06-05</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/13313">
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/13313/horario_2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/13313/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/13313/horario_1"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <ns2:rating rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.0</ns2:rating>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <rdfs:label>Taberna La Buha</rdfs:label>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/13313/geo"/>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_427b51d4-2e1c-4110-bd3a-f4a1bad899d4">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <hasTransport rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_ida_54183a33-d6d5-4e70-baa7-4e22b4ab1c8e"/>
+    <transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_422f66b0-a429-43f6-9a7c-6770d74e6fda"/>
+    <tieneAlojamiento rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/hotel_HAMADFLO_440e71b1-a561-4fb4-b089-813604be3d04"/>
+    <saleDe rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_1f11d7d6-d8be-44e5-ba43-6da8484ae05a"/>
+    <llegaA rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_e9ccaae7-47f5-4ccb-8517-51f1bb431c0b"/>
+    <fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha_inicio>
+    <fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha_fin>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">183.63368467442766</Precio>
+    <estado>activo</estado>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_437f211b-8fe5-46fe-a31f-490699e2a4c7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/81085">
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/81085/horario_2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/81085/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/81085/horario_1"/>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <ns2:rating rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.4</ns2:rating>
+    <rdfs:label>Madrid a Pie FREE TOUR MADRID</rdfs:label>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/81085/geo"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/comoRestriccionLocalidad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionActividad"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/6379348">
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/6379348/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/6379348/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/6379348/horario_2"/>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <ns2:bookingLink>https://vizeater.co/events/55232?utm_source=amadeus-1381</ns2:bookingLink>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">48.0</Precio>
+    <rdfs:label>Parrillada vegana estilo argentino en preciosa terraza con vistas</rdfs:label>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <ns2:hasImage rdf:resource="http://www.amadeus.com/activity/6379348/imagen"/>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/6379348/geo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/1484783">
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_96c3cb3e-1470-4887-802a-341585d4738b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46dc1eaa-cdfb-4186-bcc6-b9131598807c"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_61db8fb6-a642-4130-98fe-ebda59d96132"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_d78d2199-7f22-44b4-a15d-fe8dc77f7cec"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_c7669f26-9b81-46a8-a35f-cba30241e2e6"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_75abdad8-77c5-449a-a776-9503f411e235"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_95492b1f-eb27-4c6d-9469-97442176ce02"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_199b8981-7def-464e-a2e6-beabb7007957"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_79c20d9a-f564-4363-8f3e-c11ae3ce9a35"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_219a90d0-a3b6-4255-ad35-8bec1f807507"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_063be783-0102-45b2-8436-f1d61428855e"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_eaf3bf7d-c33b-4de2-9f74-2cc21f532ed5"/>
+    <sehaceEn rdf:resource="ciudad_44e60077-06a4-41ae-bb48-5a697cc32462"/>
+    <sehaceEn rdf:resource="ciudad_b7806537-d868-4a74-ac0f-4967ba87b4f8"/>
+    <sehaceEn rdf:resource="ciudad_3394a36a-a2e6-4085-89a3-f5d6d153a1b8"/>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/1484783/geo"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-10</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-12</fecha>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/1484783/horario_2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/1484783/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/1484783/horario_0"/>
+    <franjaHoraria>tarde</franjaHoraria>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <rdfs:label>Los Montes de Galicia</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <ns2:rating rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.7</ns2:rating>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/6378223">
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <ns2:hasImage rdf:resource="http://www.amadeus.com/activity/6378223/imagen"/>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/6378223/geo"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">48.0</Precio>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/6378223/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/6378223/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/6378223/horario_2"/>
+    <ns2:bookingLink>https://vizeater.co/events/22938?utm_source=amadeus-1381</ns2:bookingLink>
+    <franjaHoraria>tarde</franjaHoraria>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <rdfs:label>A dinner to celebrate winter in Las Letras</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="franja_tarde_7bf98924-06de-4c82-a9c3-2c19ee831ab3">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>tarde</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28273"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28265"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/1370525">
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_96c3cb3e-1470-4887-802a-341585d4738b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46dc1eaa-cdfb-4186-bcc6-b9131598807c"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_61db8fb6-a642-4130-98fe-ebda59d96132"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_d78d2199-7f22-44b4-a15d-fe8dc77f7cec"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_c7669f26-9b81-46a8-a35f-cba30241e2e6"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_75abdad8-77c5-449a-a776-9503f411e235"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_95492b1f-eb27-4c6d-9469-97442176ce02"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_199b8981-7def-464e-a2e6-beabb7007957"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_79c20d9a-f564-4363-8f3e-c11ae3ce9a35"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_219a90d0-a3b6-4255-ad35-8bec1f807507"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_063be783-0102-45b2-8436-f1d61428855e"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_eaf3bf7d-c33b-4de2-9f74-2cc21f532ed5"/>
+    <sehaceEn rdf:resource="ciudad_44e60077-06a4-41ae-bb48-5a697cc32462"/>
+    <sehaceEn rdf:resource="ciudad_b7806537-d868-4a74-ac0f-4967ba87b4f8"/>
+    <sehaceEn rdf:resource="ciudad_3394a36a-a2e6-4085-89a3-f5d6d153a1b8"/>
+    <rdfs:label>Terracotta</rdfs:label>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/1370525/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/1370525/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/1370525/horario_2"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-10</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-12</fecha>
+    <ns2:rating rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.8</ns2:rating>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/1370525/geo"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/transporteVuelta">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_c8439ba4-4b34-4572-bb74-ac35bb117dbc">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Barcelona</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/6378142">
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/6378142/geo"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <ns2:hasImage rdf:resource="http://www.amadeus.com/activity/6378142/imagen"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/6378142/horario_2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/6378142/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/6378142/horario_1"/>
+    <ns2:bookingLink>https://vizeater.co/events/18020?utm_source=amadeus-1381</ns2:bookingLink>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">45.6</Precio>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <rdfs:label>Tapas españolas en Madrid</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/141848">
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/141848/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/141848/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/141848/horario_2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46dc1eaa-cdfb-4186-bcc6-b9131598807c"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_61db8fb6-a642-4130-98fe-ebda59d96132"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_96c3cb3e-1470-4887-802a-341585d4738b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_d78d2199-7f22-44b4-a15d-fe8dc77f7cec"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_c7669f26-9b81-46a8-a35f-cba30241e2e6"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_75abdad8-77c5-449a-a776-9503f411e235"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_95492b1f-eb27-4c6d-9469-97442176ce02"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_199b8981-7def-464e-a2e6-beabb7007957"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_79c20d9a-f564-4363-8f3e-c11ae3ce9a35"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_219a90d0-a3b6-4255-ad35-8bec1f807507"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_063be783-0102-45b2-8436-f1d61428855e"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_eaf3bf7d-c33b-4de2-9f74-2cc21f532ed5"/>
+    <sehaceEn rdf:resource="ciudad_44e60077-06a4-41ae-bb48-5a697cc32462"/>
+    <sehaceEn rdf:resource="ciudad_b7806537-d868-4a74-ac0f-4967ba87b4f8"/>
+    <sehaceEn rdf:resource="ciudad_3394a36a-a2e6-4085-89a3-f5d6d153a1b8"/>
+    <franjaHoraria>tarde</franjaHoraria>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-10</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-12</fecha>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/141848/geo"/>
+    <rdfs:label>Rutas de Tapas por Espana</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoJustificacion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_57542920-e12f-4825-9020-05cb1a31b00c">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <hasTransport rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_ida_64b6b584-2dac-4299-bdc7-01fe522ea4ce"/>
+    <transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_0adcd582-dc6d-4e7d-9079-ff527763a0e9"/>
+    <tieneAlojamiento rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/hotel_OIMADYLF_6a879197-86d4-4b76-b87f-cf09fa8f5f84"/>
+    <saleDe rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_947089f9-25e2-40bc-aa57-053647a86ceb"/>
+    <llegaA rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_18167aec-8c57-4553-8031-8996361de81b"/>
+    <fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha_inicio>
+    <fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha_fin>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">183.88989507768213</Precio>
+    <estado>activo</estado>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_3598d7d6-8eae-4b4e-893f-c7045eaf7145"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/25007">
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/25007/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/25007/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/25007/horario_2"/>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <franjaHoraria>mañana</franjaHoraria>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/25007/geo"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <rdfs:label>Victor Herrero Entrenamiento</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <ns2:rating rdf:datatype="http://www.w3.org/2001/XMLSchema#float">5.0</ns2:rating>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tieneValoracion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionValoracion"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Valoracion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PrecioMax">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionActividad"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdPlan">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoContrato"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoJustificacion"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoRecibido"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_18167aec-8c57-4553-8031-8996361de81b">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Madrid</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_fa4216df-cf06-40ca-83e6-49b5edc44011">
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/150994"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/3044967"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
+    <rdfs:label>mañana</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/4731654">
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-10</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-12</fecha>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/4731654/horario_2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/4731654/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/4731654/horario_1"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_61db8fb6-a642-4130-98fe-ebda59d96132"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_96c3cb3e-1470-4887-802a-341585d4738b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46dc1eaa-cdfb-4186-bcc6-b9131598807c"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_d78d2199-7f22-44b4-a15d-fe8dc77f7cec"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_c7669f26-9b81-46a8-a35f-cba30241e2e6"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_75abdad8-77c5-449a-a776-9503f411e235"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_95492b1f-eb27-4c6d-9469-97442176ce02"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_199b8981-7def-464e-a2e6-beabb7007957"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_79c20d9a-f564-4363-8f3e-c11ae3ce9a35"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_219a90d0-a3b6-4255-ad35-8bec1f807507"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_063be783-0102-45b2-8436-f1d61428855e"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_eaf3bf7d-c33b-4de2-9f74-2cc21f532ed5"/>
+    <sehaceEn rdf:resource="ciudad_44e60077-06a4-41ae-bb48-5a697cc32462"/>
+    <sehaceEn rdf:resource="ciudad_b7806537-d868-4a74-ac0f-4967ba87b4f8"/>
+    <sehaceEn rdf:resource="ciudad_3394a36a-a2e6-4085-89a3-f5d6d153a1b8"/>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</Precio>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/4731654/geo"/>
+    <rdfs:comment>The booking conditions will be displayed in the booking step</rdfs:comment>
+    <ns2:bookingLink>https://beta.covermanager.com/reservation/module_restaurant/casa-tagial/english?source=amadeus</ns2:bookingLink>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <rdfs:label>Casa Tagial</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/17822">
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/17822/geo"/>
+    <ns2:rating rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.4</ns2:rating>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/17822/horario_2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/17822/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/17822/horario_1"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <franjaHoraria>tarde</franjaHoraria>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <rdfs:label>Chocolatería San Ginés</rdfs:label>
   <rdf:Description rdf:about="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/plan_e103ba91-99b8-43f7-8007-242d558eb7da">
     <fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha_inicio>
     <estado>finalizado</estado>
@@ -22,12 +546,53 @@
     <transporteVuelta rdf:resource="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/vuelo_vuelta_dda282b4-3bf2-4272-ab09-aba6ea255186"/>
     <timestamp rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-06-04T04:25:37.207485</timestamp>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/sehaceEn">
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/1229911">
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-10</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-12</fecha>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_61db8fb6-a642-4130-98fe-ebda59d96132"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_96c3cb3e-1470-4887-802a-341585d4738b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46dc1eaa-cdfb-4186-bcc6-b9131598807c"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_d78d2199-7f22-44b4-a15d-fe8dc77f7cec"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_c7669f26-9b81-46a8-a35f-cba30241e2e6"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_75abdad8-77c5-449a-a776-9503f411e235"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_95492b1f-eb27-4c6d-9469-97442176ce02"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_199b8981-7def-464e-a2e6-beabb7007957"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_79c20d9a-f564-4363-8f3e-c11ae3ce9a35"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_219a90d0-a3b6-4255-ad35-8bec1f807507"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_063be783-0102-45b2-8436-f1d61428855e"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_eaf3bf7d-c33b-4de2-9f74-2cc21f532ed5"/>
+    <sehaceEn rdf:resource="ciudad_44e60077-06a4-41ae-bb48-5a697cc32462"/>
+    <sehaceEn rdf:resource="ciudad_b7806537-d868-4a74-ac0f-4967ba87b4f8"/>
+    <sehaceEn rdf:resource="ciudad_3394a36a-a2e6-4085-89a3-f5d6d153a1b8"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/1229911/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/1229911/horario_2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/1229911/horario_1"/>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/1229911/geo"/>
+    <ns2:rating rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.3</ns2:rating>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <rdfs:label>Toni 2 Piano Bar</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/hasTransport">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
     <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PrecioMax">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
@@ -36,15 +601,111 @@
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Valoracion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_ff74997b-feec-4254-ba6e-201df973284a">
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_d8d07231-de6b-46e7-a694-5e7e691e4296"/>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_8738d4a0-5e7d-481d-925f-98d990f48547"/>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_4e761707-22dc-4d94-974b-f859dff11749"/>
+    <fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-09</fecha_fin>
+    <transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_1d8f8b7e-9e97-43f7-bfc2-3df2ac7d1ee0"/>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">500.7813876342443</Precio>
+    <llegaA rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_47f6aff5-7e0b-4c05-8e01-1f0e297aa12d"/>
+    <tieneAlojamiento rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/hotel_HAMADLET_d18281c1-0e52-4caa-8240-c86aa0832c78"/>
+    <estado>activo</estado>
+    <hasTransport rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_ida_56229441-b124-4a9c-b02f-ae3ad6283063"/>
+    <saleDe rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_e8b14fdc-8261-45e2-911a-99f1e6d2f64e"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha_inicio>
+    <timestamp rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-06-04T06:20:38.329681</timestamp>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Exterior">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPlan">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+    <owl:disjointWith rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Interior"/>
   </rdf:Description>
   <rdf:Description rdf:about="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/ciudad_origen_e0f800f1-5b39-438d-98d8-1d8f0657a761">
     <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
     <NombreCiudad>Barcelona</NombreCiudad>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_e5d62b3e-0e76-4940-829d-a483be7b17f7">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <hasTransport rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_ida_45ccfbba-6b70-492e-82da-9f477a2e9079"/>
+    <transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_5af0fbb2-f114-4866-bad4-81d0e2d09c92"/>
+    <tieneAlojamiento rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/hotel_OIMADFMN_19edd87c-2c7b-4743-9b64-01c02ff082da"/>
+    <saleDe rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_ae619661-d2ce-491e-87ac-b222266d7922"/>
+    <llegaA rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_a5bcfae6-702b-4330-b1ce-fb2a3c3f4cf0"/>
+    <fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha_inicio>
+    <fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha_fin>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">186.59219519237092</Precio>
+    <estado>activo</estado>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_59dc2506-00f7-4703-a8f4-f6e7e8958699"/>
+    <timestamp rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-06-04T06:49:41.527018</timestamp>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdTren">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Tren"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_5860f789-b0b0-4a3b-b9b4-13847c0c6675">
+    <transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_508b50d8-01be-42a2-8126-99840fb050c2"/>
+    <fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha_inicio>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <saleDe rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_1569fd72-873b-4456-82d6-4c6b824979f2"/>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">503.72162421471194</Precio>
+    <tieneAlojamiento rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/hotel_OIMADWKY_8962cd4d-c3c5-406f-b8e9-fca3c2a719a7"/>
+    <fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha_fin>
+    <llegaA rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_54a591c9-4d9f-4209-96cb-e45abd2eb2af"/>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_8bced976-e87f-432d-b743-99bf00ec21b1"/>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_7b6611e3-1a53-4df2-adf9-93263cc2591a"/>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_06231719-917c-436e-a8a5-64593b207c22"/>
+    <estado>creado</estado>
+    <estado>activo</estado>
+    <hasTransport rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_ida_6a457ab8-780a-449f-914d-504dcb0d6cd2"/>
+    <timestamp rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-06-04T04:16:09.459455</timestamp>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_06231719-917c-436e-a8a5-64593b207c22">
+    <rdfs:label>Día 3: 2025-06-07</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1591703"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/19925"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/81085"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/3044965">
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <ns2:rating rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.2</ns2:rating>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/3044965/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/3044965/horario_2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/3044965/horario_0"/>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/3044965/geo"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <rdfs:label>Parque de Atracciones de Madrid</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tiene_como_precio">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio"/>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/ImportePago">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
     <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
@@ -59,6 +720,60 @@
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
   </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_e103ba91-99b8-43f7-8007-242d558eb7da">
+    <fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha_inicio>
+    <estado>activo</estado>
+    <saleDe rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_e0f800f1-5b39-438d-98d8-1d8f0657a761"/>
+    <fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha_fin>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <llegaA rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_00010de8-48b5-4f1b-abc8-a35b8ce51032"/>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">182.7261300875401</Precio>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_5f7ce153-bdfe-482a-9614-2b27c4e1e6b3"/>
+    <hasTransport rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_ida_123601b0-d0c2-46ef-852b-04a8dfc13222"/>
+    <tieneAlojamiento rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/hotel_HNMADFTC_5293a2ef-a8f7-4686-b63c-ac05a71caa59"/>
+    <transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_dda282b4-3bf2-4272-ab09-aba6ea255186"/>
+    <timestamp rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-06-04T04:25:37.207485</timestamp>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/150994">
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/150994/horario_2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/150994/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/150994/horario_0"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46dc1eaa-cdfb-4186-bcc6-b9131598807c"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_61db8fb6-a642-4130-98fe-ebda59d96132"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_96c3cb3e-1470-4887-802a-341585d4738b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_d78d2199-7f22-44b4-a15d-fe8dc77f7cec"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_c7669f26-9b81-46a8-a35f-cba30241e2e6"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_75abdad8-77c5-449a-a776-9503f411e235"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_95492b1f-eb27-4c6d-9469-97442176ce02"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_199b8981-7def-464e-a2e6-beabb7007957"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_79c20d9a-f564-4363-8f3e-c11ae3ce9a35"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_219a90d0-a3b6-4255-ad35-8bec1f807507"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_063be783-0102-45b2-8436-f1d61428855e"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_eaf3bf7d-c33b-4de2-9f74-2cc21f532ed5"/>
+    <sehaceEn rdf:resource="ciudad_44e60077-06a4-41ae-bb48-5a697cc32462"/>
+    <sehaceEn rdf:resource="ciudad_b7806537-d868-4a74-ac0f-4967ba87b4f8"/>
+    <sehaceEn rdf:resource="ciudad_3394a36a-a2e6-4085-89a3-f5d6d153a1b8"/>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <rdfs:label>Vinophoria Day Tours</rdfs:label>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-10</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-12</fecha>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/150994/geo"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
   <rdf:Description rdf:about="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/dia_1_5f7ce153-bdfe-482a-9614-2b27c4e1e6b3">
     <seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
     <seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
@@ -108,10 +823,31 @@
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Nublado">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
+  <rdf:Description rdf:about="ciudad_destino_ae1dd4de-3e5c-4095-83c1-280518df9ba9">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Madrid</NombreCiudad>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionMeteorologica">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/1591703">
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/1591703/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/1591703/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/1591703/horario_2"/>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/1591703/geo"/>
+    <rdfs:label>Barrio de las Letras</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
   </rdf:Description>
   <rdf:Description rdf:about="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/ciudad_destino_00010de8-48b5-4f1b-abc8-a35b8ce51032">
     <NombreCiudad>Madrid</NombreCiudad>
@@ -180,6 +916,19 @@
     <seRealizan rdf:resource="http://www.amadeus.com/activity/6378142"/>
     <rdfs:label>Día 2: 2025-06-06</rdfs:label>
   </rdf:Description>
+  <rdf:Description rdf:about="plan_7106e359-bcd4-4757-a3af-7d901a549884">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <hasTransport rdf:resource="vuelo_ida_f6c89834-0ae4-4f60-aa7e-083c60055484"/>
+    <transporteVuelta rdf:resource="vuelo_vuelta_6efd397d-9497-4ee9-a039-f9301481933e"/>
+    <tieneAlojamiento rdf:resource="hotel_CAMADANC_74b3a49d-eaf1-4a07-94c0-5e25329fad2b"/>
+    <saleDe rdf:resource="ciudad_origen_919bc4d3-5d00-474a-9436-48c119a1ae3d"/>
+    <llegaA rdf:resource="ciudad_destino_ae1dd4de-3e5c-4095-83c1-280518df9ba9"/>
+    <fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-12</fecha_inicio>
+    <fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-13</fecha_fin>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">173.8332231125362</Precio>
+    <estado>activo</estado>
+    <estaCompuestoPor rdf:resource="dia_1_45f6f3a7-dd1c-42c1-bdac-84afe579087f"/>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoContrato">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
@@ -192,21 +941,141 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
   </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/message-5659769768538839853-0015">
+    <ns1:aclperformative rdf:resource="http://www.nuin.org/ontology/fipa/aclrequest"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.nuin.org/ontology/fipa/aclFipaAclMessage"/>
+    <ns1:aclcontent rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/registro_plan_09f25bf4-5593-4083-99bc-05cbfe05b747"/>
+    <ns1:aclreceiver rdf:resource="http://www.agentes.org#AgenteMantenedorPlanes"/>
+    <ns1:aclsender rdf:resource="http://www.agentes.org#AgentePlanes"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Precio">
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Llegada">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Rango"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lugar"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/esRealizadoPor">
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/28264">
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <franjaHoraria>tarde</franjaHoraria>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/28264/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/28264/horario_2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/28264/horario_0"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <rdfs:label>Ferretería Restaurante en el centro de Madrid</rdfs:label>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/28264/geo"/>
+    <ns2:rating rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.5</ns2:rating>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorPlan">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPlan"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/28265">
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46dc1eaa-cdfb-4186-bcc6-b9131598807c"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_61db8fb6-a642-4130-98fe-ebda59d96132"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_96c3cb3e-1470-4887-802a-341585d4738b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_d78d2199-7f22-44b4-a15d-fe8dc77f7cec"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_c7669f26-9b81-46a8-a35f-cba30241e2e6"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_75abdad8-77c5-449a-a776-9503f411e235"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_95492b1f-eb27-4c6d-9469-97442176ce02"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_199b8981-7def-464e-a2e6-beabb7007957"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_79c20d9a-f564-4363-8f3e-c11ae3ce9a35"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_219a90d0-a3b6-4255-ad35-8bec1f807507"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_063be783-0102-45b2-8436-f1d61428855e"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_eaf3bf7d-c33b-4de2-9f74-2cc21f532ed5"/>
+    <sehaceEn rdf:resource="ciudad_44e60077-06a4-41ae-bb48-5a697cc32462"/>
+    <sehaceEn rdf:resource="ciudad_b7806537-d868-4a74-ac0f-4967ba87b4f8"/>
+    <sehaceEn rdf:resource="ciudad_3394a36a-a2e6-4085-89a3-f5d6d153a1b8"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/28265/horario_2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/28265/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/28265/horario_0"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-10</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-12</fecha>
+    <franjaHoraria>tarde</franjaHoraria>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <rdfs:label>Universidad</rdfs:label>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/28265/geo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_d8d07231-de6b-46e7-a694-5e7e691e4296">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_df08ca58-d9ea-4f6f-afb9-82453cdfcc95"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_2f9a0236-ee1d-4a2c-ab0a-bc9fc960278a"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_f23c77ff-180e-419e-affa-bc4a7249c9ec"/>
+    <rdfs:label>Día 1: 2025-06-06</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_5f7ce153-bdfe-482a-9614-2b27c4e1e6b3">
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28273"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/4731654"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/3044967"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/150994"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1370525"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28265"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <rdfs:label>Día 1: 2025-06-05</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_d262382a-6841-499b-807c-7303fb24a705">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>tarde</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28273"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28265"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PrecioMin">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionActividad"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_635aaf91-cc6e-480a-bb05-6c091bc9cf33">
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28265"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28273"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>tarde</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Pais">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lugar"/>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Aventura">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
@@ -248,12 +1117,10 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tieneValoracion">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/sustituyeA">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionValoracion"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Valoracion"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionReplanificacion"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
   </rdf:Description>
   <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_5860f789-b0b0-4a3b-b9b4-13847c0c6675">
     <transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_508b50d8-01be-42a2-8126-99840fb050c2"/>
@@ -321,112 +1188,190 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombreCiudad">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/ActividadCancelada">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorPlan">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPlan"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/message--4711465798686572404-0015">
+    <ns1:aclperformative rdf:resource="http://www.nuin.org/ontology/fipa/aclrequest"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.nuin.org/ontology/fipa/aclFipaAclMessage"/>
+    <ns1:aclreceiver rdf:resource="http://www.agentes.org#AgenteMantenedorPlanes"/>
+    <ns1:aclsender rdf:resource="http://www.agentes.org#AgentePlanes"/>
+    <ns1:aclcontent rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/registro_plan_8f82b7f4-d485-4a51-af43-7b84416337a0"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaRecomendacion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPagoPorContrato">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorTransportes">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaTransporte"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaMeteorologica">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_e8b14fdc-8261-45e2-911a-99f1e6d2f64e">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Barcelona</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/comoDestino">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoRecibido">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_67696f0d-0713-40ef-a010-2c30cc2a49c2">
+    <rdfs:label>tarde</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/19925"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1591703"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/81085"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lugar">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionReplanificacion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_a9a2914d-750d-44bc-ae8f-c8cc31c04a3b">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <hasTransport rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_ida_e8fada4c-76a1-4d26-bea9-3e360b83044e"/>
+    <transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_a0615fcd-1fcd-414b-9218-14cd83d3f1ac"/>
+    <tieneAlojamiento rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/hotel_UIMADCAC_e99137d0-2be3-4f48-a24d-25c641513523"/>
+    <saleDe rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_c8439ba4-4b34-4572-bb74-ac35bb117dbc"/>
+    <llegaA rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_bb61b7f9-2007-4b04-97f1-5d30c9eeb043"/>
+    <fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-10</fecha_inicio>
+    <fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-11</fecha_fin>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">184.94053354196433</Precio>
+    <estado>activo</estado>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_31614f58-51bb-4728-944e-1e15191dec05"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_e9ccaae7-47f5-4ccb-8517-51f1bb431c0b">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Madrid</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Naturaleza">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/comoOrigen">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
     <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/comoPedidor">
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_24ce847a-e020-4c2a-ba42-0937bc0e3bb6">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/13313"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/6378142"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/6379095"/>
+    <rdfs:label>noche</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="franja_noche_37401f66-4bc7-44dd-8305-d4d669e6663e">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>noche</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/3044967"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/150994"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/esRealizadoPor">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
     <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Pais">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lugar"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlojamiento">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorAlojamientos">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlojamiento"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Precio">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/ImportePago">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/6379095">
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/6379095/geo"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/6379095/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/6379095/horario_2"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/6379095/horario_0"/>
+    <ns2:bookingLink>https://vizeater.co/events/54111?utm_source=amadeus-1381</ns2:bookingLink>
+    <ns2:hasImage rdf:resource="http://www.amadeus.com/activity/6379095/imagen"/>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <rdfs:label>Paseo dulce navideño</rdfs:label>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">24.0</Precio>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <franjaHoraria>tarde</franjaHoraria>
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdVuelo">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Avion"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_99a5026c-06a3-40db-883f-fc1fa3c977f1">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>noche</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/3044967"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/150994"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaActividad">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_437f211b-8fe5-46fe-a31f-490699e2a4c7">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <rdfs:label>Día 1: 2025-06-05</rdfs:label>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_b94941dd-9c72-4363-afb9-cc1038a2ad2d"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_d262382a-6841-499b-807c-7303fb24a705"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_040f47a4-9820-4d1a-a4f0-08ef044be941"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoJustificacion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lluvioso">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaTransporte">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Naturaleza">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Gastronomica">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/alojaminetoEn">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_001140ef-724b-49c8-b7a2-1043545bf801">
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/4731654"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1370525"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
+    <rdfs:label>mañana</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombreCiudad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Interior">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdTren">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Tren"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlojamiento">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombrePais">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Pais"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_ff9cdedb-4924-4734-9964-c87072540c2f">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>tarde</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28273"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28265"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Puntuacion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Valoracion"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#topObjectProperty">
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/llegaA">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tieneAlojamiento">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
@@ -434,102 +1379,124 @@
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
     <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorActividades">
+  <rdf:Description rdf:about="http://www.amadeus.com/activity/19925">
+    <franjaHoraria>mañana</franjaHoraria>
+    <franjaHoraria>noche</franjaHoraria>
+    <franjaHoraria>tarde</franjaHoraria>
+    <ns2:rating rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.4</ns2:rating>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_62976add-0757-4189-9186-48e9575e1c6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_b592003b-a409-4f43-82c6-fbe8c3de7e6b"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_4a65a7e9-3e38-49d1-bff7-be207bf27a95"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_81df1d24-42bb-4ca9-be44-1eceb15e6813"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_46124e7e-05f8-4cdd-900a-c4f24ed399b2"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_e99b3fc2-a27b-4203-936f-dabdab621004"/>
+    <sehaceEn rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_887f9bc1-0418-4498-a8a9-eb9095e4dc3b"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/19925/horario_0"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/19925/horario_1"/>
+    <tieneHorario rdf:resource="http://www.amadeus.com/activity/19925/horario_2"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <ns2:localizacion rdf:resource="http://www.amadeus.com/activity/19925/geo"/>
+    <rdfs:isDefinedBy>amadeus</rdfs:isDefinedBy>
+    <rdfs:label>Gracias mamá</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/importe">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoContrato"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_e784ea7b-ee71-4910-9c67-e8ceebe1f3bf">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/6378223"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/6379348"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28264"/>
+    <rdfs:label>mañana</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_9010593f-243f-4fb2-846f-7a8c2b8d5fae">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>tarde</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28273"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28265"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_47f6aff5-7e0b-4c05-8e01-1f0e297aa12d">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Madrid</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/comoPedidor">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaActividad"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Nevado">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoRecibido">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Recomendacion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/dc/terms/title">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdVuelo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Avion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tieneComoPlan">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago"/>
     <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_faa1c230-ea7d-49d9-9893-c1030ac62080">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>noche</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/150994"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/3044967"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/importe">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombreUsuario">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoContrato"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento">
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/message-8270083825460925608-0009">
+    <ns1:aclsender rdf:resource="http://www.agentes.org#AgentePlanes"/>
+    <rdf:type rdf:resource="http://www.nuin.org/ontology/fipa/aclFipaAclMessage"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <ns1:aclcontent rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/registro_plan_4f8d8d95-51e1-4677-9058-9f47c8726c65"/>
+    <ns1:aclreceiver rdf:resource="http://www.agentes.org#AgenteMantenedorPlanes"/>
+    <ns1:aclperformative rdf:resource="http://www.nuin.org/ontology/fipa/aclrequest"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Tormentoso">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RadioAlojamiento">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:comment>Radio del alojamiento respeto al centro de la ciudad en KMs</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionMeteorologica">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/saleDe">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tieneAlojamiento">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
     <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TemporalPerjudicial">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/estaCompuestoPor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="dia_1_45f6f3a7-dd1c-42c1-bdac-84afe579087f">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <rdfs:label>Día 1: 2025-06-12</rdfs:label>
+    <incluyeFranja rdf:resource="franja_mañana_ed38fa9a-aa9c-438f-b578-5f27695d164c"/>
+    <incluyeFranja rdf:resource="franja_tarde_7bf98924-06de-4c82-a9c3-2c19ee831ab3"/>
+    <incluyeFranja rdf:resource="franja_noche_37401f66-4bc7-44dd-8305-d4d669e6663e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Salida">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tiene_como_precio">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/cambiaPor">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlternativa"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Cultural">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Avion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_1569fd72-873b-4456-82d6-4c6b824979f2">
-    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
-    <NombreCiudad>Barcelona</NombreCiudad>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPagoPorContrato">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/sustituyeA">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionReplanificacion"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lugar">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Rango"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/duranteUnTiempo">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
@@ -537,12 +1504,289 @@
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
     <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Rango"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionReplanificacion">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaTransporte">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/estaEn">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Pais"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Cultural">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Valoracion">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaActividad">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/message--3913238344673980065-0009">
+    <ns1:aclperformative rdf:resource="http://www.nuin.org/ontology/fipa/aclrequest"/>
+    <ns1:aclreceiver rdf:resource="http://www.agentes.org#AgenteMantenedorPlanes"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.nuin.org/ontology/fipa/aclFipaAclMessage"/>
+    <ns1:aclsender rdf:resource="http://www.agentes.org#AgentePlanes"/>
+    <ns1:aclcontent rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/registro_plan_1f4c32f5-b8cc-4900-83ee-9d96623e4ae8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/ActividadCancelada">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Puntuacion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Valoracion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionActividad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_3598d7d6-8eae-4b4e-893f-c7045eaf7145">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <rdfs:label>Día 1: 2025-06-05</rdfs:label>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_e4459fe8-f708-449f-8ade-984604329ce9"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_ff9cdedb-4924-4734-9964-c87072540c2f"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_99a5026c-06a3-40db-883f-fc1fa3c977f1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_2d008943-8ad2-4949-a8f2-398886440403">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>noche</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/3044967"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/150994"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_f23c77ff-180e-419e-affa-bc4a7249c9ec">
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28273"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28265"/>
+    <rdfs:label>noche</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/sehaceEn">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_1569fd72-873b-4456-82d6-4c6b824979f2">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Barcelona</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_028ef166-0b21-411c-9a8b-348175f60924">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/17822"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/25007"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/3044965"/>
+    <rdfs:label>noche</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_8738d4a0-5e7d-481d-925f-98d990f48547">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <rdfs:label>Día 2: 2025-06-07</rdfs:label>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_b66c3ff7-93a1-4dbb-bad6-83d856d98add"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_fa4216df-cf06-40ca-83e6-49b5edc44011"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_24ce847a-e020-4c2a-ba42-0937bc0e3bb6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#topObjectProperty">
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/seRealizan">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_b94941dd-9c72-4363-afb9-cc1038a2ad2d">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>mañana</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1370525"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/4731654"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_bb61b7f9-2007-4b04-97f1-5d30c9eeb043">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Madrid</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="ciudad_origen_919bc4d3-5d00-474a-9436-48c119a1ae3d">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Barcelona</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Rango">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/alojaminetoEn">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorActividades">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaActividad"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_ae619661-d2ce-491e-87ac-b222266d7922">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Barcelona</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_31614f58-51bb-4728-944e-1e15191dec05">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <rdfs:label>Día 1: 2025-06-10</rdfs:label>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_a25cd495-c778-438f-814c-03ccfa7a727f"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_9010593f-243f-4fb2-846f-7a8c2b8d5fae"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_2d008943-8ad2-4949-a8f2-398886440403"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_040f47a4-9820-4d1a-a4f0-08ef044be941">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>noche</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/3044967"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/150994"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <dcterms:title>"Ontología de Transporte – Entrega 2"@es</dcterms:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_54a591c9-4d9f-4209-96cb-e45abd2eb2af">
+    <NombreCiudad>Madrid</NombreCiudad>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorAlojamientos">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlojamiento"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_00010de8-48b5-4f1b-abc8-a35b8ce51032">
+    <NombreCiudad>Madrid</NombreCiudad>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoContrato">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/porMotivoDe">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionReplanificacion"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/cambiaPor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlternativa"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ubicacion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombrePais">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Pais"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionValoracion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TemporalPerjudicial">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lluvioso">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_2f9a0236-ee1d-4a2c-ab0a-bc9fc960278a">
+    <rdfs:label>mañana</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1370525"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/4731654"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_1f11d7d6-d8be-44e5-ba43-6da8484ae05a">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Barcelona</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_a25cd495-c778-438f-814c-03ccfa7a727f">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>mañana</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1370525"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/4731654"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Llegada">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Rango"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Soleado">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_a5bcfae6-702b-4330-b1ce-fb2a3c3f4cf0">
+    <NombreCiudad>Madrid</NombreCiudad>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPagoPorPasarela">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_e0f800f1-5b39-438d-98d8-1d8f0657a761">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Barcelona</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_e4459fe8-f708-449f-8ade-984604329ce9">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>mañana</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1370525"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/4731654"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.org/dc/terms/title">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_947089f9-25e2-40bc-aa57-053647a86ceb">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Barcelona</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_59dc2506-00f7-4703-a8f4-f6e7e8958699">
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_635aaf91-cc6e-480a-bb05-6c091bc9cf33"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_noche_faa1c230-ea7d-49d9-9893-c1030ac62080"/>
+    <incluyeFranja rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_mañana_001140ef-724b-49c8-b7a2-1043545bf801"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <rdfs:label>Día 1: 2025-06-06</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
@@ -550,14 +1794,66 @@
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
-    <dcterms:title>"Ontología de Transporte – Entrega 2"@es</dcterms:title>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Recomendacion">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Rango">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="franja_mañana_ed38fa9a-aa9c-438f-b578-5f27695d164c">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+    <rdfs:label>mañana</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1370525"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/4731654"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Avion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/CuentaBancaria">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Aventura">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_df08ca58-d9ea-4f6f-afb9-82453cdfcc95">
+    <rdfs:label>tarde</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Tren">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPlan">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Nublado">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Nevado">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlternativa">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/franja_tarde_b66c3ff7-93a1-4dbb-bad6-83d856d98add">
+    <rdfs:label>tarde</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/FranjaHoraria"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/llegaA">

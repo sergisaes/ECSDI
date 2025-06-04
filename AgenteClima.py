@@ -326,7 +326,7 @@ def construir_respuesta_clima(datos_clima, content_uri, ciudad):
         
         # Añadir propiedades del tiempo actual
         g.add((clima_actual_id, onto.temperatura, Literal(datos_clima['actual']['temperatura'], datatype=XSD.float)))
-        g.add((clima_actual_id, onto.humedad, Literal(datos_clima['actual']['humedad'], datatype=XSD.integer)))
+        g.add((clima_actual_id, onto.humedad, Literal(datos_clima['actual']['humedad'], datatype=XSD.float)))
         g.add((clima_actual_id, RDFS.comment, Literal(datos_clima['actual']['descripcion'])))
         g.add((clima_actual_id, onto.velocidadViento, Literal(datos_clima['actual']['viento'], datatype=XSD.float)))
         g.add((clima_actual_id, onto.fecha, Literal(datos_clima['actual']['fecha'], datatype=XSD.dateTime)))
@@ -341,7 +341,7 @@ def construir_respuesta_clima(datos_clima, content_uri, ciudad):
             # Añadir propiedades de la previsión
             g.add((prevision_id, onto.fecha, Literal(dia['fecha'], datatype=XSD.date)))
             g.add((prevision_id, onto.temperatura, Literal(dia['temperatura_media'], datatype=XSD.float)))
-            g.add((prevision_id, onto.humedad, Literal(dia['humedad_media'], datatype=XSD.integer)))
+            g.add((prevision_id, onto.humedad, Literal(dia['humedad_media'], datatype=XSD.float)))
             g.add((prevision_id, RDFS.comment, Literal(dia['descripcion'])))
             
             # Marcar si hay temporal perjudicial para actividades al aire libre
