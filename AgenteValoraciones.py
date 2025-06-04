@@ -680,8 +680,8 @@ TIEMPO_ENTRE_RECOMENDACIONES = 60  # Recomendar cada 60 segundos
 #         cargar_planes()
         
 #         # Cargar valoraciones
-#         if os.path.exists("valoraciones.rdf"):
-#             g_valoraciones.parse("valoraciones.rdf", format="xml")
+#         if os.path.exists("databases/valoraciones.rdf"):
+#             g_valoraciones.parse("databases/valoraciones.rdf", format="xml")
         
 #         # Contar solicitudes pendientes
 #         solicitudes_pendientes = 0
@@ -772,10 +772,10 @@ def valorar_capacidad():
     logger.info("Monitoreando solicitudes de valoración pendientes")
     
     # Cargar datos actualizados antes de procesar
-    if os.path.exists("valoraciones.rdf"):
+    if os.path.exists("databases/valoraciones.rdf"):
         # Limpiar datos existentes para evitar duplicados
         g_valoraciones.remove((None, onto.valoracionSolicitada, None))
-        g_valoraciones.parse("valoraciones.rdf", format="xml")
+        g_valoraciones.parse("databases/valoraciones.rdf", format="xml")
     
     # Cargar planes desde el archivo
     cargar_planes()
@@ -917,8 +917,8 @@ def test():
     """Interfaz de prueba que permite activar manualmente las capacidades"""
     # Forzar carga de planes y valoraciones
     cargar_planes()
-    if os.path.exists("valoraciones.rdf"):
-        g_valoraciones.parse("valoraciones.rdf", format="xml")
+    if os.path.exists("databases/valoraciones.rdf"):
+        g_valoraciones.parse("databases/valoraciones.rdf", format="xml")
     
     # Verificar valoraciones existentes
     valoraciones = list(g_valoraciones.subjects(RDF.type, onto.Valoracion))
@@ -1107,7 +1107,7 @@ def guardar_valoraciones():
             g.add((s, p, o))
             
         # Guardar en archivo
-        g.serialize("valoraciones.rdf", format="xml")
+        g.serialize("databases/valoraciones.rdf", format="xml")
         
         num_valoraciones = len(list(g_valoraciones.subjects(RDF.type, onto.Valoracion)))
         logger.info(f"Base de datos de valoraciones guardada con {num_valoraciones} valoraciones")
@@ -1123,13 +1123,13 @@ def cargar_planes():
     """
     try:
         # Comprobar si existe el archivo
-        if os.path.exists("planes_activos.rdf"):
+        if os.path.exists("databases/planes_activos.rdf"):
             # Limpiar el grafo antes de cargar nuevos datos 
             g_planes.remove((None, None, None))
             
             # Cargar planes desde el archivo RDF
-            g_planes.parse("planes_activos.rdf", format="xml")
-            
+            g_planes.parse("databases/planes_activos.rdf", format="xml")
+
             # Contar los planes para logging
             num_planes = len(list(g_planes.subjects(RDF.type, onto.Plan)))
             num_finalizados = len(list(s for s in g_planes.subjects(RDF.type, onto.Plan) 
@@ -1243,8 +1243,8 @@ def cargar_valoraciones():
     """
     global g_valoraciones
     try:
-        if os.path.exists("valoraciones.rdf"):
-            g_valoraciones.parse("valoraciones.rdf", format="xml")
+        if os.path.exists("databases/valoraciones.rdf"):
+            g_valoraciones.parse("databases/valoraciones.rdf", format="xml")
             num_valoraciones = len(list(g_valoraciones.subjects(RDF.type, onto.Valoracion)))
             logger.info(f"Base de datos de valoraciones cargada con {num_valoraciones} valoraciones")
         else:

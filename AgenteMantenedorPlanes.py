@@ -98,7 +98,7 @@ except Exception as e:
     logger.error(f"Error al cargar la ontología: {e}")
 
 # Archivo para persistencia
-DB_FILE = "planes_activos.rdf"
+DB_FILE = "databases/planes_activos.rdf"
 
 # Cargar planes previos si existe el archivo
 if os.path.exists(DB_FILE):
