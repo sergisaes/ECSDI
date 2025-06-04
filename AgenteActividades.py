@@ -50,7 +50,7 @@ args = parser.parse_args()
 
 # Configuración del host y puerto
 if args.port is None:
-    port = 9010
+    port = 9007
 else:
     port = args.port
 
