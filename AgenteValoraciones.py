@@ -829,6 +829,17 @@ def agentbehavior2(cola):
     """
     Comportamiento del agente - Generación de recomendaciones
     """
+
+
+    logger.info("Cargando valoraciones y perfiles de usuario antes de iniciar recomendaciones...")
+    cargar_valoraciones()
+    cargar_planes()
+    
+    # Verificar que se hayan cargado correctamente
+    num_valoraciones = len(list(g_valoraciones.subjects(RDF.type, onto.Valoracion)))
+    num_planes = len(list(g_planes.subjects(RDF.type, onto.Plan)))
+    logger.info(f"Se han cargado {num_valoraciones} valoraciones y {num_planes} planes antes de iniciar")
+    
     # Esperar un poco antes de empezar para dar tiempo a que se procesen valoraciones
     time.sleep(15)
     

@@ -2239,6 +2239,10 @@ def test_interface():
                     .actividades-lista {{ list-style-type: none; padding: 0; }}
                     .actividad-tipo {{ font-style: italic; color: #777; }}
                     .actividad-desc {{ margin: 5px 0; }}
+                    .back-btn {{margin-right: 10px; display: inline-block; margin-top: 10px;}}
+                    .dia-actividades {{ margin-top: 20px;}}
+                    .franja-horaria {{margin-left: 20px;}}
+                    .lista-actividades {{list-style: none; padding-left: 0;}}
                     .ubicacion {{
                         display: inline-block;
                         padding: 2px 6px;
@@ -2299,25 +2303,6 @@ def test_interface():
                             <div class="actividades-lista">
     '''
 
-    html = '''
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <title>Plan de Viaje</title>
-        <style>
-            .seccion { margin-bottom: 30px; }
-            .precio { font-weight: bold; color: green; }
-            .total { font-size: 1.2em; }
-            .back-btn { margin-right: 10px; display: inline-block; margin-top: 10px; }
-            .dia-actividades { margin-top: 20px; }
-            .franja-horaria { margin-left: 20px; }
-            .lista-actividades { list-style: none; padding-left: 0; }
-        </style>
-    </head>
-    <body>
-        <div class="contenido">
-    '''
 
     if plan_actividades:
         for dia in range(1, dias_estancia + 1):
