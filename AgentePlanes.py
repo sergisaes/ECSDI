@@ -864,7 +864,7 @@ def buscar_agente_por_tipo(tipo_agente):
                     })
         
         if agentes_encontrados:
-            agente = agentes_encontrados[0]
+            agente = random.choice(agentes_encontrados)
             logger.info(f"Encontrado agente {agente['name']} en {agente['address']}")
             return agente
         else:
