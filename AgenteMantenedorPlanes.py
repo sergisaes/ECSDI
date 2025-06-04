@@ -407,6 +407,31 @@ def comunicacion():
                         # Copiar todos los datos del plan a la respuesta
                         for s1, p1, o1 in planes_db.triples((plan_uri, None, None)):
                             g_resp.add((s1, p1, o1))
+
+                        # Asegurarse de que se incluyen TODOS los triples relacionados con el plan
+                        for dia_uri in planes_db.objects(subject=plan_uri, predicate=onto.estaCompuestoPor):
+                            # Añadir el día al grafo respuesta
+                            g_resp.add((plan_uri, onto.estaCompuestoPor, dia_uri))
+                            
+                            # Añadir todos los triples del día
+                            for s, p, o in planes_db.triples((dia_uri, None, None)):
+                                g_resp.add((s, p, o))
+                            
+                            # Añadir todas las franjas del día
+                            for franja_uri in planes_db.objects(subject=dia_uri, predicate=onto.incluyeFranja):
+                                g_resp.add((dia_uri, onto.incluyeFranja, franja_uri))
+                                
+                                # Añadir todos los triples de la franja
+                                for s, p, o in planes_db.triples((franja_uri, None, None)):
+                                    g_resp.add((s, p, o))
+                                
+                                # Añadir todas las actividades de la franja
+                                for act_uri in planes_db.objects(subject=franja_uri, predicate=onto.seRealizan):
+                                    g_resp.add((franja_uri, onto.seRealizan, act_uri))
+                                    
+                                    # Añadir todos los triples de la actividad
+                                    for s, p, o in planes_db.triples((act_uri, None, None)):
+                                        g_resp.add((s, p, o))
                 
                 # Añadir explícitamente los datos de las ciudades
                 for ciudad_prop in [onto.llegaA, onto.saleDe]:

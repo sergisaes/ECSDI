@@ -451,8 +451,43 @@ def verificar_plan(plan_id):
             
 
             html += """
-                </body>
-            </html>
+                <div style="margin-top: 50px; padding: 20px; background-color: #f8f9fa; border-radius: 5px;">
+                    <h2>Información de depuración</h2>
+                    <div style="font-family: monospace; font-size: 12px; overflow: auto; max-height: 500px;">
+        """
+        
+            # Mostrar todos los triples relacionados con el plan
+            html += "<h3>Triples recibidos del AgenteMantenedorPlanes:</h3><pre>"
+            triples_count = 0
+            plan_uri = URIRef(f'plan_{plan_id}')
+            for s, p, o in g_resp.triples((None, None, None)):
+                triples_count += 1
+                if triples_count <= 100:  # Limitar a 100 triples para no hacer la página demasiado grande
+                    html += f"{s} | {p} | {o}\n"
+            html += f"\nTotal de triples: {triples_count}</pre>"
+            
+            # Mostrar todos los días encontrados
+            html += "<h3>Días encontrados:</h3><pre>"
+            for dia_uri in g_resp.objects(subject=plan_uri, predicate=onto.estaCompuestoPor):
+                html += f"Día: {dia_uri}\n"
+                # Mostrar propiedades del día
+                for s, p, o in g_resp.triples((dia_uri, None, None)):
+                    html += f"  {p} = {o}\n"
+            html += "</pre>"
+            
+            # Mostrar todas las franjas encontradas
+            html += "<h3>Intentando diferentes predicados para franjas:</h3><pre>"
+            for pred_str in ["incluyeFranja", "seRealizaEn", "tieneFranja"]:
+                pred = URIRef(f"{onto}{pred_str}")
+                franjas = list(g_resp.subjects(predicate=RDF.type, object=onto.FranjaHoraria))
+                html += f"Predicado: {pred} -> {len(franjas)} franjas encontradas\n"
+            html += "</pre>"
+            
+            html += """
+                        </div>
+                    </div>
+                    </body>
+                </html>
             """
             
             return html
