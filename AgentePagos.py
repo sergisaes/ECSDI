@@ -27,6 +27,7 @@ from AgentUtil.Agent import Agent
 from AgentUtil.ACLMessages import build_message, send_message, get_message_properties
 from AgentUtil.ACL import ACL
 from AgentUtil.DSO import DSO
+from ontologiaviajes import query_sparql, update_sparql
 
 # Configurar logging
 logging.basicConfig(level=logging.DEBUG)
@@ -287,43 +288,73 @@ def procesar_validacion_pago(plan_uri, factura_uri, content_uri):
 
 def verificar_pagos_pendientes():
     """
-    Verifica y carga planes pendientes en la base de datos (sin procesarlos)
+    Verifica y carga planes pendientes del Fuseki a la base de datos local (sin procesarlos)
     """
     try:
-        # Intentar cargar el archivo de planes aceptados
-        planes_graph = Graph()
-        planes_graph.parse("planes_aceptados.ttl", format="turtle")
-        logger.info("Archivo de planes aceptados cargado correctamente")
+        # Consultar planes listos desde Fuseki
+        query = """
+        PREFIX onto: <http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         
-        # Buscar planes listos sin pago procesado
-        planes_listos = []
+        SELECT ?plan ?p ?o
+        WHERE {
+            ?plan onto:estado "listo" .
+            ?plan ?p ?o .
+        }
+        """
         
-        for s, p, o in planes_graph.triples((None, onto.estado, Literal("listo"))):
-            # Verificar si ya está en nuestra base de datos
-            tiene_pago = False
-            for s1, p1, o1 in pagos_db.triples((None, onto.paraPlan, s)):
-                # Si ya tiene algún pago asociado, verificar si está completo
-                estado_pago = pagos_db.value(subject=s1, predicate=onto.estado)
-                if estado_pago and str(estado_pago) == "Completado":
-                    tiene_pago = True
-                    break
+        results = query_sparql("planes_aceptados", query)
+        
+        if not results or "results" not in results:
+            logger.info("No se encontraron planes listos para pago en Fuseki")
+            return
             
-            if not tiene_pago:
-                # Eliminar entradas previas del mismo plan (si existen)
-                for s2, p2, o2 in pagos_db.triples((s, None, None)):
-                    pagos_db.remove((s2, p2, o2))
+        # Convertir los resultados a triples en nuestro grafo local
+        planes_procesados = set()
+        
+        for binding in results["results"]["bindings"]:
+            plan_uri = URIRef(binding["plan"]["value"])
+            predicate = URIRef(binding["p"]["value"])
+            obj_value = binding["o"]["value"]
+            obj_type = binding["o"]["type"]
+            
+            # Convertir el objeto al tipo correcto
+            if obj_type == "uri":
+                obj = URIRef(obj_value)
+            elif obj_type == "literal":
+                if "datatype" in binding["o"]:
+                    datatype = URIRef(binding["o"]["datatype"])
+                    obj = Literal(obj_value, datatype=datatype)
+                else:
+                    obj = Literal(obj_value)
+            else:
+                obj = Literal(obj_value)
+            
+            # Verificar si ya tiene pago
+            if plan_uri not in planes_procesados:
+                tiene_pago = False
+                for s1, p1, o1 in pagos_db.triples((None, onto.paraPlan, plan_uri)):
+                    estado_pago = pagos_db.value(subject=s1, predicate=onto.estado)
+                    if estado_pago and str(estado_pago) == "Completado":
+                        tiene_pago = True
+                        break
                 
-                # Importar datos del plan
-                for s2, p2, o2 in planes_graph.triples((s, None, None)):
-                    pagos_db.add((s2, p2, o2))
-                    
-                logger.info(f"Plan {s} importado para pago manual")
+                if tiene_pago:
+                    planes_procesados.add(plan_uri)
+                    continue
+                
+                # Eliminar entradas previas
+                for s2, p2, o2 in pagos_db.triples((plan_uri, None, None)):
+                    pagos_db.remove((s2, p2, o2))
+            
+            # Añadir el triple al grafo local
+            pagos_db.add((plan_uri, predicate, obj))
+            planes_procesados.add(plan_uri)
+            
+        logger.info(f"Importados {len(planes_procesados)} planes de Fuseki para pago")
         
     except Exception as e:
-        if "No such file or directory" in str(e):
-            logger.info("No se encontró archivo de planes aceptados. Esperando...")
-        else:
-            logger.error(f"Error al procesar pagos pendientes: {e}")
+        logger.error(f"Error al consultar planes de Fuseki: {e}")
 
 
 def agentbehavior1(cola):
@@ -731,6 +762,40 @@ def guardar_pago_en_rdf(pago_id, plan_uri, estado, importe, fecha_pago, tipo_pag
         logger.error(f"Error al guardar el pago en el archivo de cobros: {e}")
 
 
+def guardar_grafo_en_fuseki(grafo, dataset):
+    """
+    Guarda un grafo RDF en el servidor Fuseki
+    
+    :param grafo: Grafo RDF a guardar
+    :param dataset: Nombre del dataset en Fuseki
+    """
+    try:
+        # Primero eliminamos todos los datos existentes
+        delete_query = """
+        DELETE {?s ?p ?o}
+        WHERE {?s ?p ?o}
+        """
+        update_sparql(dataset, delete_query)
+        
+        # Luego insertamos el grafo actual
+        # Convertimos el grafo a formato N-Triples
+        data = grafo.serialize(format='nt').decode('utf-8')
+        
+        # Construimos la consulta INSERT DATA
+        insert_query = f"""
+        INSERT DATA {{
+            {data}
+        }}
+        """
+        
+        # Ejecutamos la actualización
+        update_sparql(dataset, insert_query)
+        logger.info(f"Grafo actualizado en Fuseki dataset '{dataset}'")
+    except Exception as e:
+        logger.error(f"Error al guardar en Fuseki: {e}")
+        raise e
+
+
 def procesar_pago_contrato(plan_uri, importe, cuenta_bancaria, sender_uri):
     """
     Procesa un pago por contrato bancario
@@ -805,6 +870,26 @@ def procesar_pago_contrato(plan_uri, importe, cuenta_bancaria, sender_uri):
         except Exception as e:
             logger.warning(f"No se pudo actualizar planes_aceptados.ttl: {e}")
         
+        # Actualizar el estado en Fuseki
+        update_query = f"""
+        PREFIX onto: <http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/>
+
+        DELETE {{
+          <{plan_uri}> onto:estado ?estado .
+        }}
+        INSERT {{
+          <{plan_uri}> onto:estado "pagado" .
+        }}
+        WHERE {{
+          <{plan_uri}> onto:estado ?estado .
+        }}
+        """
+        try:
+            update_sparql("planes_aceptados", update_query)
+            logger.info("Estado del plan actualizado en Fuseki")
+        except Exception as e:
+            logger.warning(f"No se pudo actualizar el estado del plan en Fuseki: {e}")
+    
         g.add((respuesta_id, onto.estadoPago, Literal("Validado")))
         g.add((respuesta_id, RDFS.comment, Literal("Pago por contrato validado correctamente")))
     else:
@@ -881,6 +966,26 @@ def procesar_pago_pasarela(plan_uri, importe, sender_uri):
             f.write(serialized_data)
     except Exception as e:
         logger.warning(f"No se pudo actualizar planes_aceptados.ttl: {e}")
+    
+    # Actualizar el estado en Fuseki
+    update_query = f"""
+    PREFIX onto: <http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/>
+
+    DELETE {{
+      <{plan_uri}> onto:estado ?estado .
+    }}
+    INSERT {{
+      <{plan_uri}> onto:estado "pagado" .
+    }}
+    WHERE {{
+      <{plan_uri}> onto:estado ?estado .
+    }}
+    """
+    try:
+        update_sparql("planes_aceptados", update_query)
+        logger.info("Estado del plan actualizado en Fuseki")
+    except Exception as e:
+        logger.warning(f"No se pudo actualizar el estado del plan en Fuseki: {e}")
     
     g.add((respuesta_id, onto.estadoPago, Literal("Validado")))
     g.add((respuesta_id, RDFS.comment, Literal("Pago por pasarela validado correctamente")))
