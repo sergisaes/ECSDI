@@ -3083,9 +3083,9 @@ def guardar_plan_aceptado(plan_id, precio_total, origen, destino, fecha_ida, fec
         return False
 
 
-HTML 
+#HTML 
 
-<p>Vuelos: <span class="precio">{0:.2f}€</span></p>Add commentMore actions <p>Alojamiento: <span class="precio">{1:.2f}€</span></p> <p>Actividades: <span class="precio">{2:.2f}€</span></p> <p class="total">Precio total: <span class="precio">{3:.2f}€</span></p> <form method="post" action="/aceptar_plan"> <input type="hidden" name="plan_id" value="{4}"> <input type="hidden" name="precio_total" value="{3:.2f}"> <input type="hidden" name="origen" value="{5}"> <input type="hidden" name="destino" value="{6}"> <input type="hidden" name="fecha_ida" value="{7}"> <input type="hidden" name="fecha_vuelta" value="{8}"> <button type="submit" class="pay-button" style="padding: 12px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px;">Aceptar Plan</button> </form>
+#<p>Vuelos: <span class="precio">{0:.2f}€</span></p>Add commentMore actions <p>Alojamiento: <span class="precio">{1:.2f}€</span></p> <p>Actividades: <span class="precio">{2:.2f}€</span></p> <p class="total">Precio total: <span class="precio">{3:.2f}€</span></p> <form method="post" action="/aceptar_plan"> <input type="hidden" name="plan_id" value="{4}"> <input type="hidden" name="precio_total" value="{3:.2f}"> <input type="hidden" name="origen" value="{5}"> <input type="hidden" name="destino" value="{6}"> <input type="hidden" name="fecha_ida" value="{7}"> <input type="hidden" name="fecha_vuelta" value="{8}"> <button type="submit" class="pay-button" style="padding: 12px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px;">Aceptar Plan</button> </form>
 
 
 

@@ -25,6 +25,9 @@ import time
 import uuid
 import logging
 import os
+import datetime
+import threading
+import time
 from datetime import date
 from multiprocessing import Process, Queue
 
@@ -41,6 +44,12 @@ from AgentUtil.ACL import ACL
 from AgentUtil.FlaskServer import shutdown_server
 from AgentUtil.DSO import DSO
 from AgentUtil.ACLMessages import send_message
+
+# Configuración de tiempos para pruebas (en segundos)
+TIEMPO_ENTRE_LECTURAS_PLANES = 300  # Leer planes cada 10 segundos 
+TIEMPO_ENTRE_VALORACIONES = 15     # Solicitar valoraciones cada 15 segundos
+TIEMPO_ENTRE_RECOMENDACIONES_ACTIVIDAD = 15  # Recomendar cada 10 minutos
+
 
 # Logging
 logging.basicConfig(level=logging.INFO)
@@ -229,7 +238,6 @@ def comunicacion():
         g_valoraciones.add((plan, onto.fechaSolicitudValoracion, 
                           Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
         
-        # IMPORTANTE: Guardar explícitamente los cambios en el archivo
         guardar_valoraciones()
         
         logger.info(f"Solicitud recibida del AgenteMantenedor para valorar plan {plan} por usuario {usuario}")
@@ -653,115 +661,6 @@ def recalcular_perfil_usuario(usuario_uri):
             logger.info(f"Usuario {usuario_uri} reasignado al perfil: {nuevo_perfil} (antes: {perfil_actual})")
 
     
-
-# Agregar después de las importaciones existentes
-import datetime
-import threading
-import time
-
-# Configuración de tiempos para pruebas (en segundos)
-TIEMPO_ENTRE_LECTURAS_PLANES = 10  # Leer planes cada 10 segundos 
-TIEMPO_ENTRE_VALORACIONES = 15     # Solicitar valoraciones cada 15 segundos
-TIEMPO_ENTRE_RECOMENDACIONES = 60  # Recomendar cada 60 segundos
-
-# Clase para representar las capacidades del agente
-# class Capacidades:
-#     @staticmethod
-#     def valorar_capacidad():
-#         """
-#         Capacidad: Monitoreo de solicitudes de valoración
-        
-#         Esta capacidad ahora complementa al AgenteMantenedor, revisando
-#         solicitudes ya recibidas y enviando recordatorios cuando sea necesario.
-#         """
-#         logger.info("Monitoreando solicitudes de valoración pendientes")
-        
-#         # Cargar planes desde el archivo
-#         cargar_planes()
-        
-#         # Cargar valoraciones
-#         if os.path.exists("databases/valoraciones.rdf"):
-#             g_valoraciones.parse("databases/valoraciones.rdf", format="xml")
-        
-#         # Contar solicitudes pendientes
-#         solicitudes_pendientes = 0
-        
-#         # Solo revisar planes donde ya tenemos una solicitud de valoración registrada
-#         for plan, _, _ in g_valoraciones.triples((None, onto.valoracionSolicitada, Literal(True))):
-#             # Verificar si ya ha sido valorado
-#             ya_valorado = False
-#             for val in g_valoraciones.subjects(RDF.type, onto.Valoracion):
-#                 if (val, onto.sobrePlan, plan) in g_valoraciones:
-#                     ya_valorado = True
-#                     break
-        
-#             if not ya_valorado:
-#                 solicitudes_pendientes += 1
-                
-#                 # Verificar si ha pasado tiempo suficiente para enviar recordatorio
-#                 fecha_solicitud = g_valoraciones.value(subject=plan, predicate=onto.fechaSolicitudValoracion)
-#                 if fecha_solicitud:
-#                     try:
-#                         fecha_dt = datetime.datetime.fromisoformat(str(fecha_solicitud))
-#                         dias_pasados = (datetime.datetime.now() - fecha_dt).days
-                        
-#                         # Si han pasado más de 3 días, enviar recordatorio
-#                         if dias_pasados > 3:
-#                             logger.info(f"Enviando recordatorio para valorar plan {plan} (pendiente por {dias_pasados} días)")
-#                             # Aquí podrías implementar el envío del recordatorio
-#                     except Exception as e:
-#                         logger.error(f"Error al procesar fecha de solicitud para recordatorio: {e}")
-        
-#         logger.info(f"Solicitudes de valoración pendientes: {solicitudes_pendientes}")
-    
-#     @staticmethod
-#     def recomendar_viaje_capacidad():
-#         """
-#         Capacidad: Recomendación de viajes basada en perfiles de usuario
-        
-#         Esta capacidad se activa periódicamente, analiza las valoraciones
-#         existentes, y envía recomendaciones personalizadas a los usuarios.
-#         """
-#         logger.info("Activando capacidad: Recomendar viajes")
-        
-#         # Buscar usuarios que hayan valorado algún plan
-#         usuarios_activos = set()
-#         for val in g_store.subjects(RDF.type, onto.Valoracion):
-#             usuario = g_store.value(val, onto.deUsuario)
-#             if usuario:
-#                 usuarios_activos.add(str(usuario))
-        
-#         # Enviar recomendaciones a usuarios (máximo 3 por ejecución para no saturar)
-#         usuarios_seleccionados = random.sample(list(usuarios_activos), min(3, len(usuarios_activos))) if usuarios_activos else []
-        
-#         for usuario in usuarios_seleccionados:
-#             try:
-#                 # Analizar perfil del usuario
-#                 perfil = obtener_perfil_usuario(usuario)
-#                 logger.info(f"Generando recomendación para usuario {usuario} (Perfil: {perfil.nombre})")
-                
-#                 # Generar recomendación personalizada
-#                 recomendacion_xml = procesar_peticion_recomendacion(usuario, usuario)
-                
-#                 # Extraer destino recomendado para logging
-#                 g_rec = Graph()
-#                 g_rec.parse(data=recomendacion_xml, format='xml')
-#                 for s in g_rec.subjects(RDF.type, onto.RespuestaRecomendacion):
-#                     destino = g_rec.value(subject=s, predicate=onto.destinoRecomendado)
-#                     if destino:
-#                         logger.info(f"Destino recomendado: {destino}")
-                
-#                 # Registrar la recomendación en el sistema
-#                 rec_id = URIRef(f"http://www.semanticweb.org/ontologia/recomendacion_enviada/{uuid.uuid4()}")
-#                 g_store.add((rec_id, RDF.type, onto.RecomendacionEnviada))
-#                 g_store.add((rec_id, onto.paraUsuario, Literal(usuario)))
-#                 g_store.add((rec_id, onto.fechaEnvio, Literal(datetime.datetime.now().isoformat())))
-                
-#                 # En un entorno real, aquí se enviaría la recomendación al usuario
-#                 # por correo, notificación u otro medio
-#             except Exception as e:
-#                 logger.error(f"Error al generar recomendación: {e}")
-
 def valorar_capacidad():
     """
     Monitoreo de solicitudes de valoración
@@ -810,79 +709,121 @@ def valorar_capacidad():
     
     logger.info(f"Solicitudes de valoración pendientes: {solicitudes_pendientes}")
 
-def recomendar_viaje_capacidad():
+def recomendar_actividad_capacidad():
     """
-    Recomendación de viajes basada en perfiles de usuario
+    Recomendación de actividades específicas basada en perfiles de usuario
     
-    Esta capacidad se activa periódicamente, analiza las valoraciones
-    existentes, y envía recomendaciones personalizadas a los usuarios.
+    Esta capacidad analiza el perfil colaborativo del usuario y recomienda
+    actividades específicas que coincidan con sus preferencias.
     """
-    logger.info("Activando capacidad: Recomendar viajes")
+    logger.info("Activando capacidad: Recomendar actividades")
+    
+    # Cargar planes y actividades actualizados
+    cargar_planes()
     
     # Buscar usuarios que hayan valorado algún plan
     usuarios_activos = set()
-    for val in g_store.subjects(RDF.type, onto.Valoracion):
-        usuario = g_store.value(val, onto.deUsuario)
+    for val in g_valoraciones.subjects(RDF.type, onto.Valoracion):
+        usuario = g_valoraciones.value(val, onto.deUsuario)
         if usuario:
             usuarios_activos.add(str(usuario))
     
-    # Enviar recomendaciones a usuarios (máximo 3 por ejecución para no saturar)
+    # Seleccionar hasta 3 usuarios para enviar recomendaciones
     usuarios_seleccionados = random.sample(list(usuarios_activos), min(3, len(usuarios_activos))) if usuarios_activos else []
     
     for usuario in usuarios_seleccionados:
         try:
-            # Analizar perfil del usuario
+            # Obtener perfil del usuario
             perfil = obtener_perfil_usuario(usuario)
-            logger.info(f"Generando recomendación para usuario {usuario} (Perfil: {perfil.nombre})")
             
-            # Generar recomendación personalizada
-            recomendacion_xml = procesar_peticion_recomendacion(usuario, usuario)
+            # Determinar el tipo de actividad preferido
+            tipo_preferido = perfil.calcular_prioridad_actividad()
+            if not tipo_preferido:
+                continue
+                
+            logger.info(f"Buscando actividades de tipo '{tipo_preferido}' para usuario {usuario} (Perfil: {perfil.nombre})")
             
-            # Extraer destino recomendado para logging
-            g_rec = Graph()
-            g_rec.parse(data=recomendacion_xml, format='xml')
-            for s in g_rec.subjects(RDF.type, onto.RespuestaRecomendacion):
-                destino = g_rec.value(subject=s, predicate=onto.destinoRecomendado)
-                if destino:
-                    logger.info(f"Destino recomendado: {destino}")
+            # Recuperar actividades ya realizadas por el usuario
+            actividades_realizadas = set()
+            for val in g_valoraciones.subjects(RDF.type, onto.Valoracion):
+                if (val, onto.deUsuario, Literal(usuario)) in g_valoraciones:
+                    plan = g_valoraciones.value(subject=val, predicate=onto.sobrePlan)
+                    if plan:
+                        # Extraer todas las actividades de los planes valorados
+                        for act in g_planes.objects(subject=plan, predicate=onto.seRealizan):
+                            actividades_realizadas.add(str(act))
             
-            # Registrar la recomendación en el sistema
-            rec_id = URIRef(f"http://www.semanticweb.org/ontologia/recomendacion_enviada/{uuid.uuid4()}")
-            g_store.add((rec_id, RDF.type, onto.RecomendacionEnviada))
-            g_store.add((rec_id, onto.paraUsuario, Literal(usuario)))
-            g_store.add((rec_id, onto.fechaEnvio, Literal(datetime.datetime.now().isoformat())))
+            # Buscar actividades del tipo preferido que no haya realizado
+            actividades_recomendables = []
+            tipo_uri = getattr(onto, tipo_preferido)
             
-            # En un entorno real, aquí se enviaría la recomendación al usuario
-            # por correo, notificación u otro medio
+            for actividad in g_planes.subjects(RDF.type, tipo_uri):
+                # Verificar que no la haya realizado antes
+                if str(actividad) not in actividades_realizadas:
+                    nombre = g_planes.value(subject=actividad, predicate=RDFS.label) or "Actividad sin nombre"
+                    descripcion = g_planes.value(subject=actividad, predicate=RDFS.comment) or ""
+                    
+                    # Obtener la ciudad de la actividad
+                    ciudad = None
+                    for s, p, o in g_planes.triples((actividad, onto.sehaceEn, None)):
+                        ciudad_nombre = g_planes.value(subject=o, predicate=onto.NombreCiudad)
+                        if ciudad_nombre:
+                            ciudad = str(ciudad_nombre)
+                            break
+                    
+                    actividades_recomendables.append({
+                        'uri': actividad,
+                        'nombre': str(nombre),
+                        'descripcion': str(descripcion),
+                        'tipo': tipo_preferido,
+                        'ciudad': ciudad or "Desconocida"
+                    })
+            
+            # Si no hay actividades recomendables, continuar con el siguiente usuario
+            if not actividades_recomendables:
+                logger.info(f"No se encontraron actividades nuevas de tipo {tipo_preferido} para recomendar al usuario {usuario}")
+                continue
+                
+            # Seleccionar una actividad aleatoria de las disponibles
+            actividad_recomendada = random.choice(actividades_recomendables)
+            
+            # Crear recomendación en RDF
+            g = Graph()
+            g.bind("onto", onto)
+            g.bind("rdf", RDF)
+            g.bind("rdfs", RDFS)
+            
+            recomendacion_id = URIRef(f"http://www.semanticweb.org/ontologia/recomendacion_actividad/{uuid.uuid4()}")
+            g.add((recomendacion_id, RDF.type, onto.RecomendacionActividad))
+            g.add((recomendacion_id, onto.paraUsuario, Literal(usuario)))
+            g.add((recomendacion_id, onto.actividadRecomendada, actividad_recomendada['uri']))
+            g.add((recomendacion_id, RDFS.label, Literal(f"Recomendación: {actividad_recomendada['nombre']}")))
+            g.add((recomendacion_id, RDFS.comment, Literal(f"Creemos que te gustaría esta actividad de tipo {actividad_recomendada['tipo']} en {actividad_recomendada['ciudad']}")))
+            g.add((recomendacion_id, onto.fechaRecomendacion, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+            
+            # Mostrar información detallada por consola
+            print("\n=============================================================")
+            print(f"RECOMENDACIÓN DE ACTIVIDAD PARA USUARIO: {usuario}")
+            print("=============================================================")
+            print(f"Perfil: {perfil.nombre}")
+            print(f"Preferencia de actividad: {tipo_preferido}")
+            print(f"Actividad recomendada: {actividad_recomendada['nombre']}")
+            print(f"Ciudad: {actividad_recomendada['ciudad']}")
+            print(f"Tipo: {actividad_recomendada['tipo']}")
+            print("=============================================================\n")
+            
+            # Registrar la recomendación en el sistema como antes
+            g_store.add((recomendacion_id, RDF.type, onto.RecomendacionActividadEnviada))
+            g_store.add((recomendacion_id, onto.paraUsuario, Literal(usuario)))
+            g_store.add((recomendacion_id, onto.actividad, actividad_recomendada['uri']))
+            g_store.add((recomendacion_id, onto.fechaEnvio, Literal(datetime.datetime.now().isoformat())))
+            
+            logger.info(f"Recomendada actividad '{actividad_recomendada['nombre']}' de tipo {tipo_preferido} a usuario {usuario}")
+            
+            
         except Exception as e:
-            logger.error(f"Error al generar recomendación: {e}")
-
-# Replace SistemaPercepcion class with standard agent behaviors
-
-def agentbehavior1(cola):
-    """
-    Comportamiento del agente - Monitoreo de valoraciones
-    """
-    # Bucle principal del comportamiento
-    while True:
-        try:
-            # Verificar si hay un mensaje en la cola
-            try:
-                msg = cola.get_nowait()
-                if msg == 0:
-                    logger.info("Finalizando comportamiento del agente")
-                    break
-            except:
-                pass  # No hay mensajes, continuar
-            
-            # Monitorear solicitudes de valoración
-            valorar_capacidad()
-            
-            # Esperar antes del siguiente ciclo
-            time.sleep(TIEMPO_ENTRE_VALORACIONES)
-        except Exception as e:
-            logger.error(f"Error en comportamiento de valoraciones: {e}")
-            time.sleep(5)  # Esperar un poco antes de reintentar en caso de error
+            logger.error(f"Error al generar recomendación de actividad: {e}")
+            traceback.print_exc()
 
 def agentbehavior2(cola):
     """
@@ -903,11 +844,11 @@ def agentbehavior2(cola):
             except:
                 pass  # No hay mensajes, continuar
             
-            # Generar recomendaciones de viajes
-            recomendar_viaje_capacidad()
-            
+            recomendar_actividad_capacidad()
+            tiempo_espera = TIEMPO_ENTRE_RECOMENDACIONES_ACTIVIDAD
+
             # Esperar antes del siguiente ciclo
-            time.sleep(TIEMPO_ENTRE_RECOMENDACIONES)
+            time.sleep(TIEMPO_ENTRE_RECOMENDACIONES_ACTIVIDAD)
         except Exception as e:
             logger.error(f"Error en comportamiento de recomendaciones: {e}")
             time.sleep(5)  # Esperar un poco antes de reintentar en caso de error
@@ -996,7 +937,7 @@ def test():
                 <p>Recomendaciones enviadas: {num_recomendaciones}</p>
                 <p>Frecuencia de lectura de planes: {TIEMPO_ENTRE_LECTURAS_PLANES} segundos</p>
                 <p>Frecuencia de solicitud de valoraciones: {TIEMPO_ENTRE_VALORACIONES} segundos</p>
-                <p>Frecuencia de recomendaciones: {TIEMPO_ENTRE_RECOMENDACIONES} segundos</p>
+                <p>Frecuencia de recomendaciones: {TIEMPO_ENTRE_RECOMENDACIONES_ACTIVIDAD} segundos</p>
             </div>
             
             <h2>Planes pendientes de valorar ({len(planes_pendientes)})</h2>
@@ -1027,6 +968,20 @@ def test():
                 <input type="hidden" name="capacidad" value="recomendar">
                 <button type="submit" class="button">Activar capacidad: Recomendar viajes</button>
             </form>
+            
+            <form action="/activar_capacidad" method="POST">
+                <input type="hidden" name="capacidad" value="recomendar_actividad">
+                <button type="submit" class="button">Activar capacidad: Recomendar actividades</button>
+            </form>
+
+            <h2>Probar recomendación por perfil específico</h2>
+            <p>Selecciona un perfil para crear un usuario de prueba y ver recomendaciones:</p>
+            <p>
+                <a href="/test_recomendar_usuario?perfil=Culturales" class="button">Usuario Cultural</a>
+                <a href="/test_recomendar_usuario?perfil=Aventureros" class="button">Usuario Aventurero</a>
+                <a href="/test_recomendar_usuario?perfil=Gastronómicos" class="button">Usuario Gastronómico</a>
+                <a href="/test_recomendar_usuario?perfil=Naturalistas" class="button">Usuario Naturalista</a>
+            </p>
         </body>
     </html>
     '''
@@ -1060,9 +1015,9 @@ def activar_capacidad():
             </body>
         </html>
         '''
-    elif capacidad == 'recomendar':
-        # Activar capacidad de recomendación
-        recomendar_viaje_capacidad()
+    elif capacidad == 'recomendar_actividad':
+        # Activar capacidad de recomendación de actividades
+        recomendar_actividad_capacidad()
         return f'''
         <html>
             <head>
@@ -1075,7 +1030,7 @@ def activar_capacidad():
             </head>
             <body>
                 <div class="success">
-                    <h1>Capacidad de Recomendación Activada</h1>
+                    <h1>Capacidad de Recomendación de Actividades Activada</h1>
                     <p>La capacidad ha sido activada correctamente.</p>
                     <p>Redirigiendo al panel de pruebas...</p>
                 </div>
@@ -1085,7 +1040,6 @@ def activar_capacidad():
     
     return "Capacidad no reconocida", 400
 
-# No usamos archivos, sino grafos en memoria
 g_planes = Graph()  # Grafo para almacenar planes leídos desde AgentePlanes
 g_valoraciones = Graph()  # Grafo para almacenar las valoraciones
 
@@ -1254,6 +1208,232 @@ def cargar_valoraciones():
         logger.error(f"Error al cargar valoraciones: {e}")
         return False
         
+
+@app.route("/test_recomendar_usuario")
+def test_recomendar_usuario():
+    """
+    Endpoint para crear un usuario de prueba con perfil específico
+    y generar una recomendación para él
+    """
+    # Definir perfil para usuario de prueba
+    perfil_deseado = request.args.get('perfil', 'Culturales')
+    if perfil_deseado not in ['Culturales', 'Aventureros', 'Gastronómicos', 'Naturalistas']:
+        perfil_deseado = 'Culturales'
+    
+    # Crear usuario de prueba con ID único
+    usuario_id = f"usuario_prueba_{uuid.uuid4()}"
+    usuario_uri = f"http://www.semanticweb.org/usuario/{usuario_id}"
+    
+    # Asignar directamente al perfil deseado
+    usuarios_perfiles[usuario_uri] = perfil_deseado
+    perfiles_colaborativos[perfil_deseado].añadir_usuario(usuario_uri)
+    
+    # Simular algunas valoraciones para reforzar el perfil
+    # Esto ayuda a construir preferencias realistas
+    simular_valoraciones_usuario(usuario_uri, perfil_deseado)
+    
+    # Ejecutar recomendación específica para este usuario
+    result = recomendar_actividad_usuario(usuario_uri)
+    
+    return f'''
+    <html>
+        <head>
+            <title>Recomendación de Actividad</title>
+            <style>
+                body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                .info {{ background: #f0f0f0; padding: 15px; border-radius: 5px; margin-bottom: 20px; }}
+                .recomendacion {{ background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; }}
+                pre {{ background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }}
+            </style>
+        </head>
+        <body>
+            <h1>Test de Recomendación de Actividades</h1>
+            
+            <div class="info">
+                <h2>Usuario de prueba</h2>
+                <p><strong>URI:</strong> {usuario_uri}</p>
+                <p><strong>Perfil asignado:</strong> {perfil_deseado}</p>
+            </div>
+            
+            <div class="recomendacion">
+                <h2>Recomendación generada</h2>
+                <pre>{result}</pre>
+            </div>
+            
+            <p><a href="/test">Volver al panel de pruebas</a></p>
+        </body>
+    </html>
+    '''
+
+def simular_valoraciones_usuario(usuario_uri, perfil_deseado):
+    """
+    Simula valoraciones para un usuario según el perfil deseado
+    """
+    # Mapeo de perfiles a tipos de actividades que preferirían
+    preferencias_por_perfil = {
+        'Culturales': ['Cultural'],
+        'Aventureros': ['Aventura', 'Exterior'],
+        'Gastronómicos': ['Gastronomica'],
+        'Naturalistas': ['Naturaleza']
+    }
+    
+    # Tipos preferidos para este perfil
+    tipos_preferidos = preferencias_por_perfil.get(perfil_deseado, ['Cultural'])
+    
+    # Cargar planes para tener actividades reales
+    cargar_planes()
+    
+    # Buscar actividades del tipo preferido
+    actividades_valoradas = 0
+    for tipo in tipos_preferidos:
+        tipo_uri = getattr(onto, tipo, None)
+        if not tipo_uri:
+            continue
+            
+        for actividad in g_planes.subjects(RDF.type, tipo_uri):
+            # Crear un plan ficticio para esta actividad
+            plan_uri = URIRef(f"http://www.semanticweb.org/ontologia/plan_simulado/{uuid.uuid4()}")
+            g_valoraciones.add((plan_uri, RDF.type, onto.Plan))
+            g_valoraciones.add((plan_uri, onto.seRealizan, actividad))
+            
+            # Crear valoración positiva (4-5)
+            valoracion_uri = URIRef(f"http://www.semanticweb.org/ontologia/valoracion_simulada/{uuid.uuid4()}")
+            puntuacion = random.randint(4, 5)  # Valoración alta para reforzar perfil
+            g_valoraciones.add((valoracion_uri, RDF.type, onto.Valoracion))
+            g_valoraciones.add((valoracion_uri, onto.deUsuario, URIRef(usuario_uri)))
+            g_valoraciones.add((valoracion_uri, onto.sobrePlan, plan_uri))
+            g_valoraciones.add((valoracion_uri, onto.puntuacion, Literal(puntuacion, datatype=XSD.integer)))
+            g_valoraciones.add((valoracion_uri, RDFS.comment, Literal("Valoración simulada")))
+            
+            # Solo crear algunas valoraciones (2-3 por tipo)
+            actividades_valoradas += 1
+            if actividades_valoradas >= 3:
+                break
+    
+    # También agregar alguna ciudad visitada al perfil
+    if perfil_deseado == 'Culturales':
+        ciudades = ['Barcelona', 'Madrid', 'Roma']
+    elif perfil_deseado == 'Aventureros':
+        ciudades = ['Queenstown', 'Interlaken', 'Chamonix']
+    elif perfil_deseado == 'Gastronómicos':
+        ciudades = ['Lyon', 'San Sebastián', 'Tokio']
+    else:  # Naturalistas
+        ciudades = ['Costa Rica', 'Yellowstone', 'Islandia']
+    
+    # Registrar ciudades en el perfil
+    for ciudad in ciudades:
+        perfiles_colaborativos[perfil_deseado].registrar_ciudad(ciudad)
+    
+    logger.info(f"Simuladas {actividades_valoradas} valoraciones para usuario {usuario_uri} en perfil {perfil_deseado}")
+    return actividades_valoradas
+
+def recomendar_actividad_usuario(usuario_uri):
+    """
+    Genera una recomendación específica para un usuario y la muestra por terminal
+    """
+    logger.info(f"Generando recomendación personalizada para usuario: {usuario_uri}")
+    
+    # Cargar planes y actividades
+    cargar_planes()
+    
+    try:
+        # Obtener perfil del usuario
+        perfil = obtener_perfil_usuario(usuario_uri)
+        logger.info(f"RECOMENDADOR: Usuario {usuario_uri} pertenece al perfil {perfil.nombre}")
+        
+        # Determinar tipo de actividad preferido
+        tipo_preferido = perfil.calcular_prioridad_actividad()
+        if not tipo_preferido:
+            logger.info("RECOMENDADOR: No se pudo determinar tipo de actividad preferido, usando Cultural")
+            tipo_preferido = 'Cultural'
+        
+        logger.info(f"RECOMENDADOR: Tipo de actividad preferida: {tipo_preferido}")
+        
+        # Recuperar actividades ya realizadas
+        actividades_realizadas = set()
+        for val in g_valoraciones.subjects(RDF.type, onto.Valoracion):
+            if (val, onto.deUsuario, URIRef(usuario_uri)) in g_valoraciones:
+                plan = g_valoraciones.value(subject=val, predicate=onto.sobrePlan)
+                if plan:
+                    for act in g_planes.objects(subject=plan, predicate=onto.seRealizan):
+                        actividades_realizadas.add(str(act))
+        
+        logger.info(f"RECOMENDADOR: Usuario ha realizado {len(actividades_realizadas)} actividades anteriormente")
+        
+        # Buscar actividades recomendables
+        tipo_uri = getattr(onto, tipo_preferido)
+        actividades_recomendables = []
+        
+        for actividad in g_planes.subjects(RDF.type, tipo_uri):
+            # Filtrar actividades ya realizadas
+            if str(actividad) not in actividades_realizadas:
+                nombre = g_planes.value(subject=actividad, predicate=RDFS.label) or "Actividad sin nombre"
+                
+                # Obtener ubicación
+                ciudad = "Desconocida"
+                for s, p, o in g_planes.triples((actividad, onto.sehaceEn, None)):
+                    ciudad_nombre = g_planes.value(subject=o, predicate=onto.NombreCiudad)
+                    if ciudad_nombre:
+                        ciudad = str(ciudad_nombre)
+                        break
+                
+                actividades_recomendables.append({
+                    'uri': actividad,
+                    'nombre': str(nombre),
+                    'tipo': tipo_preferido,
+                    'ciudad': ciudad
+                })
+        
+        logger.info(f"RECOMENDADOR: Se encontraron {len(actividades_recomendables)} actividades recomendables")
+        
+        # Si hay actividades recomendables, elegir una
+        resultado = ""
+        if actividades_recomendables:
+            # Seleccionar la más adecuada (en este caso, una aleatoria)
+            recomendada = random.choice(actividades_recomendables)
+            
+            mensaje = f"""
+=============================================================
+RECOMENDACIÓN DE ACTIVIDAD GENERADA
+=============================================================
+Usuario: {usuario_uri}
+Perfil: {perfil.nombre}
+Tipo actividad preferida: {tipo_preferido}
+-------------------------------------------------------------
+ACTIVIDAD RECOMENDADA: {recomendada['nombre']}
+Ubicación: {recomendada['ciudad']}
+Tipo: {recomendada['tipo']}
+URI: {recomendada['uri']}
+=============================================================
+"""
+            # Mostrar en consola y preparar para web
+            print(mensaje)
+            resultado = mensaje
+            logger.info(f"RECOMENDADOR: Recomendación generada: {recomendada['nombre']} en {recomendada['ciudad']}")
+        else:
+            mensaje = f"""
+=============================================================
+NO SE PUDO GENERAR RECOMENDACIÓN
+=============================================================
+Usuario: {usuario_uri}
+Perfil: {perfil.nombre}
+Tipo actividad preferida: {tipo_preferido}
+Motivo: No se encontraron actividades adecuadas
+=============================================================
+"""
+            print(mensaje)
+            resultado = mensaje
+            logger.info("RECOMENDADOR: No se pudieron encontrar actividades recomendables")
+        
+        return resultado
+        
+    except Exception as e:
+        error = f"Error al generar recomendación: {e}"
+        logger.error(error)
+        traceback.print_exc()
+        return error
+
+
 if __name__ == '__main__':
     try:
         # Registrar el agente en el directorio
@@ -1291,9 +1471,7 @@ if __name__ == '__main__':
         cola2 = Queue()  # Cola para el comportamiento de recomendaciones
         
         # Poner en marcha los behaviors
-        ab1 = Process(target=agentbehavior1, args=(cola1,))
         ab2 = Process(target=agentbehavior2, args=(cola2,))
-        ab1.start()
         ab2.start()
         
         # Iniciar el servidor Flask
@@ -1303,3 +1481,4 @@ if __name__ == '__main__':
     except Exception as e:
         logger.error(f"Error al iniciar el agente: {e}")
         traceback.print_exc()
+
