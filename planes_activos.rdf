@@ -7,62 +7,20 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 >
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/importe">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoContrato"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombreUsuario">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdPlan">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoContrato"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoJustificacion"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoRecibido"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPlan">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ubicacion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/seRealizan">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="plan_e103ba91-99b8-43f7-8007-242d558eb7da">
+  <rdf:Description rdf:about="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/plan_e103ba91-99b8-43f7-8007-242d558eb7da">
     <fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha_inicio>
-    <estado>activo</estado>
-    <saleDe rdf:resource="ciudad_origen_e0f800f1-5b39-438d-98d8-1d8f0657a761"/>
+    <estado>finalizado</estado>
+    <saleDe rdf:resource="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/ciudad_origen_e0f800f1-5b39-438d-98d8-1d8f0657a761"/>
     <fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</fecha_fin>
     <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
     <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
-    <llegaA rdf:resource="ciudad_destino_00010de8-48b5-4f1b-abc8-a35b8ce51032"/>
+    <llegaA rdf:resource="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/ciudad_destino_00010de8-48b5-4f1b-abc8-a35b8ce51032"/>
     <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">182.7261300875401</Precio>
-    <estaCompuestoPor rdf:resource="dia_1_5f7ce153-bdfe-482a-9614-2b27c4e1e6b3"/>
-    <hasTransport rdf:resource="vuelo_ida_123601b0-d0c2-46ef-852b-04a8dfc13222"/>
-    <tieneAlojamiento rdf:resource="hotel_HNMADFTC_5293a2ef-a8f7-4686-b63c-ac05a71caa59"/>
-    <transporteVuelta rdf:resource="vuelo_vuelta_dda282b4-3bf2-4272-ab09-aba6ea255186"/>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/dia_1_5f7ce153-bdfe-482a-9614-2b27c4e1e6b3"/>
+    <hasTransport rdf:resource="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/vuelo_ida_123601b0-d0c2-46ef-852b-04a8dfc13222"/>
+    <tieneAlojamiento rdf:resource="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/hotel_HNMADFTC_5293a2ef-a8f7-4686-b63c-ac05a71caa59"/>
+    <transporteVuelta rdf:resource="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/vuelo_vuelta_dda282b4-3bf2-4272-ab09-aba6ea255186"/>
     <timestamp rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-06-04T04:25:37.207485</timestamp>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/cambiaPor">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlternativa"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/sehaceEn">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
@@ -71,80 +29,37 @@
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
     <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/comoPedidor">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorPlan">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPlan"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/porMotivoDe">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionReplanificacion"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Aventura">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/comoOrigen">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorAlojamientos">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlojamiento"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_5860f789-b0b0-4a3b-b9b4-13847c0c6675">
-    <transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_508b50d8-01be-42a2-8126-99840fb050c2"/>
-    <fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha_inicio>
-    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
-    <saleDe rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_1569fd72-873b-4456-82d6-4c6b824979f2"/>
-    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">503.72162421471194</Precio>
-    <tieneAlojamiento rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/hotel_OIMADWKY_8962cd4d-c3c5-406f-b8e9-fca3c2a719a7"/>
-    <fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha_fin>
-    <llegaA rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_54a591c9-4d9f-4209-96cb-e45abd2eb2af"/>
-    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_8bced976-e87f-432d-b743-99bf00ec21b1"/>
-    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_7b6611e3-1a53-4df2-adf9-93263cc2591a"/>
-    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_06231719-917c-436e-a8a5-64593b207c22"/>
-    <estado>creado</estado>
-    <estado>activo</estado>
-    <hasTransport rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_ida_6a457ab8-780a-449f-914d-504dcb0d6cd2"/>
-    <timestamp rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-06-04T04:16:09.459455</timestamp>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/estaEn">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Pais"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RadioAlojamiento">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PrecioMax">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionActividad"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:comment>Radio del alojamiento respeto al centro de la ciudad en KMs</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/hasTransport">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlternativa">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPlan">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
   </rdf:Description>
-  <rdf:Description rdf:about="dia_1_5f7ce153-bdfe-482a-9614-2b27c4e1e6b3">
+  <rdf:Description rdf:about="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/ciudad_origen_e0f800f1-5b39-438d-98d8-1d8f0657a761">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Barcelona</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/ImportePago">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PrecioMin">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionActividad"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/dia_1_5f7ce153-bdfe-482a-9614-2b27c4e1e6b3">
     <seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
     <seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
     <seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
@@ -157,141 +72,6 @@
     <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
     <rdfs:label>Día 1: 2025-06-05</rdfs:label>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/alojaminetoEn">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionMeteorologica">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_7b6611e3-1a53-4df2-adf9-93263cc2591a">
-    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
-    <seRealizan rdf:resource="http://www.amadeus.com/activity/6379095"/>
-    <seRealizan rdf:resource="http://www.amadeus.com/activity/6379348"/>
-    <seRealizan rdf:resource="http://www.amadeus.com/activity/6378223"/>
-    <seRealizan rdf:resource="http://www.amadeus.com/activity/28264"/>
-    <seRealizan rdf:resource="http://www.amadeus.com/activity/13313"/>
-    <seRealizan rdf:resource="http://www.amadeus.com/activity/6378142"/>
-    <rdfs:label>Día 2: 2025-06-06</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lluvioso">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/duranteUnTiempo">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Rango"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Llegada">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Rango"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombrePais">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Pais"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionActividad">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tieneComoPlan">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Nublado">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PrecioMin">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionActividad"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/esRealizadoPor">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="ciudad_origen_e0f800f1-5b39-438d-98d8-1d8f0657a761">
-    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
-    <NombreCiudad>Barcelona</NombreCiudad>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tieneValoracion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionValoracion"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Valoracion"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Gastronomica">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="message--3913238344673980065-0009">
-    <ns1:aclperformative rdf:resource="http://www.nuin.org/ontology/fipa/aclrequest"/>
-    <ns1:aclreceiver rdf:resource="http://www.agentes.org#AgenteMantenedorPlanes"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdf:type rdf:resource="http://www.nuin.org/ontology/fipa/aclFipaAclMessage"/>
-    <ns1:aclsender rdf:resource="http://www.agentes.org#AgentePlanes"/>
-    <ns1:aclcontent rdf:resource="registro_plan_1f4c32f5-b8cc-4900-83ee-9d96623e4ae8"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombreCiudad">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Interior">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlojamiento">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Cultural">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_54a591c9-4d9f-4209-96cb-e45abd2eb2af">
-    <NombreCiudad>Madrid</NombreCiudad>
-    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Exterior">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-    <owl:disjointWith rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Interior"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Naturaleza">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-  </rdf:Description>
   <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/message-5659769768538839853-0015">
     <ns1:aclperformative rdf:resource="http://www.nuin.org/ontology/fipa/aclrequest"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
@@ -300,61 +80,42 @@
     <ns1:aclreceiver rdf:resource="http://www.agentes.org#AgenteMantenedorPlanes"/>
     <ns1:aclsender rdf:resource="http://www.agentes.org#AgentePlanes"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionReplanificacion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Nevado">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_06231719-917c-436e-a8a5-64593b207c22">
-    <rdfs:label>Día 3: 2025-06-07</rdfs:label>
-    <seRealizan rdf:resource="http://www.amadeus.com/activity/1591703"/>
-    <seRealizan rdf:resource="http://www.amadeus.com/activity/19925"/>
-    <seRealizan rdf:resource="http://www.amadeus.com/activity/81085"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Precio">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdVuelo">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Avion"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Tormentoso">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Valoracion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tiene_como_precio">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Tren">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/llegaA">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/hasTransport">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
     <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/message--3913238344673980065-0009">
+    <ns1:aclperformative rdf:resource="http://www.nuin.org/ontology/fipa/aclrequest"/>
+    <ns1:aclreceiver rdf:resource="http://www.agentes.org#AgenteMantenedorPlanes"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.nuin.org/ontology/fipa/aclFipaAclMessage"/>
+    <ns1:aclsender rdf:resource="http://www.agentes.org#AgentePlanes"/>
+    <ns1:aclcontent rdf:resource="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/registro_plan_1f4c32f5-b8cc-4900-83ee-9d96623e4ae8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/transporteVuelta">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaRecomendacion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Nublado">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionMeteorologica">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/laura/Documents/Uni/tercer/Q2/ECSDI/Codi/ECSDI/ciudad_destino_00010de8-48b5-4f1b-abc8-a35b8ce51032">
+    <NombreCiudad>Madrid</NombreCiudad>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
   </rdf:Description>
   <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_8bced976-e87f-432d-b743-99bf00ec21b1">
     <seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
@@ -369,162 +130,19 @@
     <rdfs:label>Día 1: 2025-06-05</rdfs:label>
     <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Recomendacion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPagoPorContrato">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorTransportes">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaTransporte"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaMeteorologica">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoJustificacion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TemporalPerjudicial">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RadioAlojamiento">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoContrato">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lugar"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Rango">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdTren">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Tren"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/ImportePago">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
-    <dcterms:title>"Ontología de Transporte – Entrega 2"@es</dcterms:title>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/saleDe">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/comoRestriccionLocalidad">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionActividad"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Avion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaActividad">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/estaCompuestoPor">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoRecibido">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaRecomendacion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaTransporte">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PrecioMax">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionActividad"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/comoDestino">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionValoracion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#topObjectProperty">
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+    <rdfs:comment>Radio del alojamiento respeto al centro de la ciudad en KMs</rdfs:comment>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPagoPorPasarela">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Soleado">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Pais">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lugar"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Puntuacion">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Valoracion"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/CuentaBancaria">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorActividades">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaActividad"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/ActividadCancelada">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/dc/terms/title">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/transporteVuelta">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_54a591c9-4d9f-4209-96cb-e45abd2eb2af">
+    <NombreCiudad>Madrid</NombreCiudad>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Salida">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
@@ -532,15 +150,283 @@
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lugar">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorTransportes">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaTransporte"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Exterior">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <owl:disjointWith rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Interior"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_06231719-917c-436e-a8a5-64593b207c22">
+    <rdfs:label>Día 3: 2025-06-07</rdfs:label>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/1591703"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/19925"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/81085"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_7b6611e3-1a53-4df2-adf9-93263cc2591a">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/6379095"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/6379348"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/6378223"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/28264"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/13313"/>
+    <seRealizan rdf:resource="http://www.amadeus.com/activity/6378142"/>
+    <rdfs:label>Día 2: 2025-06-06</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoContrato">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionValoracion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Soleado">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Llegada">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Rango"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_1569fd72-873b-4456-82d6-4c6b824979f2">
-    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
-    <NombreCiudad>Barcelona</NombreCiudad>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/esRealizadoPor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Aventura">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/seRealizan">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/comoRestriccionLocalidad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionActividad"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdPlan">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoContrato"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoJustificacion"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoRecibido"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionActividad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Gastronomica">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lugar"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaMeteorologica">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tieneValoracion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionValoracion"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Valoracion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_5860f789-b0b0-4a3b-b9b4-13847c0c6675">
+    <transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_508b50d8-01be-42a2-8126-99840fb050c2"/>
+    <fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</fecha_inicio>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <saleDe rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_1569fd72-873b-4456-82d6-4c6b824979f2"/>
+    <Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">503.72162421471194</Precio>
+    <tieneAlojamiento rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/hotel_OIMADWKY_8962cd4d-c3c5-406f-b8e9-fca3c2a719a7"/>
+    <fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</fecha_fin>
+    <llegaA rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_54a591c9-4d9f-4209-96cb-e45abd2eb2af"/>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_8bced976-e87f-432d-b743-99bf00ec21b1"/>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_7b6611e3-1a53-4df2-adf9-93263cc2591a"/>
+    <estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_06231719-917c-436e-a8a5-64593b207c22"/>
+    <estado>finalizado</estado>
+    <hasTransport rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_ida_6a457ab8-780a-449f-914d-504dcb0d6cd2"/>
+    <timestamp rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-06-04T04:16:09.459455</timestamp>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Tren">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlternativa">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/CuentaBancaria">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/estaCompuestoPor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/porMotivoDe">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionReplanificacion"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ubicacion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/estaEn">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Pais"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Tormentoso">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombreUsuario">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombreCiudad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/ActividadCancelada">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorPlan">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPlan"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/comoOrigen">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/comoPedidor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Pais">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lugar"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlojamiento">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorAlojamientos">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlojamiento"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Precio">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdVuelo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Avion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaActividad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoJustificacion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lluvioso">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaTransporte">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Naturaleza">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/alojaminetoEn">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Interior">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IdTren">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Tren"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/NombrePais">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Pais"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Puntuacion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Valoracion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#topObjectProperty">
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tieneAlojamiento">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
@@ -548,28 +434,141 @@
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
     <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/formadoPorActividades">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaActividad"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Nevado">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoRecibido">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Recomendacion">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="ciudad_destino_00010de8-48b5-4f1b-abc8-a35b8ce51032">
-    <NombreCiudad>Madrid</NombreCiudad>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TiempoMeteorologico">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.org/dc/terms/title">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tieneComoPlan">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionTransporte">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/importe">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaPagoContrato"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionAlojamiento">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/saleDe">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/TemporalPerjudicial">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/tiene_como_precio">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/IntervaloPrecio"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/cambiaPor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/RespuestaAlternativa"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Cultural">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Avion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_1569fd72-873b-4456-82d6-4c6b824979f2">
     <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <NombreCiudad>Barcelona</NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPagoPorContrato">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPago"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/sustituyeA">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionReplanificacion"/>
     <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Lugar">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/duranteUnTiempo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Alojamiento"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Rango"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionReplanificacion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Valoracion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Actividad">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Peticion">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <dcterms:title>"Ontología de Transporte – Entrega 2"@es</dcterms:title>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Respuesta">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario">
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Rango">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/llegaA">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Transporte"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/comoDestino">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PeticionPlan"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
   </rdf:Description>
 </rdf:RDF>

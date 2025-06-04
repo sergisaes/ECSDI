@@ -312,13 +312,14 @@ def buscar_agente_clima():
 def limpiar_planes_finalizados():
     """
     Elimina de la base de datos los planes cuya fecha de fin ya ha pasado
+    y solicita valoraciones para estos planes al AgenteValoraciones
     """
     global planes_db
     
     fecha_actual = datetime.datetime.now().date()
     logger.info(f"Limpiando planes finalizados. Fecha actual: {fecha_actual}")
     
-    planes_eliminados = 0
+    planes_procesados = 0
     
     # Buscar todos los planes activos
     for plan_uri, _, _ in planes_db.triples((None, RDF.type, onto.Plan)):
@@ -333,22 +334,33 @@ def limpiar_planes_finalizados():
                     # Convertir a objeto date
                     fecha_fin = datetime.datetime.fromisoformat(str(fecha_fin_str)).date()
                     
-                    # Si la fecha de fin es anterior a la fecha actual, eliminar el plan
+                    # Si la fecha de fin es anterior a la fecha actual, cambiar estado a finalizado
                     if fecha_fin < fecha_actual:
-                        logger.info(f"Eliminando plan finalizado: {plan_uri}, fecha fin: {fecha_fin}")
+                        logger.info(f"Plan finalizado: {plan_uri}, fecha fin: {fecha_fin}")
+                        planes_procesados += 1
+                        
+                        # Buscar usuario asociado al plan (si existe)
+                        usuario = planes_db.value(subject=plan_uri, predicate=onto.esRealizadoPor)
+                        if not usuario:
+                            # Si no hay usuario asignado, usamos uno genérico para pruebas
+                            usuario = URIRef("http://www.semanticweb.org/usuario/default")
+                            logger.warning(f"[VALORACIÓN] Plan {plan_uri} no tiene usuario asignado, usando valor por defecto")
                         
                         # Cambiar estado a "finalizado"
                         planes_db.remove((plan_uri, onto.estado, None))
                         planes_db.add((plan_uri, onto.estado, Literal("finalizado")))
                         
-                        planes_eliminados += 1
+                        # Solicitar valoración al AgenteValoraciones
+                        logger.info(f"[VALORACIÓN] Solicitando valoración para plan {plan_uri}")
+                        solicitar_valoracion(plan_uri, usuario)
+                        
                 except Exception as e:
                     logger.error(f"Error al procesar fecha de fin {fecha_fin_str}: {e}")
     
-    if planes_eliminados > 0:
+    if planes_procesados > 0:
         # Guardar cambios en el archivo
         planes_db.serialize(DB_FILE, format="xml")
-        logger.info(f"Se eliminaron {planes_eliminados} planes finalizados")
+        logger.info(f"Se procesaron {planes_procesados} planes finalizados")
 
 
 def buscar_agente_actividades():
@@ -993,6 +1005,358 @@ def verificar_planes():
             </body>
         </html>
         """
+
+@app.route("/test_valoracion")
+def test_valoracion():
+    """
+    Endpoint para pruebas: muestra planes y permite marcar como finalizados
+    """
+    global planes_db
+    
+    # List all plans with their status
+    all_plans = []
+    
+    for plan_uri, _, _ in planes_db.triples((None, RDF.type, onto.Plan)):
+        estado = planes_db.value(subject=plan_uri, predicate=onto.estado)
+        
+        # Get destination city if available
+        destino = "Desconocido"
+        ciudad_uri = planes_db.value(subject=plan_uri, predicate=onto.llegaA)
+        if ciudad_uri:
+            ciudad = planes_db.value(subject=ciudad_uri, predicate=onto.NombreCiudad)
+            if ciudad:
+                destino = str(ciudad)
+        
+        # If plan has no status, set it to "activo" (for testing)
+        if not estado:
+            logger.info(f"Plan {plan_uri} no tiene estado, asignando 'activo'")
+            planes_db.add((plan_uri, onto.estado, Literal("activo")))
+            estado = Literal("activo")
+            planes_db.serialize(DB_FILE, format="xml")
+        
+        all_plans.append({
+            'uri': plan_uri,
+            'estado': str(estado),
+            'destino': destino
+        })
+    
+    # Process action if specified
+    action = request.args.get('action')
+    plan_id = request.args.get('plan_id')
+    
+    if action and plan_id:
+        plan_uri = URIRef(plan_id)
+        
+        if action == 'finalize':
+            # Mark as finalized and request rating
+            planes_db.remove((plan_uri, onto.estado, None))
+            planes_db.add((plan_uri, onto.estado, Literal("finalizado")))
+            
+            # Find user or use default
+            usuario = planes_db.value(subject=plan_uri, predicate=onto.esRealizadoPor)
+            if not usuario:
+                usuario = URIRef("http://www.semanticweb.org/usuario/default")
+            
+            # Request rating from AgenteValoraciones
+            solicitar_valoracion(plan_uri, usuario)
+            planes_db.serialize(DB_FILE, format="xml")
+            
+            return f"""
+            <html>
+                <head>
+                    <title>Plan Finalizado</title>
+                    <style>
+                        body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                        .success {{ color: green; }}
+                        .btn {{ display: inline-block; padding: 10px 15px; background: #3498db; 
+                              color: white; text-decoration: none; border-radius: 4px; margin-top: 20px; }}
+                    </style>
+                </head>
+                <body>
+                    <h1>Plan Finalizado</h1>
+                    <p class="success">El plan {plan_uri} ha sido marcado como finalizado.</p>
+                    <p>Se ha enviado solicitud de valoración al AgenteValoraciones.</p>
+                    <a href="/test_valoracion" class="btn">Volver</a>
+                    <a href="http://{socket.gethostname()}:9012/test" class="btn" style="background: #27ae60;">Ir a AgenteValoraciones</a>
+                </body>
+            </html>
+            """
+        elif action == 'activate':
+            # Mark as active
+            planes_db.remove((plan_uri, onto.estado, None))
+            planes_db.add((plan_uri, onto.estado, Literal("activo")))
+            planes_db.serialize(DB_FILE, format="xml")
+            return """
+            <html>
+                <head>
+                    <title>Plan Activado</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .success { color: green; }
+                        .btn { display: inline-block; padding: 10px 15px; background: #3498db; 
+                              color: white; text-decoration: none; border-radius: 4px; margin-top: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Plan Activado</h1>
+                    <p class="success">El plan ha sido marcado como activo.</p>
+                    <a href="/test_valoracion" class="btn">Volver</a>
+                </body>
+            </html>
+            """
+    
+    # Generate HTML with all plans
+    html = f"""
+    <html>
+        <head>
+            <title>Gestión de Planes para Valoraciones</title>
+            <style>
+                body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                h1 {{ color: #2c3e50; }}
+                table {{ border-collapse: collapse; width: 100%; margin: 20px 0; }}
+                th, td {{ border: 1px solid #ddd; padding: 8px; }}
+                th {{ background-color: #f2f2f2; }}
+                tr:nth-child(even) {{ background-color: #f9f9f9; }}
+                .btn {{ display: inline-block; padding: 5px 10px; text-decoration: none; color: white; 
+                       border-radius: 3px; margin: 2px; }}
+                .btn-finalizar {{ background-color: #e74c3c; }}
+                .btn-activar {{ background-color: #27ae60; }}
+                .estado-activo {{ color: green; }}
+                .estado-finalizado {{ color: blue; }}
+            </style>
+        </head>
+        <body>
+            <h1>Gestión de Planes para Valoraciones</h1>
+            
+            <p>Total de planes: {len(all_plans)}</p>
+            
+            <table>
+                <tr>
+                    <th>Plan URI</th>
+                    <th>Destino</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+    """
+    
+    for plan in all_plans:
+        estado_class = "estado-activo" if plan['estado'] == "activo" else "estado-finalizado" if plan['estado'] == "finalizado" else ""
+        
+        html += f"""
+                <tr>
+                    <td>{plan['uri']}</td>
+                    <td>{plan['destino']}</td>
+                    <td class="{estado_class}">{plan['estado']}</td>
+                    <td>
+                """
+                
+        if plan['estado'] == "activo":
+            html += f'<a href="/test_valoracion?action=finalize&plan_id={plan["uri"]}" class="btn btn-finalizar">Finalizar</a>'
+        elif plan['estado'] == "finalizado":
+            html += f'<a href="/test_valoracion?action=activate&plan_id={plan["uri"]}" class="btn btn-activar">Reactivar</a>'
+        else:
+            html += f'''
+                <a href="/test_valoracion?action=activate&plan_id={plan["uri"]}" class="btn btn-activar">Activar</a>
+                <a href="/test_valoracion?action=finalize&plan_id={plan["uri"]}" class="btn btn-finalizar">Finalizar</a>
+            '''
+            
+        html += """
+                    </td>
+                </tr>
+        """
+    
+    html += """
+            </table>
+            
+            <a href="/planes" class="btn" style="background: #3498db; padding: 10px 15px; margin-top: 20px;">Volver a Planes</a>
+        </body>
+    </html>
+    """
+    
+    return html
+
+@app.route("/activar_plan", methods=['GET'])
+def activar_plan():
+    """
+    Endpoint para activar el primer plan encontrado o crear uno nuevo de prueba
+    """
+    global planes_db
+    
+    # Buscar si hay algún plan (de cualquier estado)
+    planes_encontrados = False
+    for plan_uri, _, _ in planes_db.triples((None, RDF.type, onto.Plan)):
+        planes_encontrados = True
+        # Cambiar su estado a activo
+        planes_db.remove((plan_uri, onto.estado, None))
+        planes_db.add((plan_uri, onto.estado, Literal("activo")))
+        
+        # Asegurar que tenga fechas (necesario para la finalización posterior)
+        fecha_inicio = planes_db.value(subject=plan_uri, predicate=onto.fecha_inicio)
+        fecha_fin = planes_db.value(subject=plan_uri, predicate=onto.fecha_fin)
+        
+        if not fecha_inicio:
+            # Agregar fecha de inicio (ayer)
+            fecha_ayer = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+            planes_db.add((plan_uri, onto.fecha_inicio, Literal(fecha_ayer)))
+        
+        if not fecha_fin:
+            # Agregar fecha de fin (hoy - para que se pueda finalizar inmediatamente)
+            fecha_hoy = datetime.datetime.now().strftime('%Y-%m-%d')
+            planes_db.add((plan_uri, onto.fecha_fin, Literal(fecha_hoy)))
+        
+        # Guardar cambios
+        planes_db.serialize(DB_FILE, format="xml")
+        
+        return f"""
+        <html>
+            <head>
+                <title>Plan Activado</title>
+                <style>
+                    body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                    .success {{ color: green; }}
+                    .btn {{ display: inline-block; padding: 10px 15px; background: #3498db; color: white; text-decoration: none; border-radius: 4px; margin-top: 20px; }}
+                </style>
+            </head>
+            <body>
+                <h1>Plan Activado</h1>
+                <p class="success">El plan {plan_uri} ha sido marcado como activo y sus fechas actualizadas.</p>
+                <p>Ahora puedes usar la función <strong>test_valoracion</strong> para finalizar este plan y probarlo con el sistema de valoraciones.</p>
+                <a href="/test_valoracion" class="btn">Ir a Test Valoraciones</a>
+            </body>
+        </html>
+        """
+    
+    # Si no hay planes, crear uno nuevo
+    if not planes_encontrados:
+        # Crear un plan de prueba
+        plan_id = f'plan_test_{uuid.uuid4()}'
+        plan_uri = URIRef(plan_id)
+        
+        # Datos básicos del plan
+        planes_db.add((plan_uri, RDF.type, onto.Plan))
+        planes_db.add((plan_uri, RDF.type, onto.PlanGeneral))
+        planes_db.add((plan_uri, onto.estado, Literal("activo")))
+        
+        # Fechas (ayer al día siguiente)
+        fecha_ayer = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+        fecha_manana = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+        planes_db.add((plan_uri, onto.fecha_inicio, Literal(fecha_ayer)))
+        planes_db.add((plan_uri, onto.fecha_fin, Literal(fecha_manana)))
+        
+        # Ciudad destino
+        ciudad_uri = URIRef(f'ciudad_{uuid.uuid4()}')
+        planes_db.add((ciudad_uri, RDF.type, onto.Ciudad))
+        planes_db.add((ciudad_uri, onto.NombreCiudad, Literal("Barcelona")))
+        planes_db.add((plan_uri, onto.llegaA, ciudad_uri))
+        
+        # Usuario (para valoración)
+        planes_db.add((plan_uri, onto.esRealizadoPor, URIRef("http://www.semanticweb.org/usuario/default")))
+        
+        # Guardar cambios
+        planes_db.serialize(DB_FILE, format="xml")
+        
+        return f"""
+        <html>
+            <head>
+                <title>Plan de Prueba Creado</title>
+                <style>
+                    body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                    .success {{ color: green; }}
+                    .btn {{ display: inline-block; padding: 10px 15px; background: #3498db; color: white; text-decoration: none; border-radius: 4px; margin-top: 20px; }}
+                </style>
+            </head>
+            <body>
+                <h1>Plan de Prueba Creado</h1>
+                <p class="success">Se ha creado un nuevo plan de prueba: {plan_uri}</p>
+                <p>Este plan está marcado como activo y tiene fechas realistas para realizar pruebas.</p>
+                <a href="/test_valoracion" class="btn">Ir a Test Valoraciones</a>
+            </body>
+        </html>
+        """
+def solicitar_valoracion(plan_uri, usuario_uri):
+    """
+    Solicita al AgenteValoraciones que gestione la valoración de un plan
+    
+    :param plan_uri: URI del plan a valorar
+    :param usuario_uri: URI del usuario que debe valorar el plan
+    """
+    global mss_cnt
+    
+    # Buscar el agente de valoraciones
+    agente_valoraciones = buscar_agente_valoraciones()
+    if not agente_valoraciones:
+        logger.error("[VALORACIÓN] No se pudo encontrar el AgenteValoraciones")
+        return False
+    
+    # Crear grafo con la petición
+    g = Graph()
+    g.bind('rdf', RDF)
+    g.bind('onto', onto)
+    
+    # Crear la petición de valoración
+    peticion_id = URIRef('notificacion_plan_terminado_' + str(uuid.uuid4()))
+    g.add((peticion_id, RDF.type, onto.NotificacionPlanTerminado))
+    g.add((peticion_id, onto.planAValorar, plan_uri))
+    g.add((peticion_id, onto.paraUsuario, usuario_uri))
+    g.add((peticion_id, onto.fechaSolicitud, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+    
+    # Construir mensaje ACL
+    msg = build_message(g, 
+                      ACL.request,
+                      sender=AgenteMantenedorPlanes.uri,
+                      receiver=URIRef(agente_valoraciones['uri']),
+                      content=peticion_id,
+                      msgcnt=mss_cnt)
+    mss_cnt += 1
+    
+    # Enviar la petición
+    try:
+        logger.info(f"[VALORACIÓN] Enviando solicitud de valoración a {agente_valoraciones['address']}")
+        response = requests.get(agente_valoraciones['address'], params={'content': msg.serialize(format='xml')})
+        
+        if response.status_code == 200:
+            logger.info("[VALORACIÓN] Respuesta recibida correctamente")
+            return True
+        else:
+            logger.error(f"[VALORACIÓN] Error en la respuesta: {response.status_code}")
+            return False
+    except Exception as e:
+        logger.error(f"[VALORACIÓN] Error al solicitar valoración: {e}")
+        return False
+
+def buscar_agente_valoraciones():
+    """
+    Busca el agente de valoraciones en el directorio
+    """
+    try:
+        # Intenta buscar utilizando el tipo correcto
+        agente = buscar_agente_por_tipo(DSO.ValoracionAgent)
+        if agente:
+            return agente
+    except Exception as e:
+        logger.warning(f"Error al buscar AgenteValoraciones: {e}")
+    
+    # Configuración de respaldo si no se encuentra en el directorio
+    logger.info("Usando configuración de respaldo para AgenteValoraciones")
+    agente = {
+        'name': 'AgenteValoraciones',
+        'uri': 'http://www.agentes.org#AgenteValoraciones',
+        'address': f'http://{socket.gethostname()}:9012/comm'
+    }
+    
+    # Verificar si AgenteValoraciones está activo en la dirección de respaldo
+    try:
+        # Intenta hacer una solicitud de prueba para verificar conectividad
+        logger.info(f"Verificando conectividad con AgenteValoraciones en {agente['address']}")
+        response = requests.get(agente['address'], timeout=1, params={'check': 'true'})
+        if response.status_code == 200:
+            logger.info(f"Conectividad con AgenteValoraciones confirmada")
+        else:
+            logger.warning(f"AgenteValoraciones respondió con código {response.status_code}")
+    except Exception as e:
+        logger.warning(f"Error al verificar conectividad con AgenteValoraciones: {e}")
+    
+    return agente
 
 if __name__ == '__main__':
     try:

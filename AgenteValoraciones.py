@@ -13,7 +13,7 @@ Interacción con AgenteMantenedor:
 - Responde: ConfirmacionSolicitudValoracion
 - Flujo: AgenteMantenedor → AgenteValoraciones → Usuario → Valoración → Perfiles → Recomendaciones
 
-@author: Arnau i Laura
+@author: Laura
 """
 
 import argparse
@@ -26,6 +26,7 @@ import uuid
 import logging
 import os
 from datetime import date
+from multiprocessing import Process, Queue
 
 from flask import Flask, request, Response, render_template
 from rdflib import Graph, Literal, Namespace, URIRef
@@ -203,30 +204,38 @@ mss_cnt = 0
 @app.route("/comm")
 def comunicacion():
     global mss_cnt
+    global g_valoraciones
 
     message = request.args['content']
-    g_msg = Graph()
-    g_msg.parse(data=message, format='xml')
+    gm = Graph()
+    gm.parse(data=message, format='xml')
 
-    props = get_message_properties(g_msg)
+    props = get_message_properties(gm)
     if props['performative'] != ACL.request:
         return Response(status=400)
 
     content = props['content']
-    tipo = g_msg.value(subject=content, predicate=RDF.type)
+    tipo = gm.value(subject=content, predicate=RDF.type)
 
     # Manejo de peticiones del AgenteMantenedor
     if tipo == onto.NotificacionPlanTerminado:
-        plan = g_msg.value(subject=content, predicate=onto.planAValorar)
-        usuario = g_msg.value(subject=content, predicate=onto.paraUsuario)
+        plan = gm.value(subject=content, predicate=onto.planAValorar)
+        usuario = gm.value(subject=content, predicate=onto.paraUsuario)
         
         # Registrar solicitud de valoración
+        g_valoraciones.add((plan, RDF.type, onto.PlanPendienteValoracion))  # Añadir tipo específico
         g_valoraciones.add((plan, onto.valoracionSolicitada, Literal(True)))
-        g_valoraciones.add((plan, onto.fechaSolicitudValoracion, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+        g_valoraciones.add((plan, onto.usuario, usuario))  # Añadir el usuario directamente
+        g_valoraciones.add((plan, onto.fechaSolicitudValoracion, 
+                          Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+        
+        # IMPORTANTE: Guardar explícitamente los cambios en el archivo
+        guardar_valoraciones()
+        
+        logger.info(f"Solicitud recibida del AgenteMantenedor para valorar plan {plan} por usuario {usuario}")
         
         # Generar enlace para valoración
         enlace_valoracion = f"http://{hostname}:{port}/form_valoracion?plan={plan}&usuario={usuario}"
-        logger.info(f"Solicitud recibida del AgenteMantenedor para valorar plan {plan} por usuario {usuario}")
         logger.info(f"Enlace de valoración: {enlace_valoracion}")
         
         # Confirmar recepción al AgenteMantenedor
@@ -656,180 +665,302 @@ TIEMPO_ENTRE_VALORACIONES = 15     # Solicitar valoraciones cada 15 segundos
 TIEMPO_ENTRE_RECOMENDACIONES = 60  # Recomendar cada 60 segundos
 
 # Clase para representar las capacidades del agente
-class Capacidades:
-    @staticmethod
-    def valorar_capacidad():
-        """
-        Capacidad: Monitoreo de solicitudes de valoración
+# class Capacidades:
+#     @staticmethod
+#     def valorar_capacidad():
+#         """
+#         Capacidad: Monitoreo de solicitudes de valoración
         
-        Esta capacidad ahora complementa al AgenteMantenedor, procesando
-        las solicitudes de valoración pendientes y enviando recordatorios.
-        """
-        logger.info("Monitoreando solicitudes de valoración pendientes")
+#         Esta capacidad ahora complementa al AgenteMantenedor, revisando
+#         solicitudes ya recibidas y enviando recordatorios cuando sea necesario.
+#         """
+#         logger.info("Monitoreando solicitudes de valoración pendientes")
         
-        # Contar solicitudes pendientes
-        solicitudes_pendientes = 0
+#         # Cargar planes desde el archivo
+#         cargar_planes()
         
-        # Verificar solicitudes que llevan más de 24 horas sin respuesta
-        umbral_tiempo = datetime.datetime.now() - datetime.timedelta(days=1)
+#         # Cargar valoraciones
+#         if os.path.exists("valoraciones.rdf"):
+#             g_valoraciones.parse("valoraciones.rdf", format="xml")
         
-        for plan, _, _ in g_valoraciones.triples((None, onto.valoracionSolicitada, Literal(True))):
-            # Verificar si ya fue valorado
-            ya_valorado = False
-            for val in g_valoraciones.subjects(RDF.type, onto.Valoracion):
-                if (val, onto.sobrePlan, plan) in g_valoraciones:
-                    ya_valorado = True
-                    break
+#         # Contar solicitudes pendientes
+#         solicitudes_pendientes = 0
         
-            if ya_valorado:
-                continue
+#         # Solo revisar planes donde ya tenemos una solicitud de valoración registrada
+#         for plan, _, _ in g_valoraciones.triples((None, onto.valoracionSolicitada, Literal(True))):
+#             # Verificar si ya ha sido valorado
+#             ya_valorado = False
+#             for val in g_valoraciones.subjects(RDF.type, onto.Valoracion):
+#                 if (val, onto.sobrePlan, plan) in g_valoraciones:
+#                     ya_valorado = True
+#                     break
+        
+#             if not ya_valorado:
+#                 solicitudes_pendientes += 1
                 
-            # Verificar cuándo se solicitó la valoración
-            fecha_solicitud_lit = g_valoraciones.value(subject=plan, predicate=onto.fechaSolicitudValoracion)
-            if fecha_solicitud_lit:
-                try:
-                    fecha_solicitud = datetime.datetime.fromisoformat(str(fecha_solicitud_lit))
-                    if fecha_solicitud < umbral_tiempo:
-                        # Enviar recordatorio
-                        usuario = g_planes.value(plan, onto.usuario)
-                        if usuario:
-                            logger.info(f"Enviando recordatorio de valoración para plan {plan} a usuario {usuario}")
-                            # Aquí iría el código para enviar un recordatorio
-                except:
-                    pass
-            
-            solicitudes_pendientes += 1
+#                 # Verificar si ha pasado tiempo suficiente para enviar recordatorio
+#                 fecha_solicitud = g_valoraciones.value(subject=plan, predicate=onto.fechaSolicitudValoracion)
+#                 if fecha_solicitud:
+#                     try:
+#                         fecha_dt = datetime.datetime.fromisoformat(str(fecha_solicitud))
+#                         dias_pasados = (datetime.datetime.now() - fecha_dt).days
+                        
+#                         # Si han pasado más de 3 días, enviar recordatorio
+#                         if dias_pasados > 3:
+#                             logger.info(f"Enviando recordatorio para valorar plan {plan} (pendiente por {dias_pasados} días)")
+#                             # Aquí podrías implementar el envío del recordatorio
+#                     except Exception as e:
+#                         logger.error(f"Error al procesar fecha de solicitud para recordatorio: {e}")
         
-        logger.info(f"Solicitudes de valoración pendientes: {solicitudes_pendientes}")
+#         logger.info(f"Solicitudes de valoración pendientes: {solicitudes_pendientes}")
     
-    @staticmethod
-    def recomendar_viaje_capacidad():
-        """
-        Capacidad: Recomendación de viajes basada en perfiles de usuario
+#     @staticmethod
+#     def recomendar_viaje_capacidad():
+#         """
+#         Capacidad: Recomendación de viajes basada en perfiles de usuario
         
-        Esta capacidad se activa periódicamente, analiza las valoraciones
-        existentes, y envía recomendaciones personalizadas a los usuarios.
-        """
-        logger.info("Activando capacidad: Recomendar viajes")
+#         Esta capacidad se activa periódicamente, analiza las valoraciones
+#         existentes, y envía recomendaciones personalizadas a los usuarios.
+#         """
+#         logger.info("Activando capacidad: Recomendar viajes")
         
-        # Buscar usuarios que hayan valorado algún plan
-        usuarios_activos = set()
-        for val in g_store.subjects(RDF.type, onto.Valoracion):
-            usuario = g_store.value(val, onto.deUsuario)
-            if usuario:
-                usuarios_activos.add(str(usuario))
+#         # Buscar usuarios que hayan valorado algún plan
+#         usuarios_activos = set()
+#         for val in g_store.subjects(RDF.type, onto.Valoracion):
+#             usuario = g_store.value(val, onto.deUsuario)
+#             if usuario:
+#                 usuarios_activos.add(str(usuario))
         
-        # Enviar recomendaciones a usuarios (máximo 3 por ejecución para no saturar)
-        usuarios_seleccionados = random.sample(list(usuarios_activos), min(3, len(usuarios_activos))) if usuarios_activos else []
+#         # Enviar recomendaciones a usuarios (máximo 3 por ejecución para no saturar)
+#         usuarios_seleccionados = random.sample(list(usuarios_activos), min(3, len(usuarios_activos))) if usuarios_activos else []
         
-        for usuario in usuarios_seleccionados:
-            try:
-                # Analizar perfil del usuario
-                perfil = obtener_perfil_usuario(usuario)
-                logger.info(f"Generando recomendación para usuario {usuario} (Perfil: {perfil.nombre})")
+#         for usuario in usuarios_seleccionados:
+#             try:
+#                 # Analizar perfil del usuario
+#                 perfil = obtener_perfil_usuario(usuario)
+#                 logger.info(f"Generando recomendación para usuario {usuario} (Perfil: {perfil.nombre})")
                 
-                # Generar recomendación personalizada
-                recomendacion_xml = procesar_peticion_recomendacion(usuario, usuario)
+#                 # Generar recomendación personalizada
+#                 recomendacion_xml = procesar_peticion_recomendacion(usuario, usuario)
                 
-                # Extraer destino recomendado para logging
-                g_rec = Graph()
-                g_rec.parse(data=recomendacion_xml, format='xml')
-                for s in g_rec.subjects(RDF.type, onto.RespuestaRecomendacion):
-                    destino = g_rec.value(subject=s, predicate=onto.destinoRecomendado)
-                    if destino:
-                        logger.info(f"Destino recomendado: {destino}")
+#                 # Extraer destino recomendado para logging
+#                 g_rec = Graph()
+#                 g_rec.parse(data=recomendacion_xml, format='xml')
+#                 for s in g_rec.subjects(RDF.type, onto.RespuestaRecomendacion):
+#                     destino = g_rec.value(subject=s, predicate=onto.destinoRecomendado)
+#                     if destino:
+#                         logger.info(f"Destino recomendado: {destino}")
                 
-                # Registrar la recomendación en el sistema
-                rec_id = URIRef(f"http://www.semanticweb.org/ontologia/recomendacion_enviada/{uuid.uuid4()}")
-                g_store.add((rec_id, RDF.type, onto.RecomendacionEnviada))
-                g_store.add((rec_id, onto.paraUsuario, Literal(usuario)))
-                g_store.add((rec_id, onto.fechaEnvio, Literal(datetime.datetime.now().isoformat())))
+#                 # Registrar la recomendación en el sistema
+#                 rec_id = URIRef(f"http://www.semanticweb.org/ontologia/recomendacion_enviada/{uuid.uuid4()}")
+#                 g_store.add((rec_id, RDF.type, onto.RecomendacionEnviada))
+#                 g_store.add((rec_id, onto.paraUsuario, Literal(usuario)))
+#                 g_store.add((rec_id, onto.fechaEnvio, Literal(datetime.datetime.now().isoformat())))
                 
-                # En un entorno real, aquí se enviaría la recomendación al usuario
-                # por correo, notificación u otro medio
-            except Exception as e:
-                logger.error(f"Error al generar recomendación: {e}")
+#                 # En un entorno real, aquí se enviaría la recomendación al usuario
+#                 # por correo, notificación u otro medio
+#             except Exception as e:
+#                 logger.error(f"Error al generar recomendación: {e}")
 
-class SistemaPercepcion:
-    @staticmethod
-    def iniciar():
-        """Inicia el sistema de percepción temporal del agente"""
-        threading.Thread(target=SistemaPercepcion._bucle_leer_planes, daemon=True).start()
-        threading.Thread(target=SistemaPercepcion._bucle_valoraciones, daemon=True).start()
-        threading.Thread(target=SistemaPercepcion._bucle_recomendaciones, daemon=True).start()
-        logger.info("Sistema de percepción temporal iniciado")
+def valorar_capacidad():
+    """
+    Monitoreo de solicitudes de valoración
     
-    @staticmethod
-    def _bucle_leer_planes():
-        """Percepción temporal para leer planes periódicamente"""
-        while True:
-            try:
-                cargar_planes()
-            except Exception as e:
-                logger.error(f"Error al leer planes: {e}")
-            
-            time.sleep(TIEMPO_ENTRE_LECTURAS_PLANES)
+    Esta capacidad ahora complementa al AgenteMantenedor, revisando
+    solicitudes ya recibidas y enviando recordatorios cuando sea necesario.
+    """
+    logger.info("Monitoreando solicitudes de valoración pendientes")
     
-    @staticmethod
-    def _bucle_valoraciones():
-        """Percepción temporal adaptada para el trabajo con AgenteMantenedor"""
-        # Espera inicial 
-        time.sleep(5)
-        
-        while True:
-            try:
-                # Esta capacidad ahora monitorea las solicitudes en vez de buscar planes
-                Capacidades.valorar_capacidad()
-            except Exception as e:
-                logger.error(f"Error en monitoreo de valoraciones: {e}")
-        
-            time.sleep(TIEMPO_ENTRE_VALORACIONES)
+    # Cargar datos actualizados antes de procesar
+    if os.path.exists("valoraciones.rdf"):
+        # Limpiar datos existentes para evitar duplicados
+        g_valoraciones.remove((None, onto.valoracionSolicitada, None))
+        g_valoraciones.parse("valoraciones.rdf", format="xml")
     
-    @staticmethod
-    def _bucle_recomendaciones():
-        """Percepción temporal para la capacidad de recomendación"""
-        # Mayor espera inicial para dejar que se procesen valoraciones primero
-        time.sleep(30)
-        
-        while True:
-            try:
-                Capacidades.recomendar_viaje_capacidad()
-            except Exception as e:
-                logger.error(f"Error en capacidad de recomendación: {e}")
-            
-            time.sleep(TIEMPO_ENTRE_RECOMENDACIONES)
-
-@app.route("/test")
-def test():
-    """Interfaz de prueba que permite activar manualmente las capacidades"""
-    # Verificar número de usuarios con perfil
-    num_usuarios = len(usuarios_perfiles)
-    
-    # Verificar valoraciones existentes
-    valoraciones = list(g_valoraciones.subjects(RDF.type, onto.Valoracion))
-    num_valoraciones = len(valoraciones)
-    
-    # Verificar recomendaciones existentes
-    recomendaciones = list(g_valoraciones.subjects(RDF.type, onto.RecomendacionEnviada))
-    num_recomendaciones = len(recomendaciones)
-    
-    # Forzar carga de planes para tener datos frescos
+    # Cargar planes desde el archivo
     cargar_planes()
-    planes = list(g_planes.subjects(RDF.type, onto.Plan))
-    num_planes = len(planes)
     
-    # Obtener planes pendientes de valoración
-    planes_pendientes = []
-    for plan in g_planes.subjects(RDF.type, onto.Plan):
+    # Contar solicitudes pendientes (usando el tipo específico)
+    solicitudes_pendientes = 0
+    
+    # Buscar por PlanPendienteValoracion y/o valoracionSolicitada=True
+    for plan, _, _ in g_valoraciones.triples((None, RDF.type, onto.PlanPendienteValoracion)):
+        # Verificar si ya ha sido valorado
         ya_valorado = False
         for val in g_valoraciones.subjects(RDF.type, onto.Valoracion):
             if (val, onto.sobrePlan, plan) in g_valoraciones:
                 ya_valorado = True
                 break
-                
+        
         if not ya_valorado:
+            solicitudes_pendientes += 1
+    
+    # También buscar por valoracionSolicitada=True (para compatibilidad)
+    for plan, _, _ in g_valoraciones.triples((None, onto.valoracionSolicitada, Literal(True))):
+        # Verificar si ya fue contado o valorado
+        if (plan, RDF.type, onto.PlanPendienteValoracion) not in g_valoraciones:
+            ya_valorado = False
+            for val in g_valoraciones.subjects(RDF.type, onto.Valoracion):
+                if (val, onto.sobrePlan, plan) in g_valoraciones:
+                    ya_valorado = True
+                    break
+            
+            if not ya_valorado:
+                solicitudes_pendientes += 1
+    
+    logger.info(f"Solicitudes de valoración pendientes: {solicitudes_pendientes}")
+
+def recomendar_viaje_capacidad():
+    """
+    Recomendación de viajes basada en perfiles de usuario
+    
+    Esta capacidad se activa periódicamente, analiza las valoraciones
+    existentes, y envía recomendaciones personalizadas a los usuarios.
+    """
+    logger.info("Activando capacidad: Recomendar viajes")
+    
+    # Buscar usuarios que hayan valorado algún plan
+    usuarios_activos = set()
+    for val in g_store.subjects(RDF.type, onto.Valoracion):
+        usuario = g_store.value(val, onto.deUsuario)
+        if usuario:
+            usuarios_activos.add(str(usuario))
+    
+    # Enviar recomendaciones a usuarios (máximo 3 por ejecución para no saturar)
+    usuarios_seleccionados = random.sample(list(usuarios_activos), min(3, len(usuarios_activos))) if usuarios_activos else []
+    
+    for usuario in usuarios_seleccionados:
+        try:
+            # Analizar perfil del usuario
+            perfil = obtener_perfil_usuario(usuario)
+            logger.info(f"Generando recomendación para usuario {usuario} (Perfil: {perfil.nombre})")
+            
+            # Generar recomendación personalizada
+            recomendacion_xml = procesar_peticion_recomendacion(usuario, usuario)
+            
+            # Extraer destino recomendado para logging
+            g_rec = Graph()
+            g_rec.parse(data=recomendacion_xml, format='xml')
+            for s in g_rec.subjects(RDF.type, onto.RespuestaRecomendacion):
+                destino = g_rec.value(subject=s, predicate=onto.destinoRecomendado)
+                if destino:
+                    logger.info(f"Destino recomendado: {destino}")
+            
+            # Registrar la recomendación en el sistema
+            rec_id = URIRef(f"http://www.semanticweb.org/ontologia/recomendacion_enviada/{uuid.uuid4()}")
+            g_store.add((rec_id, RDF.type, onto.RecomendacionEnviada))
+            g_store.add((rec_id, onto.paraUsuario, Literal(usuario)))
+            g_store.add((rec_id, onto.fechaEnvio, Literal(datetime.datetime.now().isoformat())))
+            
+            # En un entorno real, aquí se enviaría la recomendación al usuario
+            # por correo, notificación u otro medio
+        except Exception as e:
+            logger.error(f"Error al generar recomendación: {e}")
+
+# Replace SistemaPercepcion class with standard agent behaviors
+
+def agentbehavior1(cola):
+    """
+    Comportamiento del agente - Monitoreo de valoraciones
+    """
+    # Bucle principal del comportamiento
+    while True:
+        try:
+            # Verificar si hay un mensaje en la cola
+            try:
+                msg = cola.get_nowait()
+                if msg == 0:
+                    logger.info("Finalizando comportamiento del agente")
+                    break
+            except:
+                pass  # No hay mensajes, continuar
+            
+            # Monitorear solicitudes de valoración
+            valorar_capacidad()
+            
+            # Esperar antes del siguiente ciclo
+            time.sleep(TIEMPO_ENTRE_VALORACIONES)
+        except Exception as e:
+            logger.error(f"Error en comportamiento de valoraciones: {e}")
+            time.sleep(5)  # Esperar un poco antes de reintentar en caso de error
+
+def agentbehavior2(cola):
+    """
+    Comportamiento del agente - Generación de recomendaciones
+    """
+    # Esperar un poco antes de empezar para dar tiempo a que se procesen valoraciones
+    time.sleep(15)
+    
+    # Bucle principal del comportamiento
+    while True:
+        try:
+            # Verificar si hay un mensaje en la cola
+            try:
+                msg = cola.get_nowait()
+                if msg == 0:
+                    logger.info("Finalizando comportamiento del agente")
+                    break
+            except:
+                pass  # No hay mensajes, continuar
+            
+            # Generar recomendaciones de viajes
+            recomendar_viaje_capacidad()
+            
+            # Esperar antes del siguiente ciclo
+            time.sleep(TIEMPO_ENTRE_RECOMENDACIONES)
+        except Exception as e:
+            logger.error(f"Error en comportamiento de recomendaciones: {e}")
+            time.sleep(5)  # Esperar un poco antes de reintentar en caso de error
+
+@app.route("/test")
+def test():
+    """Interfaz de prueba que permite activar manualmente las capacidades"""
+    # Forzar carga de planes y valoraciones
+    cargar_planes()
+    if os.path.exists("valoraciones.rdf"):
+        g_valoraciones.parse("valoraciones.rdf", format="xml")
+    
+    # Verificar valoraciones existentes
+    valoraciones = list(g_valoraciones.subjects(RDF.type, onto.Valoracion))
+    num_valoraciones = len(valoraciones)
+    
+    # Count planes
+    planes = list(g_planes.subjects(RDF.type, onto.Plan))
+    num_planes = len(planes)
+    
+    # Count users with profiles
+    num_usuarios = len(usuarios_perfiles)
+    
+    # Count recommendations sent
+    recomendaciones = list(g_store.subjects(RDF.type, onto.RecomendacionEnviada))
+    num_recomendaciones = len(recomendaciones)
+    
+    # Obtener planes pendientes de valoración
+    planes_pendientes = []
+    
+    # Buscar por PlanPendienteValoracion o valoracionSolicitada=True
+    solicitudes = []
+    solicitudes.extend(g_valoraciones.subjects(RDF.type, onto.PlanPendienteValoracion))
+    
+    for plan, _, _ in g_valoraciones.triples((None, onto.valoracionSolicitada, Literal(True))):
+        if plan not in solicitudes:
+            solicitudes.append(plan)
+    
+    for plan in solicitudes:
+        # Verificar si ya fue valorado
+        ya_valorado = False
+        for val in g_valoraciones.subjects(RDF.type, onto.Valoracion):
+            if (val, onto.sobrePlan, plan) in g_valoraciones:
+                ya_valorado = True
+                break
+        
+        if not ya_valorado:
+            # Usar el usuario guardado en g_valoraciones, no en g_planes
+            usuario = g_valoraciones.value(plan, onto.usuario)
+            if not usuario and plan in g_planes:
+                usuario = g_planes.value(plan, onto.usuario) or g_planes.value(plan, onto.esRealizadoPor)
+            
             # Extraer información del plan
-            usuario = g_planes.value(plan, onto.usuario)
             destino_uri = g_planes.value(plan, onto.llegaA)
             destino = g_planes.value(destino_uri, onto.NombreCiudad) if destino_uri else "Desconocido"
             
@@ -909,7 +1040,7 @@ def activar_capacidad():
     
     if capacidad == 'valorar':
         # Activar capacidad de valoración
-        Capacidades.valorar_capacidad()
+        valorar_capacidad()
         return f'''
         <html>
             <head>
@@ -931,7 +1062,7 @@ def activar_capacidad():
         '''
     elif capacidad == 'recomendar':
         # Activar capacidad de recomendación
-        Capacidades.recomendar_viaje_capacidad()
+        recomendar_viaje_capacidad()
         return f'''
         <html>
             <head>
@@ -960,54 +1091,58 @@ g_valoraciones = Graph()  # Grafo para almacenar las valoraciones
 
 # Función para guardar valoraciones (solo mantiene el grafo en memoria)
 def guardar_valoraciones():
-    num_valoraciones = len(list(g_valoraciones.subjects(RDF.type, onto.Valoracion)))
-    logger.info(f"Base de datos de valoraciones actualizada: {num_valoraciones} tripletas")
-    return True
+    """
+    Guarda las valoraciones en un archivo RDF
+    """
+    try:
+        # Preparar el grafo para guardar
+        g = Graph()
+        g.bind('rdf', RDF)
+        g.bind('rdfs', RDFS)
+        g.bind('onto', onto)
+        g.bind('xsd', XSD)
+        
+        # Copiar todas las valoraciones al grafo de guardado
+        for s, p, o in g_valoraciones:
+            g.add((s, p, o))
+            
+        # Guardar en archivo
+        g.serialize("valoraciones.rdf", format="xml")
+        
+        num_valoraciones = len(list(g_valoraciones.subjects(RDF.type, onto.Valoracion)))
+        logger.info(f"Base de datos de valoraciones guardada con {num_valoraciones} valoraciones")
+        return True
+    except Exception as e:
+        logger.error(f"Error al guardar valoraciones: {e}")
+        return False
 
 # Función para cargar los planes desde el grafo externo
 def cargar_planes():
     """
-    Carga los planes directamente desde el AgentePlanes a través de su API
+    Carga los planes directamente desde el archivo planes_activos.rdf
     """
-    global g_planes
-
-    
     try:
-        # Buscar AgentePlanes en el directorio
-        agente_planes = None
-        agentes = buscar_agente_por_tipo(DSO.SolverAgent)  # AgentePlanes usa este tipo
-        
-        for agente in agentes:
-            if 'planes' in agente['name'].lower():
-                agente_planes = agente
-                break
-        
-        if not agente_planes:
-            logger.warning("No se pudo encontrar AgentePlanes en el directorio")
-            # Usar dirección hardcoded como fallback
-            planes_host = socket.gethostname()
-            planes_port = 9010  # Puerto por defecto de AgentePlanes
-            planes_url = f"http://{planes_host}:{planes_port}/get_planes"
-        else:
-            # Construir URL usando la dirección del agente (cambiando /comm por /get_planes)
-            planes_url = agente_planes['address'].replace('/comm', '/get_planes')
-        
-        # Hacer petición al endpoint
-        logger.info(f"Consultando planes en: {planes_url}")
-        response = requests.get(planes_url)
-        
-        if response.status_code == 200:
-            # Cargar la respuesta en el grafo
-            g_planes.parse(data=response.text, format='turtle')
+        # Comprobar si existe el archivo
+        if os.path.exists("planes_activos.rdf"):
+            # Limpiar el grafo antes de cargar nuevos datos 
+            g_planes.remove((None, None, None))
+            
+            # Cargar planes desde el archivo RDF
+            g_planes.parse("planes_activos.rdf", format="xml")
+            
+            # Contar los planes para logging
             num_planes = len(list(g_planes.subjects(RDF.type, onto.Plan)))
-            logger.info(f"Planes cargados exitosamente: {num_planes} encontrados")
+            num_finalizados = len(list(s for s in g_planes.subjects(RDF.type, onto.Plan) 
+                                    if (s, onto.estado, Literal("finalizado")) in g_planes))
+            
+            logger.info(f"Planes cargados desde planes_activos.rdf: {num_planes} planes, {num_finalizados} finalizados")
             return True
         else:
-            logger.warning(f"Error al cargar planes: {response.status_code}")
+            logger.warning("No se encontró el archivo planes_activos.rdf")
             return False
             
     except Exception as e:
-        logger.error(f"Error al cargar planes desde AgentePlanes: {e}")
+        logger.error(f"Error al cargar planes desde archivo: {e}")
         traceback.print_exc()
         return False
 
@@ -1102,6 +1237,23 @@ def buscar_agente_por_tipo(tipo_agente):
         traceback.print_exc()
         return None
 
+def cargar_valoraciones():
+    """
+    Carga las valoraciones desde el archivo RDF si existe
+    """
+    global g_valoraciones
+    try:
+        if os.path.exists("valoraciones.rdf"):
+            g_valoraciones.parse("valoraciones.rdf", format="xml")
+            num_valoraciones = len(list(g_valoraciones.subjects(RDF.type, onto.Valoracion)))
+            logger.info(f"Base de datos de valoraciones cargada con {num_valoraciones} valoraciones")
+        else:
+            logger.info("No existe archivo de valoraciones previo, se creará al guardar la primera valoración")
+        return True
+    except Exception as e:
+        logger.error(f"Error al cargar valoraciones: {e}")
+        return False
+        
 if __name__ == '__main__':
     try:
         # Registrar el agente en el directorio
@@ -1113,8 +1265,9 @@ if __name__ == '__main__':
         gmess.add((reg_obj, DSO.Uri, AgenteValoraciones.uri))
         gmess.add((reg_obj, FOAF.name, Literal(AgenteValoraciones.name)))
         gmess.add((reg_obj, DSO.Address, Literal(AgenteValoraciones.address)))
-        gmess.add((reg_obj, DSO.AgentType, DSO.ValoracionAgent))  # Tipo específico para valoraciones        
-        # Registrar el agente en el directorio
+        gmess.add((reg_obj, DSO.AgentType, DSO.ValoracionAgent))        
+        
+        # Lo metemos en el registro de servicios
         try:
             send_message(
                 build_message(gmess, ACL.request,
@@ -1130,8 +1283,18 @@ if __name__ == '__main__':
             logger.warning(f"No se pudo conectar con el DirectoryAgent: {e}")
             logger.warning("El agente continuará funcionando sin registro en el directorio")
         
-        # Iniciar el sistema de percepción
-        SistemaPercepcion.iniciar()
+        # Cargar valoraciones previas
+        cargar_valoraciones()
+        
+        # Colas para comunicación entre procesos
+        cola1 = Queue()  # Cola para el comportamiento de valoraciones
+        cola2 = Queue()  # Cola para el comportamiento de recomendaciones
+        
+        # Poner en marcha los behaviors
+        ab1 = Process(target=agentbehavior1, args=(cola1,))
+        ab2 = Process(target=agentbehavior2, args=(cola2,))
+        ab1.start()
+        ab2.start()
         
         # Iniciar el servidor Flask
         logger.info(f"Iniciando servidor en {hostname}:{port}")
