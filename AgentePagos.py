@@ -16,6 +16,7 @@ import uuid
 import logging
 import random
 import time
+import os
 
 from rdflib import Namespace, Graph, Literal, URIRef
 from rdflib.namespace import RDF, RDFS, XSD, FOAF
@@ -650,6 +651,69 @@ def procesar_peticion_pago_automatica(peticion_id, plan_uri, importe):
         return False
 
 
+def guardar_pago_en_rdf(pago_id, plan_uri, estado, importe, fecha_pago, tipo_pago=None, cuenta_bancaria=None):
+    """
+    Guarda la información del pago en el archivo cobros.rdf
+    
+    :param pago_id: URI del pago
+    :param plan_uri: URI del plan pagado
+    :param estado: Estado del pago (Completado, Rechazado, etc)
+    :param importe: Importe del pago
+    :param fecha_pago: Fecha del pago
+    :param tipo_pago: Tipo de pago (Contrato o Pasarela)
+    :param cuenta_bancaria: Número de cuenta bancaria (solo para pagos por contrato)
+    """
+    # Archivo RDF para cobros
+    COBROS_RDF_FILE = "databases/cobros.rdf"
+    
+    # Crear un nuevo grafo para los cobros
+    cobros_db = Graph()
+    cobros_db.bind('rdf', RDF)
+    cobros_db.bind('rdfs', RDFS)
+    cobros_db.bind('onto', onto)
+    cobros_db.bind('xsd', XSD)
+    
+    # Cargar archivo existente si ya existe
+    try:
+        if os.path.exists(COBROS_RDF_FILE):
+            cobros_db.parse(COBROS_RDF_FILE, format="xml")
+            logger.info(f"Archivo de cobros cargado: {len(cobros_db)} triples")
+    except Exception as e:
+        logger.warning(f"No se pudo cargar el archivo de cobros: {e}")
+    
+    # Añadir información del pago
+    cobros_db.add((pago_id, RDF.type, onto.Pago))
+    cobros_db.add((pago_id, onto.paraPlan, plan_uri))
+    cobros_db.add((pago_id, onto.estado, Literal(estado)))
+    cobros_db.add((pago_id, onto.importe, Literal(importe, datatype=XSD.float)))
+    cobros_db.add((pago_id, onto.fechaPago, Literal(fecha_pago, datatype=XSD.dateTime)))
+    
+    # Si es pago por contrato, añadir la cuenta bancaria
+    if tipo_pago == "Contrato" and cuenta_bancaria:
+        cobros_db.add((pago_id, onto.CuentaBancaria, Literal(str(cuenta_bancaria))))
+        cobros_db.add((pago_id, RDF.type, onto.PagoContrato))
+    elif tipo_pago == "Pasarela":
+        cobros_db.add((pago_id, RDF.type, onto.PagoPasarela))
+    
+    # Guardar el archivo
+    try:
+        # Crear directorio si no existe
+        os.makedirs(os.path.dirname(COBROS_RDF_FILE), exist_ok=True)
+        
+        # Guardar archivo
+        cobros_db.serialize(COBROS_RDF_FILE, format="xml")
+        logger.info(f"Pago {pago_id} guardado en el archivo de cobros")
+        
+        # Si está configurado Fuseki, actualizar también en el servidor
+        try:
+            guardar_grafo_en_fuseki(cobros_db, "cobros")
+        except Exception as e:
+            logger.warning(f"No se pudo actualizar el pago en Fuseki: {e}")
+            
+    except Exception as e:
+        logger.error(f"Error al guardar el pago en el archivo de cobros: {e}")
+
+
 def procesar_pago_contrato(plan_uri, importe, cuenta_bancaria, sender_uri):
     """
     Procesa un pago por contrato bancario
@@ -687,13 +751,18 @@ def procesar_pago_contrato(plan_uri, importe, cuenta_bancaria, sender_uri):
     if cuenta_valida:
         # Crear pago si la cuenta es válida
         pago_id = URIRef(f'pago_contrato_{str(uuid.uuid4())}')
+        timestamp = datetime.datetime.now().isoformat()
+        
         pagos_db.add((pago_id, RDF.type, onto.Pago))
         pagos_db.add((pago_id, onto.paraPlan, URIRef(plan_uri)))
         pagos_db.add((pago_id, onto.estado, Literal("Completado")))
-        pagos_db.add((pago_id, onto.fechaCreacion, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
-        pagos_db.add((pago_id, onto.fechaPago, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+        pagos_db.add((pago_id, onto.fechaCreacion, Literal(timestamp, datatype=XSD.dateTime)))
+        pagos_db.add((pago_id, onto.fechaPago, Literal(timestamp, datatype=XSD.dateTime)))
         pagos_db.add((pago_id, onto.importe, Literal(importe, datatype=XSD.float)))
         pagos_db.add((pago_id, onto.CuentaBancaria, Literal(str(cuenta_bancaria))))
+        
+        # Guardar el pago en el archivo cobros.rdf
+        guardar_pago_en_rdf(pago_id, URIRef(plan_uri), "Completado", importe, timestamp, "Contrato", cuenta_bancaria)
         
         # Actualizar estado del plan
         for s, p, o in pagos_db.triples((URIRef(plan_uri), None, None)):
@@ -760,12 +829,17 @@ def procesar_pago_pasarela(plan_uri, importe, sender_uri):
     
     # Crear pago
     pago_id = URIRef(f'pago_pasarela_{str(uuid.uuid4())}')
+    timestamp = datetime.datetime.now().isoformat()
+    
     pagos_db.add((pago_id, RDF.type, onto.Pago))
     pagos_db.add((pago_id, onto.paraPlan, URIRef(plan_uri)))
     pagos_db.add((pago_id, onto.estado, Literal("Completado")))
-    pagos_db.add((pago_id, onto.fechaCreacion, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
-    pagos_db.add((pago_id, onto.fechaPago, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+    pagos_db.add((pago_id, onto.fechaCreacion, Literal(timestamp, datatype=XSD.dateTime)))
+    pagos_db.add((pago_id, onto.fechaPago, Literal(timestamp, datatype=XSD.dateTime)))
     pagos_db.add((pago_id, onto.importe, Literal(importe, datatype=XSD.float)))
+    
+    # Guardar el pago en el archivo cobros.rdf
+    guardar_pago_en_rdf(pago_id, URIRef(plan_uri), "Completado", importe, timestamp, "Pasarela")
     
     # Actualizar estado del plan
     for s, p, o in pagos_db.triples((URIRef(plan_uri), None, None)):
@@ -777,7 +851,7 @@ def procesar_pago_pasarela(plan_uri, importe, sender_uri):
     try:
         planes_graph = Graph()
         planes_graph.parse("planes_aceptados.ttl", format="turtle")
-        
+
         for s, p, o in planes_graph.triples((URIRef(plan_uri), onto.estado, None)):
             planes_graph.remove((s, p, o))
         
@@ -794,7 +868,6 @@ def procesar_pago_pasarela(plan_uri, importe, sender_uri):
     g.add((respuesta_id, onto.estadoPago, Literal("Validado")))
     g.add((respuesta_id, RDFS.comment, Literal("Pago por pasarela validado correctamente")))
     
-
     # Construir mensaje completo
     mss_cnt += 1
     return build_message(g, ACL.inform, 
