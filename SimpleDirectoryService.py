@@ -104,18 +104,36 @@ def register():
     """
 
     def process_register():
-        # Si la hay extraemos el nombre del agente (FOAF.name), el URI del agente
-        # su direccion y su tipo
-
+        """
+        Procesa la solicitud de registro de un agente y ajusta las direcciones
+        para garantizar que funcionen en entornos distribuidos
+        """
         logger.info('Peticion de registro')
 
+        # Extraer datos básicos del agente
         agn_add = gm.value(subject=content, predicate=DSO.Address)
         agn_name = gm.value(subject=content, predicate=FOAF.name)
         agn_uri = gm.value(subject=content, predicate=DSO.Uri)
         agn_type = gm.value(subject=content, predicate=DSO.AgentType)
 
-        # Añadimos la informacion en el grafo de registro vinculandola a la URI
-        # del agente y registrandola como tipo FOAF.Agent
+        # Obtener la dirección IP real del cliente que se está registrando
+        client_ip = request.remote_addr
+        logger.info(f"IP del cliente que se registra: {client_ip}")
+
+        # Verificar si la dirección del agente usa localhost o nombre de host
+        agn_add_str = str(agn_add)
+        if "localhost" in agn_add_str or "127.0.0.1" in agn_add_str or "DESKTOP-" in agn_add_str.upper():
+            # Extraer puerto de la dirección original
+            import re
+            port_match = re.search(r":(\d+)/", agn_add_str)
+            if port_match:
+                port = port_match.group(1)
+                # Construir nueva dirección con IP real
+                new_address = f"http://{client_ip}:{port}/comm"
+                logger.info(f"Reemplazando dirección {agn_add_str} por {new_address}")
+                agn_add = Literal(new_address)
+
+        # Añadimos la información en el grafo de registro
         dsgraph.add((agn_uri, RDF.type, FOAF.Agent))
         dsgraph.add((agn_uri, FOAF.name, agn_name))
         dsgraph.add((agn_uri, DSO.Address, agn_add))
@@ -129,40 +147,41 @@ def register():
                              msgcnt=mss_cnt)
 
     def process_search():
-        # Asumimos que hay una accion de busqueda que puede tener
-        # diferentes parametros en funcion de si se busca un tipo de agente
-        # o un agente concreto por URI o nombre
-        # Podriamos resolver esto tambien con un query-ref y enviar un objeto de
-        # registro con variables y constantes
-
-        # Solo consideramos cuando Search indica el tipo de agente
-        # Buscamos una coincidencia exacta
-        # Retornamos el primero de la lista de posibilidades
-
-        logger.info('Peticion de busqueda')
+        """
+        Procesa una solicitud de búsqueda de agentes por tipo
+        Devuelve todos los agentes encontrados, no solo el primero
+        """
+        logger.info('Petición de búsqueda')
 
         agn_type = gm.value(subject=content, predicate=DSO.AgentType)
-        rsearch = dsgraph.triples((None, DSO.AgentType, agn_type))
-        if rsearch is not None:
-            agn_uri = next(rsearch)[0]
-            agn_add = dsgraph.value(subject=agn_uri, predicate=DSO.Address)
+        # Buscamos todas las coincidencias
+        agents = list(dsgraph.subjects(DSO.AgentType, agn_type))
+        
+        if agents:
             gr = Graph()
             gr.bind('dso', DSO)
             rsp_obj = agn['Directory-response']
-            gr.add((rsp_obj, DSO.Address, agn_add))
-            gr.add((rsp_obj, DSO.Uri, agn_uri))
+            
+            # Añadir todos los agentes encontrados a la respuesta
+            for agent_uri in agents:
+                agent_add = dsgraph.value(subject=agent_uri, predicate=DSO.Address)
+                # Crear un nodo único para cada resultado
+                result_node = URIRef(f"{str(agent_uri)}-result")
+                gr.add((rsp_obj, DSO.hasResult, result_node))
+                gr.add((result_node, DSO.Address, agent_add))
+                gr.add((result_node, DSO.Uri, agent_uri))
+                
             return build_message(gr,
-                                 ACL.inform,
-                                 sender=DirectoryAgent.uri,
-                                 msgcnt=mss_cnt,
-                                 receiver=agn_uri,
-                                 content=rsp_obj)
+                           ACL.inform,
+                           sender=DirectoryAgent.uri,
+                           msgcnt=mss_cnt,
+                           content=rsp_obj)
         else:
             # Si no encontramos nada retornamos un inform sin contenido
             return build_message(Graph(),
-                                 ACL.inform,
-                                 sender=DirectoryAgent.uri,
-                                 msgcnt=mss_cnt)
+                           ACL.inform,
+                           sender=DirectoryAgent.uri,
+                           msgcnt=mss_cnt)
 
     global dsgraph
     global mss_cnt

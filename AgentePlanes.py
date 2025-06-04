@@ -784,97 +784,60 @@ def tidyup():
 
 def buscar_agente_por_tipo(tipo_agente):
     """
-    Busca un agente por su tipo en el directorio
-    
-    :param tipo_agente: Tipo del agente a buscar (DSO.TransportAgent, DSO.HotelsAgent, etc)
-    :return: Información del agente o None si no se encuentra
+    Busca un agente de un tipo específico en el directorio
     """
     global mss_cnt
-
-    tipo_str = str(tipo_agente).split('#')[-1]
-    logger.info(f"Buscando agente de tipo {tipo_str} en el directorio...")
+    logger.info(f"Buscando agente de tipo {tipo_agente} en el directorio...")
     
-    # Crear grafo para buscar en el directorio
+    # Construir mensaje de búsqueda
     gmess = Graph()
     gmess.bind('dso', DSO)
-    gmess.bind('rdf', RDF)
-    
-    search_obj = agn[f'search-{str(uuid.uuid4())}']
+    search_obj = agn[AgentePlanes.name + '-search']
     gmess.add((search_obj, RDF.type, DSO.Search))
     gmess.add((search_obj, DSO.AgentType, tipo_agente))
     
-    # Construir el mensaje
+    # Enviar mensaje al directorio
     msg = build_message(gmess, ACL.request,
-                       sender=AgentePlanes.uri,
-                       receiver=DirectoryAgent.uri,
-                       content=search_obj,
-                       msgcnt=mss_cnt)
+                      sender=AgentePlanes.uri,
+                      receiver=DirectoryAgent.uri,
+                      content=search_obj,
+                      msgcnt=mss_cnt)
     mss_cnt += 1
     
-    # Mejor manejo de errores
-    try:
-        # Enviar el mensaje
-        gr = send_message(msg, DirectoryAgent.address)
-        
-        # Verificación básica de la respuesta
-        if not isinstance(gr, Graph):
-            logger.error(f"La respuesta del directorio no es un grafo válido: {gr}")
-            return None
-        
-        logger.debug(f"Respuesta del directorio: {len(gr)} tripletas")
-        
+    # Enviar petición
+    logger.debug(f"Enviando petición de búsqueda al directorio")
+    response = requests.get(DirectoryAgent.address, params={'content': msg.serialize(format='xml')})
+    
+    if response.status_code == 200:
         # Procesar la respuesta
-        msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
-        if not msg:
-            logger.error("No se encontró un mensaje FIPA ACL en la respuesta")
-            return None
-            
-        content = gr.value(subject=msg, predicate=ACL.content)
-        if not content:
-            logger.error("No se encontró el contenido del mensaje")
-            return None
+        gresponse = Graph()
+        gresponse.parse(data=response.text, format='xml')
+        logger.debug(f"Respuesta del directorio: {len(gresponse)} tripletas")
         
-        # Buscar todos los agentes en la respuesta
-        agentes_encontrados = []
-        
-        # Método 1: Buscar por AgentType
-        for s, p, o in gr.triples((None, DSO.AgentType, tipo_agente)):
-            uri = gr.value(subject=s, predicate=DSO.Uri)
-            name = gr.value(subject=s, predicate=FOAF.name)
-            address = gr.value(subject=s, predicate=DSO.Address)
-            
-            if uri and address:
-                agentes_encontrados.append({
-                    'name': str(name) if name else tipo_str,
-                    'uri': uri,
-                    'address': address
-                })
-        
-        # Método 2: Buscar en el contenido
-        if not agentes_encontrados:
-            for s, p, o in gr.triples((content, DSO.Address, None)):
-                uri = gr.value(subject=s, predicate=DSO.Uri)
-                name = gr.value(subject=s, predicate=FOAF.name)
+        # Buscar los resultados (pueden ser múltiples)
+        resultado = None
+        for content, p, o in gresponse.triples((None, RDF.type, ACL.inform)):
+            for s, p, o in gresponse.triples((None, DSO.hasResult, None)):
+                resultado_obj = o
+                # Obtener dirección del agente
+                address = gresponse.value(subject=resultado_obj, predicate=DSO.Address)
+                uri = gresponse.value(subject=resultado_obj, predicate=DSO.Uri)
                 
-                if uri:
-                    agentes_encontrados.append({
-                        'name': str(name) if name else tipo_str,
+                # Verificar que la dirección contiene una IP y no un nombre de host
+                address_str = str(address)
+                if "localhost" not in address_str and "127.0.0.1" not in address_str:
+                    resultado = {
                         'uri': uri,
-                        'address': o
-                    })
+                        'address': address
+                    }
+                    logger.info(f"Encontrado agente {tipo_agente} en {address}")
+                    return resultado
         
-        if agentes_encontrados:
-            agente = agentes_encontrados[0]
-            logger.info(f"Encontrado agente {agente['name']} en {agente['address']}")
-            return agente
-        else:
-            logger.warning(f"No se encontró ningún agente de tipo {tipo_str}")
+        if not resultado:
+            logger.warning(f"No se encontraron agentes de tipo {tipo_agente}")
             return None
-            
-    except Exception as e:
-        logger.error(f"Error al buscar agente: {e}")
-        import traceback
-        logger.error(traceback.format_exc())
+    else:
+        logger.error(f"Error en la respuesta del directorio: {response.status_code}")
         return None
 
 
@@ -1823,6 +1786,7 @@ def procesar_peticion_plan(origen, destino, fecha_ida, fecha_vuelta, precio_max,
         g.bind('rdf', RDF)
         g.bind('rdfs', RDFS)
         g.bind('onto', onto)
+        g.bind('xsd', XSD)
         
         respuesta_id = URIRef(f'respuesta_plan_{str(uuid.uuid4())}')
         g.add((respuesta_id, RDF.type, onto.RespuestaPlan))
