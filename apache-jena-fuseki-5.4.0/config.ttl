@@ -1,0 +1,132 @@
+@prefix :        <#> .
+@prefix fuseki:  <http://jena.apache.org/fuseki#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix tdb2:    <http://jena.apache.org/2016/tdb#> .
+@prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix text:    <http://jena.apache.org/text#> .
+
+# Servidor Fuseki para los datasets de la aplicación ECSDI
+[] rdf:type fuseki:Server ;
+   fuseki:services (
+     :ontologia
+     :planes_aceptados
+     :planes_activos
+     :planes_creados
+     :valoraciones
+     :cobros
+   ) .
+
+# Dataset para la ontología
+:ontologia rdf:type fuseki:Service ;
+    rdfs:label "Ontología ECSDI" ;
+    fuseki:name "ontologia" ;
+    fuseki:serviceReadWriteGraphStore "data" ;
+    fuseki:endpoint [ fuseki:operation fuseki:query ;
+                      fuseki:name "sparql"
+                    ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:update ;
+                      fuseki:name "update"
+                    ] ;
+    fuseki:dataset :dataset_ontologia .
+
+:dataset_ontologia rdf:type tdb2:DatasetTDB2 ;
+    tdb2:location "databases/ontologia" ;
+    # Cargar el archivo TTL directamente
+    ja:data "entrega2.ttl" ;
+    .
+
+# Dataset para planes aceptados
+:planes_aceptados rdf:type fuseki:Service ;
+    rdfs:label "Planes Aceptados" ;
+    fuseki:name "planes_aceptados" ;
+    fuseki:serviceReadWriteGraphStore "data" ;
+    fuseki:endpoint [ fuseki:operation fuseki:query ;
+                      fuseki:name "sparql"
+                    ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:update ;
+                      fuseki:name "update"
+                    ] ;
+    fuseki:dataset :dataset_planes_aceptados .
+
+:dataset_planes_aceptados rdf:type tdb2:DatasetTDB2 ;
+    tdb2:location "databases/planes_aceptados" ;
+    # Cargar el archivo TTL directamente
+    ja:data "planes_aceptados.ttl" ;
+    .
+
+# Dataset para planes activos
+:planes_activos rdf:type fuseki:Service ;
+    rdfs:label "Planes Activos" ;
+    fuseki:name "planes_activos" ;
+    fuseki:serviceReadWriteGraphStore "data" ;
+    fuseki:endpoint [ fuseki:operation fuseki:query ;
+                      fuseki:name "sparql"
+                    ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:update ;
+                      fuseki:name "update"
+                    ] ;
+    fuseki:dataset :dataset_planes_activos .
+
+:dataset_planes_activos rdf:type tdb2:DatasetTDB2 ;
+    tdb2:location "databases/planes_activos" ;
+    # Cargar el archivo RDF directamente
+    ja:data "planes_activos.rdf" ;
+    .
+
+# Dataset para planes creados
+:planes_creados rdf:type fuseki:Service ;
+    rdfs:label "Planes Creados" ;
+    fuseki:name "planes_creados" ;
+    fuseki:serviceReadWriteGraphStore "data" ;
+    fuseki:endpoint [ fuseki:operation fuseki:query ;
+                      fuseki:name "sparql"
+                    ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:update ;
+                      fuseki:name "update"
+                    ] ;
+    fuseki:dataset :dataset_planes_creados .
+
+:dataset_planes_creados rdf:type tdb2:DatasetTDB2 ;
+    tdb2:location "databases/planes_creados" ;
+    # Cargar el archivo RDF directamente
+    ja:data "planes_creados.rdf" ;
+    .
+
+# Dataset para valoraciones
+:valoraciones rdf:type fuseki:Service ;
+    rdfs:label "Valoraciones" ;
+    fuseki:name "valoraciones" ;
+    fuseki:serviceReadWriteGraphStore "data" ;
+    fuseki:endpoint [ fuseki:operation fuseki:query ;
+                      fuseki:name "sparql"
+                    ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:update ;
+                      fuseki:name "update"
+                    ] ;
+    fuseki:dataset :dataset_valoraciones .
+
+:dataset_valoraciones rdf:type tdb2:DatasetTDB2 ;
+    tdb2:location "databases/valoraciones" ;
+    # Cargar el archivo RDF directamente
+    ja:data "valoraciones.rdf" ;
+    .
+
+# Dataset para cobros
+:cobros rdf:type fuseki:Service ;
+    rdfs:label "Cobros" ;
+    fuseki:name "cobros" ;
+    fuseki:serviceReadWriteGraphStore "data" ;
+    fuseki:endpoint [ fuseki:operation fuseki:query ;
+                      fuseki:name "sparql"
+                    ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:update ;
+                      fuseki:name "update"
+                    ] ;
+    fuseki:dataset :dataset_cobros .
+
+:dataset_cobros rdf:type tdb2:DatasetTDB2 ;
+    tdb2:location "databases/cobros" ;
+    # Cargar el archivo RDF directamente
+    ja:data "databases/cobros.rdf" ;
+    .

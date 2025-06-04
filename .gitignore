@@ -2,3 +2,14 @@
 APIKeys.py
 __pycache__/
 *.pyc
+
+# Archivos de configuración temporales
+/run/
+fuseki.log
+fuseki-console.log
+
+# Directorios de base de datos persistente (Fuseki dataset)
+databases/
+tdb/
+tdb2/
+tdb-backup/

@@ -1,6 +1,6 @@
 rdflib
 flask
-SPARQLWrapper
+SPARQLWrapper==2.0.0
 requests
 numpy
 matplotlib
