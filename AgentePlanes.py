@@ -76,6 +76,8 @@ onto = Namespace("http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/")
 # Contador de mensajes
 mss_cnt = 0
 
+notificaciones = []
+
 # Datos del Agente
 AgentePlanes = Agent('AgentePlanes',
                      agn.AgentePlanes,
@@ -231,7 +233,83 @@ def obtener_plan(plan_id):
         logger.error(traceback.format_exc())
         return None
 
+@app.route("/notificaciones")
+def ver_notificaciones():
+    """
+    Muestra las notificaciones de cambios de actividades
+    """
+    global notificaciones
     
+    # Marcar todas como leídas
+    for notif in notificaciones:
+        notif['leida'] = True
+    
+    html = """
+    <html>
+        <head>
+            <title>Notificaciones</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                h1 { color: #333; }
+                .notificacion {
+                    background: #f5f5f5;
+                    border-left: 4px solid #ff9800;
+                    padding: 15px;
+                    margin-bottom: 15px;
+                    border-radius: 4px;
+                }
+                .fecha { color: #666; font-size: 0.9em; }
+                .cambio { margin: 10px 0; }
+                .actividad-antigua { color: #e53935; text-decoration: line-through; }
+                .actividad-nueva { color: #43a047; font-weight: bold; }
+                .motivo { font-style: italic; }
+                .btn { 
+                    display: inline-block; 
+                    padding: 10px 15px; 
+                    background: #2196F3; 
+                    color: white; 
+                    text-decoration: none; 
+                    border-radius: 4px; 
+                    margin-top: 20px;
+                }
+                .empty { color: #666; font-style: italic; }
+            </style>
+        </head>
+        <body>
+            <h1>Notificaciones de Cambios en Planes</h1>
+    """
+    
+    if notificaciones:
+        for n in reversed(notificaciones):  # Mostrar las más recientes primero
+            html += f"""
+            <div class="notificacion">
+                <div class="fecha">Recibida: {n.get('timestamp', 'Fecha desconocida')}</div>
+                <p>Se ha modificado una actividad en tu plan debido a previsión de {n.get('motivo', 'mal tiempo')}.</p>
+                
+                <div class="cambio">
+                    <div>Plan afectado: <a href="/verificar_plan/{n.get('plan_id', '')}">{n.get('plan_id', 'Plan desconocido')}</a></div>
+                    <div>Fecha: {n.get('fecha', 'No especificada')} ({n.get('franja', 'No especificada')})</div>
+                    <div>
+                        <span class="actividad-antigua">{n.get('nombre_antigua', 'Actividad desconocida')}</span> → 
+                        <span class="actividad-nueva">{n.get('nombre_nueva', 'Actividad desconocida')}</span>
+                    </div>
+                </div>
+                
+                <div class="motivo">Motivo: {n.get('mensaje', n.get('motivo', 'Condiciones climáticas adversas'))}</div>
+            </div>
+            """
+    else:
+        html += '<p class="empty">No hay notificaciones.</p>'
+    
+    html += """
+            <a href="/status" class="btn">Volver al estado del agente</a>
+        </body>
+    </html>
+    """
+    
+    return html
+
+
 @app.route("/verificar_plan/<plan_id>")
 def verificar_plan(plan_id):
     """Verifica el estado de un plan específico en el AgenteMantenedorPlanes"""
@@ -499,21 +577,103 @@ def verificar_plan(plan_id):
         logger.error(traceback.format_exc())
         return f"Error al verificar plan: {str(e)}"
     
-@app.route("/comm")
+@app.route("/comm", methods=['GET', 'POST'])
 def comunicacion():
     """
     Punto de entrada de comunicación para recibir peticiones
     """
     global dsgraph
     global mss_cnt
+    global notificaciones
 
-    message = request.args['content']
+    if request.method == 'GET':
+        message = request.args.get('content')
+    else:  # POST
+        message = request.form.get('content')
+
     gm = Graph()
     gm.parse(data=message, format='xml')
     
     msgdic = get_message_properties(gm)
     logger.debug(f"Recibido mensaje con performativa: {msgdic['performative']}")
-
+    # Si es una notificación de cambio de actividad
+    if msgdic['performative'] == ACL.inform:
+        content = msgdic['content']
+        
+        # Buscar notificación de cambio de actividad
+        for s, p, o in gm.triples((None, RDF.type, onto.NotificacionCambioActividad)):
+            logger.info(f"Recibida notificación de cambio de actividad: {s}")
+            
+            # Extraer datos de la notificación
+            notificacion = {
+                'id': str(uuid.uuid4()),
+                'timestamp': datetime.datetime.now().isoformat(),
+                'plan_uri': None,
+                'actividad_antigua': None,
+                'actividad_nueva': None,
+                'fecha': None,
+                'franja': None,
+                'motivo': None,
+                'mensaje': None,
+                'leida': False
+            }
+            
+            # Extraer plan modificado
+            for s1, p1, o1 in gm.triples((s, onto.planModificado, None)):
+                notificacion['plan_uri'] = o1
+                # Extraer ID del plan para referencia fácil
+                if str(o1).startswith('plan_'):
+                    notificacion['plan_id'] = str(o1).split('plan_')[-1]
+            
+            # Extraer actividades
+            for s1, p1, o1 in gm.triples((s, onto.actividadAntigua, None)):
+                notificacion['actividad_antigua'] = o1
+                # Buscar nombre de la actividad antigua
+                for s2, p2, o2 in gm.triples((o1, RDFS.label, None)):
+                    notificacion['nombre_antigua'] = str(o2)
+            
+            for s1, p1, o1 in gm.triples((s, onto.actividadNueva, None)):
+                notificacion['actividad_nueva'] = o1
+                # Buscar nombre de la actividad nueva
+                for s2, p2, o2 in gm.triples((o1, RDFS.label, None)):
+                    notificacion['nombre_nueva'] = str(o2)
+            
+            # Extraer fecha y franja
+            for s1, p1, o1 in gm.triples((s, onto.fechaActividad, None)):
+                notificacion['fecha'] = str(o1)
+            
+            for s1, p1, o1 in gm.triples((s, onto.franjaHoraria, None)):
+                notificacion['franja'] = str(o1)
+            
+            # Extraer motivo
+            for s1, p1, o1 in gm.triples((s, onto.motivoCambio, None)):
+                notificacion['motivo'] = str(o1)
+            
+            # Extraer mensaje si existe
+            for s1, p1, o1 in gm.triples((s, RDFS.comment, None)):
+                notificacion['mensaje'] = str(o1)
+            
+            # Guardar la notificación
+            notificaciones.append(notificacion)
+            logger.info(f"Notificación almacenada: {notificacion['mensaje']}")
+            
+            # Responder con confirmación
+            g_resp = Graph()
+            g_resp.bind('rdf', RDF)
+            g_resp.bind('onto', onto)
+            
+            confirmacion_id = URIRef('confirmacion_notificacion_' + str(uuid.uuid4()))
+            g_resp.add((confirmacion_id, RDF.type, onto.ConfirmacionNotificacion))
+            g_resp.add((confirmacion_id, RDFS.comment, Literal("Notificación recibida correctamente")))
+            
+            mss_cnt += 1
+            return Response(build_message(g_resp, ACL.inform,
+                           sender=AgentePlanes.uri,
+                           receiver=msgdic['sender'],
+                           content=confirmacion_id,
+                           msgcnt=mss_cnt).serialize(format='xml'),
+                           mimetype='text/xml')
+        
     # Si es una nueva petición de plan
     if msgdic['performative'] == ACL.request:
         # Buscar el contenido de la petición
@@ -2317,6 +2477,18 @@ def status():
                     <td>{problema['timestamp'].strftime('%Y-%m-%d %H:%M:%S')}</td>
                 </tr>
         """
+    
+    notificaciones_no_leidas = sum(1 for n in notificaciones if not n.get('leida', False))
+    
+    html += f"""
+        <div class="status-box">
+            <h2>Notificaciones</h2>
+            <p><a href="/notificaciones" style="text-decoration:none;">
+                <span style="background-color: {('#e53935' if notificaciones_no_leidas > 0 else '#757575')}; color: white; padding: 2px 8px; border-radius: 10px; font-size: 14px; margin-right: 10px;">{notificaciones_no_leidas}</span>
+                Ver notificaciones
+            </a></p>
+        </div>
+    """
     
     html += """
             </table>

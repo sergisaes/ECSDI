@@ -1025,6 +1025,15 @@ def verificar_actividades_exteriores():
                                                     planes_db.serialize(DB_FILE, format="xml")
                                                     actividades_modificadas += 1
                                                     planes_modificados += 1
+
+                                                    notificar_cambio_actividad(
+                                                        plan_uri, 
+                                                        actividad_id, 
+                                                        nueva_actividad_id, 
+                                                        fecha_str, 
+                                                        str(franja), 
+                                                        clima_info.get('descripcion', 'mal tiempo')
+                                                    )
                                                 else:
                                                     logger.warning(f"[VERIFICACIÓN] ✗ No se encontró actividad interior para sustituir a '{nombre_actividad}'")
                                     
@@ -1314,6 +1323,95 @@ def simular_mal_clima():
             </body>
         </html>
         """
+    
+def buscar_agente_planes():
+    """
+    Busca el AgentePlanes en el directorio
+    """
+    try:
+        # Intenta buscar utilizando el tipo correcto
+        agente = buscar_agente_por_tipo(DSO.SolverAgent)
+        if agente:
+            return agente
+    except Exception as e:
+        logger.warning(f"Error al buscar AgentePlanes: {e}")
+    
+    # Configuración de respaldo si no se encuentra en el directorio
+    logger.info("Usando configuración de respaldo para AgentePlanes")
+    agente = {
+        'name': 'AgentePlanes',
+        'uri': 'http://www.agentes.org#AgentePlanes',
+        'address': f'http://{socket.gethostname()}:9000/comm'
+    }
+    
+    return agente
+
+def notificar_cambio_actividad(plan_uri, actividad_antigua, actividad_nueva, fecha, franja, motivo):
+    """
+    Notifica al AgentePlanes sobre un cambio de actividad debido al clima
+    
+    :param plan_uri: URI del plan modificado
+    :param actividad_antigua: URI de la actividad exterior reemplazada
+    :param actividad_nueva: URI de la actividad interior que la reemplaza
+    :param fecha: Fecha en que ocurre la actividad
+    :param franja: Franja horaria
+    :param motivo: Motivo del cambio (generalmente clima adverso)
+    """
+    global mss_cnt
+    
+    # Buscar el AgentePlanes
+    agente_planes = buscar_agente_planes()
+    if not agente_planes:
+        logger.error("[NOTIFICACIÓN] No se pudo encontrar el AgentePlanes")
+        return False
+    
+    # Crear grafo con la notificación
+    g = Graph()
+    g.bind('rdf', RDF)
+    g.bind('onto', onto)
+    
+    # Crear la notificación de cambio
+    notificacion_id = URIRef('notificacion_cambio_' + str(uuid.uuid4()))
+    g.add((notificacion_id, RDF.type, onto.NotificacionCambioActividad))
+    g.add((notificacion_id, onto.planModificado, plan_uri))
+    g.add((notificacion_id, onto.actividadAntigua, actividad_antigua))
+    g.add((notificacion_id, onto.actividadNueva, actividad_nueva))
+    g.add((notificacion_id, onto.fechaActividad, Literal(fecha)))
+    g.add((notificacion_id, onto.franjaHoraria, Literal(franja)))
+    g.add((notificacion_id, onto.motivoCambio, Literal(motivo)))
+    g.add((notificacion_id, onto.fechaNotificacion, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+    
+    # Añadir información textual para la notificación
+    nombre_antigua = planes_db.value(subject=actividad_antigua, predicate=RDFS.label) or "Sin nombre"
+    nombre_nueva = planes_db.value(subject=actividad_nueva, predicate=RDFS.label) or "Sin nombre"
+    
+    mensaje = f"La actividad exterior '{nombre_antigua}' ha sido reemplazada por '{nombre_nueva}' debido a previsión de {motivo} para el día {fecha} ({franja})."
+    g.add((notificacion_id, RDFS.comment, Literal(mensaje)))
+    
+    # Construir mensaje ACL
+    msg = build_message(g, 
+                      ACL.inform,  # Usamos inform en lugar de request
+                      sender=AgenteMantenedorPlanes.uri,
+                      receiver=URIRef(agente_planes['uri']),
+                      content=notificacion_id,
+                      msgcnt=mss_cnt)
+    mss_cnt += 1
+    
+    # Enviar la notificación
+    try:
+        logger.info(f"[NOTIFICACIÓN] Enviando notificación de cambio de actividad a {agente_planes['address']}")
+        response = requests.post(agente_planes['address'], data={'content': msg.serialize(format='xml')})
+        
+        if response.status_code == 200:
+            logger.info("[NOTIFICACIÓN] Notificación enviada correctamente")
+            return True
+        else:
+            logger.error(f"[NOTIFICACIÓN] Error en la respuesta: {response.status_code}")
+            return False
+    except Exception as e:
+        logger.error(f"[NOTIFICACIÓN] Error al enviar notificación: {e}")
+        return False
+
 
 def reconstruir_estructura_plan(plan_uri):
     """
