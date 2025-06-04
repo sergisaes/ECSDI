@@ -19,6 +19,7 @@ import time
 import random
 import traceback
 import requests
+import os
 import concurrent.futures
 
 from rdflib import Namespace, Graph, Literal, URIRef
@@ -87,6 +88,26 @@ DirectoryAgent = Agent('DirectoryAgent',
                        'http://%s:%d/Register' % (dhostname, dport),
                        'http://%s:%d/Stop' % (dhostname, dport))
 
+
+
+# Base de datos de planes (grafo RDF)
+planes_db = Graph()
+planes_db.bind('rdf', RDF)
+planes_db.bind('rdfs', RDFS)
+planes_db.bind('onto', onto)
+planes_db.bind('xsd', XSD)
+
+# Archivo para la base de datos de planes
+PLANES_DB_FILE = "planes_creados.rdf"
+
+# Cargar planes existentes si existe el archivo
+try:
+    if os.path.exists(PLANES_DB_FILE):
+        planes_db.parse(PLANES_DB_FILE, format="xml")
+        logger.info(f"Cargados {len(planes_db)} triples desde {PLANES_DB_FILE}")
+except Exception as e:
+    logger.error(f"Error al cargar la base de datos de planes: {e}")
+
 # Global triplestore graph
 dsgraph = Graph()
 # Cargar la ontología en el grafo
@@ -102,7 +123,214 @@ cola1 = Queue()
 # Flask app
 app = Flask(__name__)
 
+def guardar_plan_en_db(plan_uri, grafo_plan):
+    """
+    Guarda un plan en la base de datos RDF y en el archivo
+    
+    :param plan_uri: URI del plan a guardar
+    :param grafo_plan: Grafo con los datos del plan
+    :return: True si se guardó correctamente
+    """
+    global planes_db
+    
+    try:
+        # Eliminar el plan si ya existe
+        for s, p, o in planes_db.triples((plan_uri, None, None)):
+            planes_db.remove((s, p, o))
+        
+        # Añadir todos los triples del plan
+        for s, p, o in grafo_plan.triples((None, None, None)):
+            planes_db.add((s, p, o))
+        
+        # Añadir timestamp de creación si no existe
+        timestamp_exists = False
+        for s, p, o in planes_db.triples((plan_uri, onto.fechaCreacion, None)):
+            timestamp_exists = True
+            break
+            
+        if not timestamp_exists:
+            planes_db.add((plan_uri, onto.fechaCreacion, 
+                         Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+        
+        # Guardar en archivo
+        planes_db.serialize(PLANES_DB_FILE, format="xml")
+        logger.info(f"Plan {plan_uri} guardado en la base de datos")
+        return True
+    except Exception as e:
+        logger.error(f"Error al guardar plan en la base de datos: {e}")
+        logger.error(traceback.format_exc())
+        return False
 
+def obtener_plan(plan_id):
+    """
+    Obtiene los datos de un plan específico de la base de datos
+    
+    :param plan_id: Identificador o URI del plan
+    :return: Diccionario con los datos del plan o None si no existe
+    """
+    global planes_db
+    
+    try:
+        # Normalizar el plan_id (podría ser URI completa o solo el ID)
+        if isinstance(plan_id, URIRef):
+            plan_uri = plan_id
+        elif plan_id.startswith('http://') or plan_id.startswith('plan_'):
+            plan_uri = URIRef(plan_id)
+        else:
+            plan_uri = URIRef(f"plan_{plan_id}")
+        
+        # Verificar si el plan existe
+        plan_existe = False
+        for s, p, o in planes_db.triples((plan_uri, RDF.type, onto.Plan)):
+            plan_existe = True
+            break
+            
+        if not plan_existe:
+            logger.warning(f"Plan {plan_id} no encontrado en la base de datos")
+            return None
+        
+        # Extraer datos básicos del plan
+        plan_data = {
+            'uri': plan_uri,
+            'origen': None,
+            'destino': None,
+            'fecha_inicio': None,
+            'fecha_fin': None,
+            'precio_total': 0,
+            'actividades': []
+        }
+        
+        # Extraer origen
+        for s, p, o in planes_db.triples((plan_uri, onto.saleDe, None)):
+            for s2, p2, o2 in planes_db.triples((o, onto.NombreCiudad, None)):
+                plan_data['origen'] = str(o2)
+                break
+        
+        # Extraer destino
+        for s, p, o in planes_db.triples((plan_uri, onto.llegaA, None)):
+            for s2, p2, o2 in planes_db.triples((o, onto.NombreCiudad, None)):
+                plan_data['destino'] = str(o2)
+                break
+        
+        # Extraer fechas
+        for s, p, o in planes_db.triples((plan_uri, onto.fecha_inicio, None)):
+            plan_data['fecha_inicio'] = str(o)
+        
+        for s, p, o in planes_db.triples((plan_uri, onto.fecha_fin, None)):
+            plan_data['fecha_fin'] = str(o)
+        
+        # Extraer precio
+        for s, p, o in planes_db.triples((plan_uri, onto.Precio, None)):
+            plan_data['precio_total'] = float(o)
+        
+        # Extraer actividades (sería más complejo y requeriría recorrer toda la estructura)
+        
+        return plan_data
+    except Exception as e:
+        logger.error(f"Error al obtener plan: {e}")
+        logger.error(traceback.format_exc())
+        return None
+    
+@app.route("/verificar_plan/<plan_id>")
+def verificar_plan(plan_id):
+    """
+    Verifica el estado de un plan específico en el AgenteMantenedorPlanes
+    """
+    try:
+        # Buscar el agente mantenedor de planes
+        agente_mantenedor = buscar_agente_por_tipo(DSO.PlanAgent)
+        if not agente_mantenedor:
+            return f"No se pudo encontrar el AgenteMantenedorPlanes en el directorio"
+        
+        # Crear consulta
+        g = Graph()
+        g.bind('rdf', RDF)
+        g.bind('onto', onto)
+        
+        consulta_id = URIRef('consulta_planes_' + str(uuid.uuid4()))
+        g.add((consulta_id, RDF.type, onto.ConsultaPlanes))
+        
+        # Añadir el plan específico a consultar si se proporciona
+        if plan_id:
+            plan_uri = URIRef(f'plan_{plan_id}')
+            g.add((consulta_id, onto.consultaPlan, plan_uri))
+        
+        # Construir mensaje ACL
+        msg = build_message(g, ACL.request,
+                          sender=AgentePlanes.uri,
+                          receiver=URIRef(agente_mantenedor['uri']),
+                          content=consulta_id,
+                          msgcnt=mss_cnt)
+        
+        # Enviar consulta
+        response = requests.get(agente_mantenedor['address'], params={'content': msg.serialize(format='xml')})
+        
+        if response.status_code == 200:
+            # Parsear respuesta
+            g_resp = Graph()
+            g_resp.parse(data=response.text, format='xml')
+            
+            html = """
+            <html>
+                <head>
+                    <title>Estado del Plan</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        h1 { color: #2c3e50; }
+                        .plan-box { background: #f5f5f5; padding: 15px; margin: 15px 0; border-radius: 5px; }
+                        .property { margin: 5px 0; }
+                        .title { font-weight: bold; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Estado del Plan</h1>
+            """
+            
+            # Buscar información del plan
+            planes_encontrados = 0
+            for s, p, o in g_resp.triples((None, RDF.type, onto.RespuestaConsultaPlanes)):
+                for s2, p2, o2 in g_resp.triples((s, onto.contienePlan, None)):
+                    plan_uri = o2
+                    planes_encontrados += 1
+                    
+                    html += '<div class="plan-box">'
+                    html += f'<h2>Plan: {plan_uri}</h2>'
+                    
+                    # Estado
+                    estado = g_resp.value(subject=plan_uri, predicate=onto.estado)
+                    html += f'<div class="property"><span class="title">Estado:</span> {estado}</div>'
+                    
+                    # Fechas
+                    fecha_inicio = g_resp.value(subject=plan_uri, predicate=onto.fecha_inicio)
+                    fecha_fin = g_resp.value(subject=plan_uri, predicate=onto.fecha_fin)
+                    html += f'<div class="property"><span class="title">Fechas:</span> {fecha_inicio} a {fecha_fin}</div>'
+                    
+                    # Destino
+                    for s3, p3, o3 in g_resp.triples((plan_uri, onto.llegaA, None)):
+                        ciudad = g_resp.value(subject=o3, predicate=onto.NombreCiudad)
+                        html += f'<div class="property"><span class="title">Destino:</span> {ciudad}</div>'
+                    
+                    # Timestamp
+                    timestamp = g_resp.value(subject=plan_uri, predicate=onto.timestamp)
+                    html += f'<div class="property"><span class="title">Registrado:</span> {timestamp}</div>'
+                    
+                    html += '</div>'
+            
+            if planes_encontrados == 0:
+                html += '<p>No se encontró el plan especificado en el mantenedor.</p>'
+            
+            html += """
+                </body>
+            </html>
+            """
+            
+            return html
+        else:
+            return f"Error al consultar el plan: {response.status_code}"
+    
+    except Exception as e:
+        return f"Error al verificar plan: {str(e)}"
+    
 @app.route("/comm")
 def comunicacion():
     """
@@ -854,7 +1082,7 @@ def evaluar_transportes(grafo_transportes, content_uri, precio_max=None):
                     # Horas cómodas: 8-11 y 17-20
                     hora_salida_buena = (8 <= hora_salida <= 11) or (17 <= hora_salida <= 20)
                 else:
-                    hora_salida_buena = False;
+                    hora_salida_buena = False
                     
                 if llegada:
                     fecha_hora_llegada = datetime.datetime.fromisoformat(str(llegada).replace('Z', '+00:00'))
@@ -1194,10 +1422,7 @@ def procesar_respuesta_transportes(grafo_respuesta, respuesta_uri, peticion_orig
     # Si hay una petición original, referenciarla
     if peticion_original:
         g.add((respuesta_id, onto.respuestaA, peticion_original))
-    
-    # Registrar el plan en el AgenteMantenedorPlanes
-    registrar_plan_en_mantenedor(plan_id, g)
-
+   
     # Construir mensaje completo
     mss_cnt += 1
     return build_message(g, ACL.inform,
@@ -1219,7 +1444,7 @@ def procesar_peticion_plan(origen, destino, fecha_ida, fecha_vuelta, precio_max,
     :param sender: URI del remitente
     :return: Mensaje XML con la respuesta
     """
-    global mss_cnt
+    global mss
     
     logger.info(f"Procesando petición de plan desde {origen} hacia {destino}")
     
@@ -1567,6 +1792,66 @@ def test_interface():
         precio_transporte = mejor_ida['precio'] + mejor_vuelta['precio']
         precio_alojamiento = mejor_alojamiento['precio'] * dias_estancia
         precio_total = precio_transporte + precio_alojamiento + precio_actividades
+
+        # En la función test_interface, cuando construye la respuesta HTML:
+
+
+        # Crear un ID único para este plan
+        plan_id = URIRef(f'plan_{str(uuid.uuid4())}')
+
+        # Crear el plan en la base de datos RDF
+        g = Graph()
+        g.bind('rdf', RDF)
+        g.bind('rdfs', RDFS)
+        g.bind('onto', onto)
+        g.bind('xsd', XSD)
+
+        # Añadir datos básicos del plan
+        g.add((plan_id, RDF.type, onto.Plan))
+        g.add((plan_id, RDF.type, onto.PlanGeneral))
+
+        # Añadir transportes y alojamiento
+        g.add((plan_id, onto.hasTransport, mejor_ida['uri']))
+        g.add((plan_id, onto.transporteVuelta, mejor_vuelta['uri']))
+        g.add((plan_id, onto.tieneAlojamiento, mejor_alojamiento['uri']))
+
+        # Añadir origen, destino y fechas
+        origen_uri = URIRef(f'ciudad_origen_' + str(uuid.uuid4()))
+        g.add((origen_uri, RDF.type, onto.Ciudad))
+        g.add((origen_uri, onto.NombreCiudad, Literal(origen)))
+        g.add((plan_id, onto.saleDe, origen_uri))
+
+        destino_uri = URIRef(f'ciudad_destino_' + str(uuid.uuid4()))
+        g.add((destino_uri, RDF.type, onto.Ciudad))
+        g.add((destino_uri, onto.NombreCiudad, Literal(destino)))
+        g.add((plan_id, onto.llegaA, destino_uri))
+
+        g.add((plan_id, onto.fecha_inicio, Literal(fecha_ida, datatype=XSD.date)))
+        g.add((plan_id, onto.fecha_fin, Literal(fecha_vuelta, datatype=XSD.date)))
+        g.add((plan_id, onto.Precio, Literal(precio_total, datatype=XSD.float)))
+        g.add((plan_id, onto.estado, Literal("activo")))
+
+        # Añadir actividades
+        if plan_actividades:
+            for dia, datos_dia in plan_actividades.items():
+                dia_id = URIRef(f'dia_{dia}_{str(uuid.uuid4())}')
+                g.add((dia_id, RDF.type, onto.PlanDe1Dia))
+                g.add((dia_id, RDFS.label, Literal(f"Día {dia}: {datos_dia['fecha']}")))
+                g.add((plan_id, onto.estaCompuestoPor, dia_id))
+                
+                for franja, actividades in datos_dia['franjas'].items():
+                    for act in actividades:
+                        g.add((dia_id, onto.seRealizan, act['uri']))
+
+        # Guardar el plan en la base de datos
+        registrar_plan_en_mantenedor(plan_id, g)
+        guardar_plan_en_db(plan_id, g)
+
+        # Extraer el ID del plan para referencia
+        plan_id_str = str(plan_id).split('_')[-1]
+
+        
+
         
         # Construir respuesta HTML
         html = f'''
@@ -1701,11 +1986,18 @@ def test_interface():
                         <p class="total">Precio total: <span class="precio">{:.2f}€</span></p>
                     </div>
                     
-                    <a href="/test" class="back-btn">Volver</a>
+ 
+                    <div class="seccion">
+                        <h2>Acciones</h2>
+                        <p><strong>ID del plan:</strong> {plan_id_str}</p>
+                        <a href="/verificar_plan/{plan_id_str}" class="back-btn" target="_blank">Verificar Plan en Mantenedor</a>
+                        <a href="/plan/{plan_id_str}" class="back-btn" target="_blank">Ver Detalles del Plan</a>
+                        <a href="/test" class="back-btn">Volver</a>
+                    </div>
                 </div>
             </body>
         </html>
-        '''.format(precio_transporte, precio_alojamiento, precio_actividades, precio_total)
+        '''.format(precio_transporte, precio_alojamiento, precio_actividades, precio_total, plan_id_str=plan_id_str)
         
         return html
 
@@ -1988,12 +2280,12 @@ def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, pr
     g.add((plan_id, onto.tieneAlojamiento, mejor_alojamiento['uri']))
     
     # Añadir origen, destino y fechas
-    origen_uri = URIRef(f'ciudad_origen_{str(uuid.uuid4())}')
+    origen_uri = URIRef(f'ciudad_origen_' + str(uuid.uuid4()))
     g.add((origen_uri, RDF.type, onto.Ciudad))
     g.add((origen_uri, onto.NombreCiudad, Literal(origen)))
     g.add((plan_id, onto.saleDe, origen_uri))
     
-    destino_uri = URIRef(f'ciudad_destino_{str(uuid.uuid4())}')
+    destino_uri = URIRef(f'ciudad_destino_' + str(uuid.uuid4()))
     g.add((destino_uri, RDF.type, onto.Ciudad))
     g.add((destino_uri, onto.NombreCiudad, Literal(destino)))
     g.add((plan_id, onto.llegaA, destino_uri))
@@ -2010,7 +2302,7 @@ def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, pr
             dia_id = URIRef(f'dia_{dia}_{str(uuid.uuid4())}')
             g.add((dia_id, RDF.type, onto.PlanDe1Dia))
             g.add((dia_id, RDFS.label, Literal(f"Día {dia}: {datos_dia['fecha']}")))
-            g.add((respuesta_completa_id, onto.estaCompuestoPor, dia_id))
+            g.add((plan_id, onto.estaCompuestoPor, dia_id))
             
             for franja, actividades in datos_dia['franjas'].items():
                 for act in actividades:
@@ -2045,6 +2337,7 @@ def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, pr
     
     # Registrar el plan en el AgenteMantenedorPlanes
     registrar_plan_en_mantenedor(plan_id, g)
+    guardar_plan_en_db(plan_id, g)
 
     # Construir mensaje completo siguiendo la especificación FIPA ACL
     mss_cnt += 1
@@ -2091,11 +2384,15 @@ def registrar_plan_en_mantenedor(plan_uri, grafo_plan):
     """
     global mss_cnt
     
+    logger.info(f"[DEPURACIÓN] Iniciando registro del plan {plan_uri} en AgenteMantenedorPlanes")
+    
     # Buscar el agente mantenedor de planes
     agente_mantenedor = buscar_agente_por_tipo(DSO.PlanAgent)
     if not agente_mantenedor:
-        logger.error("No se pudo encontrar el AgenteMantenedorPlanes")
+        logger.error("[DEPURACIÓN] No se pudo encontrar el AgenteMantenedorPlanes en el directorio")
         return False
+    
+    logger.info(f"[DEPURACIÓN] Agente Mantenedor encontrado en: {agente_mantenedor['address']}")
     
     # Crear petición de registro
     g = Graph()
@@ -2107,8 +2404,34 @@ def registrar_plan_en_mantenedor(plan_uri, grafo_plan):
     g.add((registro_id, onto.planARegistrar, plan_uri))
     
     # Copiar todo el grafo del plan
+    triples_count = 0
     for s, p, o in grafo_plan:
         g.add((s, p, o))
+        triples_count += 1
+    
+    logger.info(f"[DEPURACIÓN] Creada petición de registro con {triples_count} triples")
+    
+    # Extraer información básica del plan para logs
+    origen = None
+    destino = None
+    fecha_inicio = None
+    fecha_fin = None
+    
+    for s, p, o in grafo_plan.triples((plan_uri, onto.saleDe, None)):
+        for s2, p2, o2 in grafo_plan.triples((o, onto.NombreCiudad, None)):
+            origen = str(o2)
+    
+    for s, p, o in grafo_plan.triples((plan_uri, onto.llegaA, None)):
+        for s2, p2, o2 in grafo_plan.triples((o, onto.NombreCiudad, None)):
+            destino = str(o2)
+    
+    for s, p, o in grafo_plan.triples((plan_uri, onto.fecha_inicio, None)):
+        fecha_inicio = str(o)
+    
+    for s, p, o in grafo_plan.triples((plan_uri, onto.fecha_fin, None)):
+        fecha_fin = str(o)
+    
+    logger.info(f"[DEPURACIÓN] Plan a registrar: {origen} → {destino}, {fecha_inicio} a {fecha_fin}")
     
     # Construir mensaje ACL
     msg = build_message(g, ACL.request,
@@ -2120,18 +2443,34 @@ def registrar_plan_en_mantenedor(plan_uri, grafo_plan):
     
     # Enviar la petición
     try:
+        logger.info(f"[DEPURACIÓN] Enviando petición de registro al AgenteMantenedorPlanes: {agente_mantenedor['address']}")
         response = requests.get(agente_mantenedor['address'], params={'content': msg.serialize(format='xml')})
         
         if response.status_code == 200:
-            logger.info(f"Plan {plan_uri} registrado correctamente en AgenteMantenedorPlanes")
+            logger.info(f"[DEPURACIÓN] Plan {plan_uri} registrado correctamente. Respuesta: {response.text[:100]}...")
+            
+            # Intentar analizar la respuesta
+            try:
+                g_resp = Graph()
+                g_resp.parse(data=response.text, format='xml')
+                
+                # Verificar si es una confirmación
+                for s, p, o in g_resp.triples((None, RDF.type, onto.ConfirmacionRegistro)):
+                    logger.info(f"[DEPURACIÓN] Recibida confirmación de registro: {s}")
+                    break
+            except Exception as parse_err:
+                logger.warning(f"[DEPURACIÓN] No se pudo analizar la respuesta: {parse_err}")
+            
             return True
         else:
-            logger.error(f"Error al registrar plan: {response.status_code}")
+            logger.error(f"[DEPURACIÓN] Error al registrar plan: {response.status_code}. Respuesta: {response.text[:100]}...")
             return False
     except Exception as e:
-        logger.error(f"Error al registrar plan: {e}")
+        logger.error(f"[DEPURACIÓN] Excepción al registrar plan: {e}")
+        logger.error(traceback.format_exc())
         return False
-    
+
+
 def guardar_plan_aceptado(plan_id, precio_total, origen, destino, fecha_ida, fecha_vuelta):
     """
     Guarda un plan aceptado por el usuario para que el AgentePagos pueda procesarlo

@@ -127,49 +127,104 @@ def comunicacion():
     gm.parse(data=message, format='xml')
     
     msgdic = get_message_properties(gm)
-    logger.debug(f"Recibido mensaje con performativa: {msgdic['performative']}")
+    logger.debug(f"[DEPURACIÓN] Recibido mensaje con performativa: {msgdic['performative']}")
 
-    # Si es un nuevo plan para registrar
+    # Si es un mensaje tipo request
     if msgdic['performative'] == ACL.request:
         content = msgdic['content']
         
-        # Buscar solicitud de registro de plan
+        # Primero verificamos qué tipo de mensaje es basado en su contenido RDF
+        es_registro_plan = False
+        es_consulta_planes = False
+        
+        # Verificar si es un registro de plan
         for s, p, o in gm.triples((None, RDF.type, onto.RegistroPlan)):
-            plan_uri = None
-            # Extraer URI del plan a registrar
-            for s1, p1, o1 in gm.triples((s, onto.planARegistrar, None)):
-                plan_uri = o1
-                
-            if plan_uri:
-                # Copiar todo el grafo del plan a nuestra base de datos
-                for s1, p1, o1 in gm.triples((plan_uri, None, None)):
-                    planes_db.add((s1, p1, o1))
+            es_registro_plan = True
+            break
+            
+        # Verificar si es una consulta de planes
+        for s, p, o in gm.triples((None, RDF.type, onto.ConsultaPlanes)):
+            es_consulta_planes = True
+            break
+        
+        logger.info(f"[DEPURACIÓN] Tipo de mensaje: registro_plan={es_registro_plan}, consulta_planes={es_consulta_planes}")
+            
+        # Procesar según el tipo de mensaje
+        if es_registro_plan:
+            # Procesamiento para registro de plan
+            for s, p, o in gm.triples((None, RDF.type, onto.RegistroPlan)):
+                plan_uri = None
+                # Extraer URI del plan a registrar
+                for s1, p1, o1 in gm.triples((s, onto.planARegistrar, None)):
+                    plan_uri = o1
                     
-                # Copiar también todas las propiedades de los componentes del plan
-                for s1, p1, o1 in gm.triples((None, None, None)):
-                    if s1 != s and s1 != content:  # No copiar la petición en sí
+                if plan_uri:
+                    # Copiar todo el grafo del plan a nuestra base de datos
+                    triples_count = 0
+                    for s1, p1, o1 in gm.triples((plan_uri, None, None)):
                         planes_db.add((s1, p1, o1))
-                
-                # Añadir estado "activo" al plan
-                planes_db.add((plan_uri, onto.estado, Literal("activo")))
-                
-                # Añadir timestamp
-                planes_db.add((plan_uri, onto.timestamp, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
-                
-                # Guardar en el archivo para persistencia
-                planes_db.serialize(DB_FILE, format="xml")
-                
-                logger.info(f"Plan registrado: {plan_uri}")
-                
-                # Responder confirmación
+                        triples_count += 1
+                        
+                    # Copiar también todas las propiedades de los componentes del plan
+                    for s1, p1, o1 in gm.triples((None, None, None)):
+                        if s1 != s and s1 != content:  # No copiar la petición en sí
+                            planes_db.add((s1, p1, o1))
+                    
+                    # Añadir estado "activo" al plan
+                    planes_db.remove((plan_uri, onto.estado, None))  # Eliminar cualquier estado previo
+                    planes_db.add((plan_uri, onto.estado, Literal("activo")))
+                    
+                    # Añadir timestamp
+                    planes_db.add((plan_uri, onto.timestamp, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+                    
+                    # Guardar en el archivo para persistencia
+                    planes_db.serialize(DB_FILE, format="xml")
+                    
+                    logger.info(f"Plan registrado: {plan_uri} con {triples_count} triples")
+                    
+                    # Responder confirmación
+                    g = Graph()
+                    g.bind('rdf', RDF)
+                    g.bind('onto', onto)
+                    
+                    respuesta_id = URIRef(f'confirmacion_{str(uuid.uuid4())}')
+                    g.add((respuesta_id, RDF.type, onto.ConfirmacionRegistro))
+                    g.add((respuesta_id, onto.planRegistrado, plan_uri))
+                    g.add((respuesta_id, RDFS.comment, Literal(f"Plan registrado correctamente")))
+                    
+                    mss_cnt += 1
+                    return Response(build_message(g, ACL.inform,
+                                   sender=AgenteMantenedorPlanes.uri,
+                                   receiver=msgdic['sender'],
+                                   content=respuesta_id,
+                                   msgcnt=mss_cnt).serialize(format='xml'),
+                                   mimetype='text/xml')
+        
+        elif es_consulta_planes:
+            # Procesamiento para consulta de planes
+            for s, p, o in gm.triples((None, RDF.type, onto.ConsultaPlanes)):
+                # Construir respuesta con todos los planes activos
                 g = Graph()
                 g.bind('rdf', RDF)
                 g.bind('onto', onto)
                 
-                respuesta_id = URIRef(f'confirmacion_{str(uuid.uuid4())}')
-                g.add((respuesta_id, RDF.type, onto.ConfirmacionRegistro))
-                g.add((respuesta_id, onto.planRegistrado, plan_uri))
-                g.add((respuesta_id, RDFS.comment, Literal(f"Plan registrado correctamente")))
+                respuesta_id = URIRef(f'respuesta_planes_{str(uuid.uuid4())}')
+                g.add((respuesta_id, RDF.type, onto.RespuestaConsultaPlanes))
+                
+                # Extraer planes activos
+                planes_encontrados = 0
+                for plan_uri, _, _ in planes_db.triples((None, RDF.type, onto.Plan)):
+                    # Verificar si está activo
+                    estado = planes_db.value(subject=plan_uri, predicate=onto.estado)
+                    if estado and str(estado) == "activo":
+                        g.add((respuesta_id, onto.contienePlan, plan_uri))
+                        planes_encontrados += 1
+                        
+                        # Copiar todos los datos del plan a la respuesta
+                        for s1, p1, o1 in planes_db.triples((plan_uri, None, None)):
+                            g.add((s1, p1, o1))
+                
+                logger.info(f"Consultados {planes_encontrados} planes activos")
                 
                 mss_cnt += 1
                 return Response(build_message(g, ACL.inform,
@@ -179,44 +234,8 @@ def comunicacion():
                                msgcnt=mss_cnt).serialize(format='xml'),
                                mimetype='text/xml')
     
-    # Si es una consulta de planes activos
-    elif msgdic['performative'] == ACL.query_ref:
-        content = msgdic['content']
-        
-        for s, p, o in gm.triples((None, RDF.type, onto.ConsultaPlanes)):
-            # Construir respuesta con todos los planes activos
-            g = Graph()
-            g.bind('rdf', RDF)
-            g.bind('onto', onto)
-            
-            respuesta_id = URIRef(f'respuesta_planes_{str(uuid.uuid4())}')
-            g.add((respuesta_id, RDF.type, onto.RespuestaConsultaPlanes))
-            
-            # Extraer planes activos
-            planes_encontrados = 0
-            for plan_uri, _, _ in planes_db.triples((None, RDF.type, onto.Plan)):
-                # Verificar si está activo
-                estado = planes_db.value(subject=plan_uri, predicate=onto.estado)
-                if estado and str(estado) == "activo":
-                    g.add((respuesta_id, onto.contienePlan, plan_uri))
-                    planes_encontrados += 1
-                    
-                    # Copiar todos los datos del plan a la respuesta
-                    for s1, p1, o1 in planes_db.triples((plan_uri, None, None)):
-                        g.add((s1, p1, o1))
-            
-            logger.info(f"Consultados {planes_encontrados} planes activos")
-            
-            mss_cnt += 1
-            return Response(build_message(g, ACL.inform,
-                           sender=AgenteMantenedorPlanes.uri,
-                           receiver=msgdic['sender'],
-                           content=respuesta_id,
-                           msgcnt=mss_cnt).serialize(format='xml'),
-                           mimetype='text/xml')
-    
     # Si no sabemos cómo manejar la petición
-    logger.warning(f"Petición desconocida: {msgdic.get('performative')}")
+    logger.warning(f"Petición desconocida: tipo={msgdic.get('performative')}, es_registro={es_registro_plan if 'es_registro_plan' in locals() else 'No verificado'}, es_consulta={es_consulta_planes if 'es_consulta_planes' in locals() else 'No verificado'}")
     return Response(status=400)
 
 @app.route("/Stop")
@@ -240,18 +259,97 @@ def tidyup():
 
 def buscar_agente_clima():
     """
-    Busca el agente de clima en el directorio
+    Busca el agente de clima en el directorio, con mejor manejo de errores
     """
-    agente = buscar_agente_por_tipo(DSO.WeatherAgent)
-    if not agente:
-        # Configuración de respaldo si no se encuentra en el directorio
-        agente = {
-            'name': 'AgenteClima',
-            'uri': 'http://www.agentes.org#AgenteClima',
-            'address': f'http://{socket.gethostname()}:9001/comm'
-        }
-        logger.info(f"Usando configuración de respaldo para AgenteClima: {agente['address']}")
-    return agente
+    logger.info("[VERIFICACIÓN] Buscando AgenteClima...")
+    
+    try:
+        # Intentar buscar por tipo correcto
+        agente = buscar_agente_por_tipo(DSO.WeatherAgent)
+        if agente:
+            logger.info(f"[VERIFICACIÓN] Encontrado AgenteClima en {agente['address']}")
+            return agente
+        
+        # Intentar con tipo SolverAgent (alternativo)
+        logger.info("[VERIFICACIÓN] Intentando con tipo SolverAgent...")
+        agente = buscar_agente_por_tipo(DSO.SolverAgent)
+        if agente:
+            logger.info(f"[VERIFICACIÓN] Encontrado AgenteClima como SolverAgent en {agente['address']}")
+            return agente
+    except Exception as e:
+        logger.warning(f"[VERIFICACIÓN] Error al buscar en directorio: {e}")
+    
+    # Configuración de respaldo si falla la búsqueda
+    logger.warning("[VERIFICACIÓN] Usando configuración de respaldo para AgenteClima")
+    
+    # Probar diferentes puertos comunes para el AgenteClima
+    puertos_clima = [9001, 9002, 9004, 9008]
+    hostname = socket.gethostname()
+    
+    for puerto in puertos_clima:
+        address = f'http://{hostname}:{puerto}/comm'
+        try:
+            # Prueba básica de conectividad
+            logger.info(f"[VERIFICACIÓN] Probando conectividad con posible AgenteClima en {address}")
+            response = requests.get(address, timeout=1)
+            if response.status_code == 200:
+                logger.info(f"[VERIFICACIÓN] ¡Conectividad exitosa con {address}!")
+                return {
+                    'name': 'AgenteClima',
+                    'uri': 'http://www.agentes.org#AgenteClima',
+                    'address': address
+                }
+        except:
+            continue
+    
+    # Si todo falla, retornar configuración por defecto
+    return {
+        'name': 'AgenteClima',
+        'uri': 'http://www.agentes.org#AgenteClima',
+        'address': f'http://{hostname}:9001/comm'
+    }
+
+def limpiar_planes_finalizados():
+    """
+    Elimina de la base de datos los planes cuya fecha de fin ya ha pasado
+    """
+    global planes_db
+    
+    fecha_actual = datetime.datetime.now().date()
+    logger.info(f"Limpiando planes finalizados. Fecha actual: {fecha_actual}")
+    
+    planes_eliminados = 0
+    
+    # Buscar todos los planes activos
+    for plan_uri, _, _ in planes_db.triples((None, RDF.type, onto.Plan)):
+        # Verificar si está activo
+        estado = planes_db.value(subject=plan_uri, predicate=onto.estado)
+        if estado and str(estado) == "activo":
+            # Obtener fecha de fin
+            fecha_fin_str = planes_db.value(subject=plan_uri, predicate=onto.fecha_fin)
+            
+            if fecha_fin_str:
+                try:
+                    # Convertir a objeto date
+                    fecha_fin = datetime.datetime.fromisoformat(str(fecha_fin_str)).date()
+                    
+                    # Si la fecha de fin es anterior a la fecha actual, eliminar el plan
+                    if fecha_fin < fecha_actual:
+                        logger.info(f"Eliminando plan finalizado: {plan_uri}, fecha fin: {fecha_fin}")
+                        
+                        # Cambiar estado a "finalizado"
+                        planes_db.remove((plan_uri, onto.estado, None))
+                        planes_db.add((plan_uri, onto.estado, Literal("finalizado")))
+                        
+                        planes_eliminados += 1
+                except Exception as e:
+                    logger.error(f"Error al procesar fecha de fin {fecha_fin_str}: {e}")
+    
+    if planes_eliminados > 0:
+        # Guardar cambios en el archivo
+        planes_db.serialize(DB_FILE, format="xml")
+        logger.info(f"Se eliminaron {planes_eliminados} planes finalizados")
+
 
 def buscar_agente_actividades():
     """
@@ -362,94 +460,111 @@ def buscar_agente_por_tipo(tipo_agente):
 
 def consultar_clima(ciudad, fecha):
     """
-    Consulta el clima para una ciudad y fecha específicas
-    
-    :param ciudad: Nombre de la ciudad
-    :param fecha: Fecha en formato YYYY-MM-DD
-    :return: Información del clima o None si hay error
+    Consulta el clima para una ciudad y fecha específicas, con mejor manejo de errores
     """
     global mss_cnt
     
-    # Buscar el agente de clima
-    agente_clima = buscar_agente_clima()
-    if not agente_clima:
-        logger.error("No se pudo encontrar el AgenteClima")
-        return None
+    logger.info(f"[CLIMA] Consultando clima para {ciudad} en fecha {fecha}")
     
-    # Crear petición de clima
-    g = Graph()
-    g.bind('rdf', RDF)
-    g.bind('onto', onto)
-    g.bind('xsd', XSD)
-    
-    peticion_id = URIRef('peticion_clima_' + str(uuid.uuid4()))
-    g.add((peticion_id, RDF.type, onto.PeticionClima))
-    
-    # Crear nodo para la ciudad
-    ciudad_id = URIRef('ciudad_' + str(uuid.uuid4()))
-    g.add((ciudad_id, onto.NombreCiudad, Literal(ciudad)))
-    g.add((peticion_id, onto.comoRestriccionLocalidad, ciudad_id))
-    
-    # Añadir días a consultar (solo 1 para la fecha específica)
-    g.add((peticion_id, onto.duranteUnTiempo, Literal(1)))
-    
-    # Construir mensaje ACL
-    msg = build_message(g, ACL.request,
-                      sender=AgenteMantenedorPlanes.uri,
-                      receiver=URIRef(agente_clima['uri']),
-                      content=peticion_id,
-                      msgcnt=mss_cnt)
-    mss_cnt += 1
-    
-    # Enviar la petición
+    # Si no hay agente de clima o falla la conexión, simulamos un clima neutro
     try:
-        response = requests.get(agente_clima['address'], params={'content': msg.serialize(format='xml')})
-        
-        if response.status_code == 200:
-            logger.info(f"Respuesta del clima recibida para {ciudad}, fecha {fecha}")
-            g_resp = Graph()
-            g_resp.parse(data=response.text, format='xml')
-            
-            # Extraer información relevante
-            clima_info = {}
-            
-            # Buscar la respuesta de clima
-            for s, p, o in g_resp.triples((None, RDF.type, onto.RespuestaClima)):
-                respuesta_id = s
+        # Buscar el agente de clima (con retries)
+        max_intentos = 2
+        for intento in range(max_intentos):
+            agente_clima = buscar_agente_clima()
+            if agente_clima:
+                # Crear petición de clima
+                g = Graph()
+                g.bind('rdf', RDF)
+                g.bind('onto', onto)
+                g.bind('xsd', XSD)
                 
-                # Buscar previsiones
-                for s1, p1, o1 in g_resp.triples((respuesta_id, onto.previsiones, None)):
-                    prevision_id = o1
+                peticion_id = URIRef('peticion_clima_' + str(uuid.uuid4()))
+                g.add((peticion_id, RDF.type, onto.PeticionClima))
+                
+                # Crear nodo para la ciudad
+                ciudad_id = URIRef('ciudad_' + str(uuid.uuid4()))
+                g.add((ciudad_id, onto.NombreCiudad, Literal(ciudad)))
+                g.add((peticion_id, onto.comoRestriccionLocalidad, ciudad_id))
+                
+                # Añadir días a consultar (solo 1 para la fecha específica)
+                g.add((peticion_id, onto.duranteUnTiempo, Literal(1)))
+                
+                # Construir mensaje ACL
+                msg = build_message(g, ACL.request,
+                                  sender=AgenteMantenedorPlanes.uri,
+                                  receiver=URIRef(agente_clima['uri']),
+                                  content=peticion_id,
+                                  msgcnt=mss_cnt)
+                mss_cnt += 1
+                
+                # Enviar la petición
+                try:
+                    response = requests.get(agente_clima['address'], 
+                                         params={'content': msg.serialize(format='xml')},
+                                         timeout=3)
                     
-                    # Extraer fecha de la previsión
-                    fecha_prevision = None
-                    for s2, p2, o2 in g_resp.triples((prevision_id, onto.fecha, None)):
-                        fecha_prevision = str(o2)
-                    
-                    # Si es la fecha que buscamos
-                    if fecha_prevision and fecha_prevision == fecha:
-                        # Extraer si hay temporal perjudicial
-                        for s2, p2, o2 in g_resp.triples((prevision_id, onto.TemporalPerjudicial, None)):
-                            clima_info['temporal_perjudicial'] = str(o2).lower() == "true"
+                    if response.status_code == 200:
+                        logger.info(f"Respuesta del clima recibida para {ciudad}, fecha {fecha}")
+                        g_resp = Graph()
+                        g_resp.parse(data=response.text, format='xml')
                         
-                        # Extraer temperatura
-                        for s2, p2, o2 in g_resp.triples((prevision_id, onto.temperatura, None)):
-                            clima_info['temperatura'] = float(o2)
+                        # Extraer información relevante
+                        clima_info = {}
                         
-                        # Extraer descripción
-                        for s2, p2, o2 in g_resp.triples((prevision_id, RDFS.comment, None)):
-                            clima_info['descripcion'] = str(o2)
-                        
-                        return clima_info
-            
-            # Si no encontramos la fecha específica, devolver None
-            return None
-        else:
-            logger.error(f"Error en la respuesta del clima: {response.status_code}")
-            return None
+                        # Buscar la respuesta de clima
+                        for s, p, o in g_resp.triples((None, RDF.type, onto.RespuestaClima)):
+                            respuesta_id = s
+                            
+                            # Buscar previsiones
+                            for s1, p1, o1 in g_resp.triples((respuesta_id, onto.previsiones, None)):
+                                prevision_id = o1
+                                
+                                # Extraer fecha de la previsión
+                                fecha_prevision = None
+                                for s2, p2, o2 in g_resp.triples((prevision_id, onto.fecha, None)):
+                                    fecha_prevision = str(o2)
+                                
+                                # Si es la fecha que buscamos
+                                if fecha_prevision and fecha_prevision == fecha:
+                                    # Extraer si hay temporal perjudicial
+                                    for s2, p2, o2 in g_resp.triples((prevision_id, onto.TemporalPerjudicial, None)):
+                                        clima_info['temporal_perjudicial'] = str(o2).lower() == "true"
+                                    
+                                    # Extraer temperatura
+                                    for s2, p2, o2 in g_resp.triples((prevision_id, onto.temperatura, None)):
+                                        clima_info['temperatura'] = float(o2)
+                                    
+                                    # Extraer descripción
+                                    for s2, p2, o2 in g_resp.triples((prevision_id, RDFS.comment, None)):
+                                        clima_info['descripcion'] = str(o2)
+                                    
+                                    return clima_info
+                
+                    else:
+                        logger.warning(f"[CLIMA] Error en respuesta: {response.status_code}")
+                        continue
+                except Exception as e:
+                    logger.warning(f"[CLIMA] Error al contactar agente clima: {e}")
+                    continue
+        
+        # Si llegamos aquí, no se pudo consultar el clima
+        logger.warning(f"[CLIMA] No se pudo obtener clima para {ciudad} en {fecha}")
+        
+        # Devolver un clima "neutro" por defecto
+        return {
+            'temporal_perjudicial': False,
+            'temperatura': 20.0,
+            'descripcion': "Información no disponible - usando clima predeterminado"
+        }
+        
     except Exception as e:
-        logger.error(f"Error al consultar clima: {e}")
-        return None
+        logger.error(f"[CLIMA] Error general al consultar clima: {e}")
+        return {
+            'temporal_perjudicial': False,
+            'temperatura': 20.0,
+            'descripcion': f"Error en consulta: {str(e)}"
+        }
 
 def buscar_actividad_interior(ciudad, fecha, franja):
     """
@@ -540,19 +655,28 @@ def verificar_actividades_exteriores():
     """
     Verifica todas las actividades exteriores de los planes activos y las modifica si es necesario
     """
+    logger.info("[VERIFICACIÓN] Iniciando verificación de actividades exteriores en planes activos")
+    planes_procesados = 0
+    planes_modificados = 0
+    
     # Buscar todos los planes activos
     for plan_uri, _, _ in planes_db.triples((None, RDF.type, onto.Plan)):
         # Verificar si está activo
         estado = planes_db.value(subject=plan_uri, predicate=onto.estado)
         if estado and str(estado) == "activo":
+            logger.info(f"[VERIFICACIÓN] Procesando plan activo: {plan_uri}")
+            planes_procesados += 1
+            
             # Obtener ciudad de destino
             ciudad = None
             for s, p, o in planes_db.triples((plan_uri, onto.llegaA, None)):
                 ciudad_uri = o
                 ciudad = planes_db.value(subject=ciudad_uri, predicate=onto.NombreCiudad)
             
+            logger.debug(f"[VERIFICACIÓN] Ciudad de destino: {ciudad}")
+            
             if not ciudad:
-                logger.warning(f"Plan {plan_uri} no tiene ciudad de destino")
+                logger.warning(f"[VERIFICACIÓN] Plan {plan_uri} no tiene ciudad de destino")
                 continue
             
             # Obtener fechas del plan
@@ -565,70 +689,120 @@ def verificar_actividades_exteriores():
             for s, p, o in planes_db.triples((plan_uri, onto.fecha_fin, None)):
                 fecha_fin = str(o)
             
+            logger.debug(f"[VERIFICACIÓN] Fechas del plan: {fecha_inicio} a {fecha_fin}")
+            
             if not fecha_inicio or not fecha_fin:
-                logger.warning(f"Plan {plan_uri} no tiene fechas definidas")
+                logger.warning(f"[VERIFICACIÓN] Plan {plan_uri} no tiene fechas definidas")
                 continue
             
             # Calcular días del plan
-            fecha_inicio_dt = datetime.datetime.fromisoformat(fecha_inicio)
-            fecha_fin_dt = datetime.datetime.fromisoformat(fecha_fin)
+            try:
+                fecha_inicio_dt = datetime.datetime.fromisoformat(fecha_inicio)
+                fecha_fin_dt = datetime.datetime.fromisoformat(fecha_fin)
+                logger.debug(f"[VERIFICACIÓN] Periodo del plan: {(fecha_fin_dt - fecha_inicio_dt).days + 1} días")
+            except ValueError as e:
+                logger.error(f"[VERIFICACIÓN] Error al procesar fechas del plan {plan_uri}: {e}")
+                continue
             
             # Para cada día del plan
             fecha_actual = fecha_inicio_dt
+            dias_procesados = 0
             while fecha_actual <= fecha_fin_dt:
                 fecha_str = fecha_actual.strftime('%Y-%m-%d')
+                dias_procesados += 1
+                logger.debug(f"[VERIFICACIÓN] Procesando día {dias_procesados}: {fecha_str}")
                 
                 # Consultar clima para este día
+                logger.info(f"[VERIFICACIÓN] Consultando clima para {ciudad} en fecha {fecha_str}")
                 clima_info = consultar_clima(ciudad, fecha_str)
                 
-                # Si hay mal tiempo
-                if clima_info and clima_info.get('temporal_perjudicial'):
-                    logger.info(f"Detectado mal tiempo en {ciudad} para {fecha_str}: {clima_info.get('descripcion')}")
+                if clima_info:
+                    logger.debug(f"[VERIFICACIÓN] Información del clima: {clima_info}")
                     
-                    # Buscar actividades exteriores para este día
-                    for dia_id, _, _ in planes_db.triples((None, RDF.type, onto.PlanDe1Dia)):
-                        # Verificar si este día pertenece al plan
-                        if (plan_uri, onto.estaCompuestoPor, dia_id) in planes_db:
-                            # Verificar si la fecha coincide
-                            dia_fecha = planes_db.value(subject=dia_id, predicate=RDFS.label)
-                            if dia_fecha and fecha_str in str(dia_fecha):
-                                # Buscar actividades de este día
-                                for franja_id in planes_db.objects(subject=dia_id, predicate=onto.incluyeFranja):
-                                    # Obtener franja horaria
-                                    franja = planes_db.value(subject=franja_id, predicate=RDFS.label)
-                                    if not franja:
-                                        continue
+                    # Si hay mal tiempo
+                    if clima_info.get('temporal_perjudicial'):
+                        logger.warning(f"[VERIFICACIÓN] ¡ALERTA! Detectado mal tiempo en {ciudad} para {fecha_str}: {clima_info.get('descripcion')}")
+                        
+                        # Buscar actividades exteriores para este día
+                        logger.info(f"[VERIFICACIÓN] Buscando actividades exteriores para el día {fecha_str}")
+                        actividades_encontradas = 0
+                        actividades_modificadas = 0
+                        
+                        for dia_id, _, _ in planes_db.triples((None, RDF.type, onto.PlanDe1Dia)):
+                            # Verificar si este día pertenece al plan
+                            if (plan_uri, onto.estaCompuestoPor, dia_id) in planes_db:
+                                # Verificar si la fecha coincide
+                                dia_fecha = planes_db.value(subject=dia_id, predicate=RDFS.label)
+                                if dia_fecha and fecha_str in str(dia_fecha):
+                                    logger.debug(f"[VERIFICACIÓN] Encontrado día {dia_id} con fecha {dia_fecha}")
                                     
-                                    # Buscar actividades en esta franja
-                                    for actividad_id in planes_db.objects(subject=franja_id, predicate=onto.seRealizan):
-                                        # Verificar si es una actividad exterior
-                                        es_exterior = False
-                                        for s, p, o in planes_db.triples((actividad_id, RDF.type, onto.Exterior)):
-                                            es_exterior = True
-                                            break
+                                    # Buscar franjas horarias de este día
+                                    franjas_procesadas = 0
+                                    for franja_id in planes_db.objects(subject=dia_id, predicate=onto.incluyeFranja):
+                                        franjas_procesadas += 1
                                         
-                                        if es_exterior:
-                                            logger.info(f"Encontrada actividad exterior {actividad_id} en día {fecha_str}, franja {franja}")
+                                        # Obtener franja horaria
+                                        franja = planes_db.value(subject=franja_id, predicate=RDFS.label)
+                                        if not franja:
+                                            logger.warning(f"[VERIFICACIÓN] Franja {franja_id} sin etiqueta en día {dia_id}")
+                                            continue
+                                        
+                                        logger.debug(f"[VERIFICACIÓN] Procesando franja {franja_id}: {franja}")
+                                        
+                                        # Buscar actividades en esta franja
+                                        for actividad_id in planes_db.objects(subject=franja_id, predicate=onto.seRealizan):
+                                            actividades_encontradas += 1
                                             
-                                            # Buscar una actividad de interior para sustituirla
-                                            nueva_actividad_id = buscar_actividad_interior(ciudad, fecha_str, str(franja))
+                                            # Verificar si es una actividad exterior
+                                            es_exterior = False
+                                            for s, p, o in planes_db.triples((actividad_id, RDF.type, onto.Exterior)):
+                                                es_exterior = True
+                                                break
                                             
-                                            if nueva_actividad_id:
-                                                logger.info(f"Reemplazando actividad exterior {actividad_id} por actividad interior {nueva_actividad_id}")
+                                            # Obtener nombre de la actividad para logs
+                                            nombre_actividad = planes_db.value(subject=actividad_id, predicate=RDFS.label)
+                                            nombre_actividad = str(nombre_actividad) if nombre_actividad else str(actividad_id)
+                                            
+                                            if es_exterior:
+                                                logger.warning(f"[VERIFICACIÓN] Encontrada actividad exterior: {nombre_actividad} en día {fecha_str}, franja {franja}")
                                                 
-                                                # Eliminar la actividad exterior
-                                                planes_db.remove((franja_id, onto.seRealizan, actividad_id))
+                                                # Buscar una actividad de interior para sustituirla
+                                                logger.info(f"[VERIFICACIÓN] Buscando actividad interior para sustituir a {nombre_actividad}")
+                                                nueva_actividad_id = buscar_actividad_interior(ciudad, fecha_str, str(franja))
                                                 
-                                                # Añadir la nueva actividad
-                                                planes_db.add((franja_id, onto.seRealizan, nueva_actividad_id))
-                                                
-                                                # Guardar cambios
-                                                planes_db.serialize(DB_FILE, format="xml")
-                                            else:
-                                                logger.warning(f"No se encontró actividad interior para sustituir a {actividad_id}")
+                                                if nueva_actividad_id:
+                                                    # Obtener nombre de la nueva actividad
+                                                    nuevo_nombre = planes_db.value(subject=nueva_actividad_id, predicate=RDFS.label)
+                                                    nuevo_nombre = str(nuevo_nombre) if nuevo_nombre else str(nueva_actividad_id)
+                                                    
+                                                    logger.info(f"[VERIFICACIÓN] ✓ Reemplazando actividad exterior '{nombre_actividad}' por actividad interior '{nuevo_nombre}'")
+                                                    
+                                                    # Eliminar la actividad exterior
+                                                    planes_db.remove((franja_id, onto.seRealizan, actividad_id))
+                                                    
+                                                    # Añadir la nueva actividad
+                                                    planes_db.add((franja_id, onto.seRealizan, nueva_actividad_id))
+                                                    
+                                                    # Guardar cambios
+                                                    planes_db.serialize(DB_FILE, format="xml")
+                                                    actividades_modificadas += 1
+                                                    planes_modificados += 1
+                                                else:
+                                                    logger.warning(f"[VERIFICACIÓN] ✗ No se encontró actividad interior para sustituir a '{nombre_actividad}'")
+                                    
+                                    if franjas_procesadas == 0:
+                                        logger.warning(f"[VERIFICACIÓN] Día {dia_id} no tiene franjas horarias definidas")
+                        
+                        logger.info(f"[VERIFICACIÓN] Día {fecha_str}: {actividades_encontradas} actividades procesadas, {actividades_modificadas} modificadas")
+                else:
+                    logger.warning(f"[VERIFICACIÓN] No se pudo obtener información del clima para {ciudad} en fecha {fecha_str}")
                 
                 # Avanzar al siguiente día
                 fecha_actual += datetime.timedelta(days=1)
+            
+            logger.info(f"[VERIFICACIÓN] Plan {plan_uri}: procesados {dias_procesados} días")
+    
+    logger.info(f"[VERIFICACIÓN] Completada: {planes_procesados} planes procesados, {planes_modificados} planes modificados")
 
 def agentbehavior1(cola):
     """
@@ -675,6 +849,10 @@ def agentbehavior1(cola):
             except:
                 pass  # No hay mensajes, continuar
             
+            hora_actual = datetime.datetime.now().hour
+            if hora_actual in [8, 20]:  # Ejecutar a las 8am y 8pm
+                limpiar_planes_finalizados()
+
             # Verificar actividades exteriores en planes activos
             verificar_actividades_exteriores()
             
