@@ -2928,6 +2928,166 @@ def guardar_plan_aceptado(plan_id, precio_total, origen, destino, fecha_ida, fec
         return False
 
 
+@app.route("/aceptar_plan", methods=['POST'])
+def aceptar_plan():
+    """
+    Procesa la aceptación de un plan por parte del usuario y
+    lo guarda para que sea procesado por el AgentePagos
+    """
+    # Extraer datos del formulario
+    plan_id = request.form['plan_id']
+    precio_total = float(request.form['precio_total'])
+    origen = request.form['origen']
+    destino = request.form['destino']
+    fecha_ida = request.form['fecha_ida']
+    fecha_vuelta = request.form['fecha_vuelta']
+    
+    # Guardar el plan como aceptado
+    exito = guardar_plan_aceptado(plan_id, precio_total, origen, destino, fecha_ida, fecha_vuelta)
+    
+    if exito:
+        return f'''
+        <html>
+            <head>
+                <title>Plan Aceptado</title>
+                <style>
+                    body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                    .success-box {{ background: #d4edda; color: #155724; padding: 15px; margin: 20px 0; border-radius: 5px; }}
+                    .back-btn {{ margin-top: 20px; padding: 10px; background: #4CAF50; color: white; text-decoration: none; display: inline-block; border-radius: 5px; }}
+                    table {{ border-collapse: collapse; width: 100%; margin: 20px 0; }}
+                    th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
+                    th {{ background-color: #f2f2f2; }}
+                </style>
+            </head>
+            <body>
+                <h1>Plan Aceptado Correctamente</h1>
+                
+                <div class="success-box">
+                    <p>Su plan de viaje ha sido aceptado y enviado para procesamiento de pago.</p>
+                    <p>El sistema procesará automáticamente el pago en breve.</p>
+                </div>
+                
+                <h2>Detalles del Plan:</h2>
+                <table>
+                    <tr>
+                        <th>Identificador</th>
+                        <td>{plan_id}</td>
+                    </tr>
+                    <tr>
+                        <th>Origen</th>
+                        <td>{origen}</td>
+                    </tr>
+                    <tr>
+                        <th>Destino</th>
+                        <td>{destino}</td>
+                    </tr>
+                    <tr>
+                        <th>Fecha Ida</th>
+                        <td>{fecha_ida}</td>
+                    </tr>
+                    <tr>
+                        <th>Fecha Vuelta</th>
+                        <td>{fecha_vuelta}</td>
+                    </tr>
+                    <tr>
+                        <th>Importe Total</th>
+                        <td>{precio_total:.2f}€</td>
+                    </tr>
+                </table>
+                
+                <p>Puedes consultar el estado de tu pago más adelante a través del panel de usuario.</p>
+                
+                <a href="/test" class="back-btn">Volver al buscador</a>
+            </body>
+        </html>
+        '''
+    else:
+        return f'''
+        <html>
+            <head>
+                <title>Error</title>
+                <style>body {{ font-family: Arial, sans-serif; margin: 20px; }}</style>
+            </head>
+            <body>
+                <h1>Error al procesar el plan</h1>
+                <p>No se pudo guardar el plan seleccionado. Por favor, inténtelo de nuevo.</p>
+                <p><a href="/test">Volver al buscador</a></p>
+            </body>
+        </html>
+        '''
+
+
+def guardar_plan_aceptado(plan_id, precio_total, origen, destino, fecha_ida, fecha_vuelta):
+    """
+    Guarda un plan aceptado por el usuario para que el AgentePagos pueda procesarlo
+    
+    :param plan_id: Identificador del plan
+    :param precio_total: Precio total del plan
+    :param origen: Ciudad origen
+    :param destino: Ciudad destino
+    :param fecha_ida: Fecha de ida
+    :param fecha_vuelta: Fecha de vuelta
+    :return: True si se ha guardado correctamente
+    """
+    try:
+        # Crear grafo para almacenar el plan
+        planes_db = Graph()
+        planes_db.bind('rdf', RDF)
+        planes_db.bind('rdfs', RDFS)
+        planes_db.bind('onto', onto)
+        planes_db.bind('xsd', XSD)
+        
+        # Intentar cargar datos existentes
+        try:
+            planes_db.parse("planes_aceptados.ttl", format="turtle")
+        except:
+            # Si el archivo no existe, se creará uno nuevo
+            logger.info("Creando nuevo archivo de planes aceptados")
+        
+        # Crear el plan
+        plan_uri = URIRef(f'plan_{plan_id}')
+        
+        # Verificar si ya existe
+        for s, p, o in planes_db.triples((plan_uri, None, None)):
+            # Ya existe, actualizamos
+            logger.info(f"El plan {plan_id} ya existe, actualizando")
+            return True
+        
+        # Añadir datos básicos del plan
+        planes_db.add((plan_uri, RDF.type, onto.Plan))
+        planes_db.add((plan_uri, onto.Precio, Literal(precio_total, datatype=XSD.float)))
+        planes_db.add((plan_uri, onto.PrecioTotal, Literal(precio_total, datatype=XSD.float)))
+        planes_db.add((plan_uri, onto.estado, Literal("listo")))
+        
+        # Ciudades
+        planes_db.add((plan_uri, RDFS.comment, 
+                     Literal(f"Viaje de {origen} a {destino} del {fecha_ida} al {fecha_vuelta}")))
+        
+        # Fecha de creación
+        planes_db.add((plan_uri, onto.fechaCreacion, 
+                     Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+        
+        # Guardar en archivo
+        with open("planes_aceptados.ttl", 'wb') as f:
+            serialized_data = planes_db.serialize(format='turtle')
+            if isinstance(serialized_data, str):
+                serialized_data = serialized_data.encode('utf-8')
+            f.write(serialized_data)
+            
+        logger.info(f"Plan {plan_id} guardado como aceptado con precio {precio_total}€")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error al guardar el plan aceptado: {e}")
+        logger.error(traceback.format_exc())
+        return False
+
+
+HTML 
+
+<p>Vuelos: <span class="precio">{0:.2f}€</span></p>Add commentMore actions <p>Alojamiento: <span class="precio">{1:.2f}€</span></p> <p>Actividades: <span class="precio">{2:.2f}€</span></p> <p class="total">Precio total: <span class="precio">{3:.2f}€</span></p> <form method="post" action="/aceptar_plan"> <input type="hidden" name="plan_id" value="{4}"> <input type="hidden" name="precio_total" value="{3:.2f}"> <input type="hidden" name="origen" value="{5}"> <input type="hidden" name="destino" value="{6}"> <input type="hidden" name="fecha_ida" value="{7}"> <input type="hidden" name="fecha_vuelta" value="{8}"> <button type="submit" class="pay-button" style="padding: 12px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px;">Aceptar Plan</button> </form>
+
+
 
 @app.route("/get_planes")
 def get_planes():
@@ -2961,20 +3121,7 @@ def get_planes():
     return Response(g_planes.serialize(format='turtle'), mimetype='text/turtle')
     
 
-    
-    for s, p, o in g.triples((plan_id, None, None)):
-            dsgraph.add((s, p, o))
-            
-            # Si el objeto es un recurso, guardar también sus propiedades
-            if isinstance(o, URIRef):
-                for s2, p2, o2 in g.triples((o, None, None)):
-                    dsgraph.add((s2, p2, o2))
-
-    logger.info(f"Plan {plan_id} guardado en el grafo global dsgraph")
-
-    # Devolver el grafo en formato turtle
-    return Response(g_planes.serialize(format='turtle'), mimetype='text/turtle')
-
+  
 if __name__ == '__main__':
     try:
         # Iniciar el comportamiento de registro en el directorio
