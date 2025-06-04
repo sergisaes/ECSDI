@@ -16,6 +16,7 @@ import datetime
 import uuid
 import logging
 import os
+import time
 from amadeus import Client, ResponseError
 
 from rdflib import Namespace, Graph, Literal, URIRef, BNode
@@ -32,6 +33,8 @@ from APIKeys import AMADEUS_CLIENT_ID, AMADEUS_CLIENT_SECRET
 # Configurar logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+
+ultima_peticion_amadeus = None
 
 __author__ = 'Laura'
 
@@ -238,52 +241,68 @@ def buscar_actividades_amadeus(ciudad_nombre, fecha=None, tipo_actividad=None, p
     :param franja_horaria: Franja horaria deseada
     :return: Lista de actividades desde Amadeus
     """
+    global ultima_peticion_amadeus
+
+    # Tiempo mínimo entre solicitudes (en segundos)
+    TIEMPO_ESPERA = 5
+
+    # Verifica si se necesita esperar antes de realizar la solicitud
+    if ultima_peticion_amadeus:
+        tiempo_transcurrido = time.time() - ultima_peticion_amadeus
+        if tiempo_transcurrido < TIEMPO_ESPERA:
+            tiempo_a_esperar = TIEMPO_ESPERA - tiempo_transcurrido
+            logger.info(f"Esperando {tiempo_a_esperar:.2f} segundos antes de realizar la siguiente solicitud a Amadeus")
+            time.sleep(tiempo_a_esperar)
+
     if not amadeus or ciudad_nombre not in CIUDADES_COORDS:
         logger.warning(f"No se puede buscar en Amadeus: cliente={amadeus}, ciudad={ciudad_nombre}")
         return []
-    
+
     activities = []
-    
+
     try:
+        # Actualiza el tiempo de la última solicitud
+        ultima_peticion_amadeus = time.time()
+
         # Obtener coordenadas de la ciudad
         coords = CIUDADES_COORDS[ciudad_nombre]['ll'].split(',')
         latitude = float(coords[0])
         longitude = float(coords[1])
-        
+
         # Consultar actividades usando el endpoint correcto de Amadeus
         logger.info(f"Consultando actividades en Amadeus para {ciudad_nombre} en coordenadas {latitude},{longitude}")
-        
+
         # Usar el método correcto con los parámetros correctos
         response = amadeus.shopping.activities.get(
             latitude=latitude,
             longitude=longitude,
             radius=5  # Radio en kilómetros (máximo 20)
         )
-        
+
         logger.info(f"Recibidas {len(response.data)} actividades de Amadeus")
-        
+
         # Definir franjas horarias disponibles (fijas ya que Amadeus no las proporciona)
-        horarios_disponibles = ["09:00", "11:00", "13:00", "15:00", "17:00"]
-        
+        horarios_disponibles = ["mañana", "tarde", "noche"]
+
         for activity in response.data:
             # Extraer precio si está disponible
             precio = None
             if 'price' in activity and 'amount' in activity['price']:
                 precio = float(activity['price']['amount'])
-            
+
             # Si hay límite de precio y el precio supera el máximo, ignorar
             if precio_max is not None and precio is not None and precio > precio_max:
                 logger.debug(f"Actividad {activity.get('name')} excede precio máximo: {precio} > {precio_max}")
                 continue
-            
+
             # Verificar franja horaria si se especificó
             if franja_horaria and franja_horaria not in horarios_disponibles:
                 logger.debug(f"Actividad {activity.get('name')} no disponible en franja horaria {franja_horaria}")
                 continue
-            
+
             # Determinar si la actividad es interior o exterior
             tipo_ubicacion = determinar_tipo_ubicacion(
-                activity.get('name', ''), 
+                activity.get('name', ''),
                 activity.get('shortDescription', '')
             )
 
@@ -308,12 +327,12 @@ def buscar_actividades_amadeus(ciudad_nombre, fecha=None, tipo_actividad=None, p
                 'fecha': fecha,
                 'tipo_ubicacion': tipo_ubicacion  # Añadimos el tipo de ubicación
             }
-            
+
             activities.append(act)
-        
+
         logger.info(f"Encontradas {len(activities)} actividades en Amadeus para {ciudad_nombre}")
         return activities
-        
+
     except ResponseError as e:
         logger.error(f"Error en API de Amadeus: {e}")
         return []
