@@ -16,3 +16,10 @@
     onto:fechaCreacion "2025-06-04T00:35:38.793344"^^xsd:dateTime ;
     rdfs:comment "Viaje de Barcelona a Madrid del 2025-06-26 al 2025-06-29" .
 
+<plan_dc3c08bb-e7e0-4044-a675-18abd7c3f39b> a onto:Plan ;
+    onto:Precio "470.10707128013354"^^xsd:float ;
+    onto:PrecioTotal "470.10707128013354"^^xsd:float ;
+    onto:estado "listo" ;
+    onto:fechaCreacion "2025-06-04T22:29:46.194818"^^xsd:dateTime ;
+    rdfs:comment "Viaje de Barcelona a Madrid del 2025-06-06 al 2025-06-08" .
+

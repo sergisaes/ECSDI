@@ -48,7 +48,7 @@ from AgentUtil.ACLMessages import send_message
 # Configuración de tiempos para pruebas (en segundos)
 TIEMPO_ENTRE_LECTURAS_PLANES = 300  # Leer planes cada 10 segundos 
 TIEMPO_ENTRE_VALORACIONES = 15     # Solicitar valoraciones cada 15 segundos
-TIEMPO_ENTRE_RECOMENDACIONES_ACTIVIDAD = 15  # Recomendar cada 10 minutos
+TIEMPO_ENTRE_RECOMENDACIONES_ACTIVIDAD = 600  # Recomendar cada 10 minutos
 
 
 # Logging
