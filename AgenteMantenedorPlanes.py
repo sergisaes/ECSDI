@@ -114,7 +114,169 @@ cola1 = Queue()
 # Flask app
 app = Flask(__name__)
 
-@app.route("/comm")
+
+@app.route("/plan_estructura/<plan_id>")
+def plan_estructura(plan_id):
+    """
+    Muestra la estructura completa del plan para depuración
+    """
+    try:
+        plan_uri = URIRef(f'plan_{plan_id}')
+        
+        # Verificar que el plan existe
+        if not any(planes_db.triples((plan_uri, RDF.type, onto.Plan))):
+            return f"Plan {plan_id} no encontrado"
+        
+        html = """
+        <html>
+            <head><title>Estructura del Plan</title>
+            <style>
+                body { font-family: Arial; margin: 20px; }
+                .section { margin: 20px 0; border: 1px solid #ddd; padding: 10px; border-radius: 5px; }
+                pre { background: #f5f5f5; padding: 10px; }
+                h3 { margin-top: 0; }
+            </style>
+            </head>
+            <body>
+                <h1>Estructura Detallada del Plan</h1>
+        """
+        
+        # 1. Información básica
+        html += """<div class="section"><h3>Información Básica</h3>"""
+        html += "<pre>"
+        for s, p, o in planes_db.triples((plan_uri, None, None)):
+            html += f"{p.split('/')[-1]} = {o}\n"
+        html += "</pre></div>"
+        
+        # 2. Ciudades
+        html += """<div class="section"><h3>Ciudades</h3>"""
+        html += "<h4>Origen:</h4><pre>"
+        origen_uri = planes_db.value(subject=plan_uri, predicate=onto.saleDe)
+        if origen_uri:
+            for s, p, o in planes_db.triples((origen_uri, None, None)):
+                html += f"{p.split('/')[-1]} = {o}\n"
+        else:
+            html += "No hay origen definido\n"
+        html += "</pre>"
+        
+        html += "<h4>Destino:</h4><pre>"
+        destino_uri = planes_db.value(subject=plan_uri, predicate=onto.llegaA)
+        if destino_uri:
+            for s, p, o in planes_db.triples((destino_uri, None, None)):
+                html += f"{p.split('/')[-1]} = {o}\n"
+        else:
+            html += "No hay destino definido\n"
+        html += "</pre></div>"
+        
+        # 3. Días
+        html += """<div class="section"><h3>Días y Actividades</h3>"""
+        dias = list(planes_db.objects(subject=plan_uri, predicate=onto.estaCompuestoPor))
+        if dias:
+            for dia_uri in dias:
+                label = planes_db.value(subject=dia_uri, predicate=RDFS.label) or "Sin etiqueta"
+                html += f"<h4>Día: {label}</h4>"
+                
+                # Franjas
+                franjas = list(planes_db.objects(subject=dia_uri, predicate=onto.incluyeFranja))
+                if franjas:
+                    for franja_uri in franjas:
+                        franja_label = planes_db.value(subject=franja_uri, predicate=RDFS.label) or "Sin etiqueta"
+                        html += f"<h5>Franja: {franja_label}</h5>"
+                        
+                        # Actividades
+                        actividades = list(planes_db.objects(subject=franja_uri, predicate=onto.seRealizan))
+                        if actividades:
+                            html += "<ul>"
+                            for act_uri in actividades:
+                                act_nombre = planes_db.value(subject=act_uri, predicate=RDFS.label) or "Sin nombre"
+                                act_precio = planes_db.value(subject=act_uri, predicate=onto.Precio) or "N/A"
+                                html += f"<li>{act_nombre} - Precio: {act_precio}</li>"
+                            html += "</ul>"
+                        else:
+                            html += "<p>No hay actividades en esta franja</p>"
+                else:
+                    html += "<p>No hay franjas definidas para este día</p>"
+        else:
+            html += "<p>No hay días definidos para este plan</p>"
+        html += "</div>"
+        
+        html += """</body></html>"""
+        return html
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+
+        
+@app.route("/debug_plan/<plan_id>")
+def debug_plan(plan_id):
+    """
+    Muestra los triples exactos guardados para un plan
+    """
+    try:
+        plan_uri = URIRef(f'plan_{plan_id}')
+        
+        html = """
+        <html>
+            <head>
+                <title>Debug Plan Data</title>
+                <style>
+                    body { font-family: monospace; margin: 20px; }
+                    pre { background: #f5f5f5; padding: 10px; white-space: pre-wrap; }
+                </style>
+            </head>
+            <body>
+                <h1>Datos Crudos del Plan</h1>
+        """
+        
+        # Mostrar todos los triples relacionados con el plan
+        html += "<h2>Datos directos del plan</h2><pre>"
+        for s, p, o in planes_db.triples((plan_uri, None, None)):
+            html += f"{p} = {o}\n"
+        html += "</pre>"
+        
+        # Mostrar datos de ciudades
+        html += "<h2>Ciudades relacionadas</h2><pre>"
+        for s, p, o in planes_db.triples((plan_uri, onto.llegaA, None)):
+            html += f"llegaA = {o}\n"
+            for s2, p2, o2 in planes_db.triples((o, None, None)):
+                html += f"  {p2} = {o2}\n"
+        for s, p, o in planes_db.triples((plan_uri, onto.saleDe, None)):
+            html += f"saleDe = {o}\n"
+            for s2, p2, o2 in planes_db.triples((o, None, None)):
+                html += f"  {p2} = {o2}\n"
+        html += "</pre>"
+        
+        # Mostrar días y actividades
+        html += "<h2>Días del plan</h2>"
+        for dia_uri in planes_db.objects(subject=plan_uri, predicate=onto.estaCompuestoPor):
+            html += f"<h3>Día: {dia_uri}</h3><pre>"
+            for s, p, o in planes_db.triples((dia_uri, None, None)):
+                html += f"{p} = {o}\n"
+            html += "</pre>"
+            
+            # Buscar franjas
+            html += "<h4>Franjas horarias:</h4><pre>"
+            for franja_uri in planes_db.objects(subject=dia_uri, predicate=onto.incluyeFranja):
+                html += f"Franja: {franja_uri}\n"
+                for s, p, o in planes_db.triples((franja_uri, None, None)):
+                    html += f"  {p} = {o}\n"
+                
+                # Actividades en la franja
+                html += "  Actividades:\n"
+                for act_uri in planes_db.objects(subject=franja_uri, predicate=onto.seRealizan):
+                    html += f"    Actividad: {act_uri}\n"
+            html += "</pre>"
+        
+        html += """
+            </body>
+        </html>
+        """
+        
+        return html
+    except Exception as e:
+        return f"Error al depurar plan: {str(e)}"
+    
+@app.route("/comm", methods=['GET', 'POST'])
 def comunicacion():
     """
     Punto de entrada de comunicación para recibir planes y peticiones
@@ -122,7 +284,21 @@ def comunicacion():
     global planes_db
     global mss_cnt
 
-    message = request.args['content']
+    message = None
+    if 'content' in request.args:
+        # Si viene como parámetro en la URL (sea GET o POST)
+        message = request.args['content']
+    elif request.method == 'POST' and 'content' in request.form:
+        # Si viene en el cuerpo del formulario
+        message = request.form.get('content')
+    elif request.method == 'POST' and request.data:
+        # Si viene como datos crudos
+        message = request.data.decode('utf-8')
+
+    if not message:
+        logger.error("No se proporcionó contenido en la petición")
+        return Response("No se proporcionó contenido en la petición", status=400)
+
     gm = Graph()
     gm.parse(data=message, format='xml')
     
@@ -161,26 +337,29 @@ def comunicacion():
                 if plan_uri:
                     # Copiar todo el grafo del plan a nuestra base de datos
                     triples_count = 0
-                    for s1, p1, o1 in gm.triples((plan_uri, None, None)):
-                        planes_db.add((s1, p1, o1))
-                        triples_count += 1
+
+                    # Identificar todos los nodos relacionados con el plan
+                    nodos_relacionados = set([plan_uri])
+                    nodos_pendientes = [plan_uri]
+
+                    # Recorrer recursivamente todos los nodos relacionados
+                    while nodos_pendientes:
+                        nodo_actual = nodos_pendientes.pop(0)
                         
-                    # Copiar también todas las propiedades de los componentes del plan
-                    for s1, p1, o1 in gm.triples((None, None, None)):
-                        if s1 != s and s1 != content:  # No copiar la petición en sí
-                            planes_db.add((s1, p1, o1))
-                    
-                    # Añadir estado "activo" al plan
-                    planes_db.remove((plan_uri, onto.estado, None))  # Eliminar cualquier estado previo
-                    planes_db.add((plan_uri, onto.estado, Literal("activo")))
-                    
-                    # Añadir timestamp
-                    planes_db.add((plan_uri, onto.timestamp, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
-                    
+                        # Copiar todos los triples donde este nodo es sujeto
+                        for s, p, o in gm.triples((nodo_actual, None, None)):
+                            planes_db.add((s, p, o))
+                            triples_count += 1
+                            
+                            # Si el objeto es otro URI, añadirlo a los pendientes si no lo hemos procesado
+                            if isinstance(o, URIRef) and o not in nodos_relacionados:
+                                nodos_relacionados.add(o)
+                                nodos_pendientes.append(o)
+
                     # Guardar en el archivo para persistencia
                     planes_db.serialize(DB_FILE, format="xml")
-                    
-                    logger.info(f"Plan registrado: {plan_uri} con {triples_count} triples")
+
+                    logger.info(f"Plan registrado: {plan_uri} con {triples_count} triples y {len(nodos_relacionados)} nodos relacionados")
                     
                     # Responder confirmación
                     g = Graph()
@@ -204,12 +383,17 @@ def comunicacion():
             # Procesamiento para consulta de planes
             for s, p, o in gm.triples((None, RDF.type, onto.ConsultaPlanes)):
                 # Construir respuesta con todos los planes activos
-                g = Graph()
-                g.bind('rdf', RDF)
-                g.bind('onto', onto)
+                g_resp = Graph()
+                g_resp.bind('rdf', RDF)
+                g_resp.bind('onto', onto)
+
+                if isinstance(content, URIRef) and (content, RDF.type, onto.ConsultaPlanes) in gm:
+                    for plan_uri in gm.objects(subject=content, predicate=onto.consultaPlan):
+                        # Reconstruir estructura antes de responder
+                        reconstruir_estructura_plan(plan_uri)
                 
                 respuesta_id = URIRef(f'respuesta_planes_{str(uuid.uuid4())}')
-                g.add((respuesta_id, RDF.type, onto.RespuestaConsultaPlanes))
+                g_resp.add((respuesta_id, RDF.type, onto.RespuestaConsultaPlanes))
                 
                 # Extraer planes activos
                 planes_encontrados = 0
@@ -217,17 +401,34 @@ def comunicacion():
                     # Verificar si está activo
                     estado = planes_db.value(subject=plan_uri, predicate=onto.estado)
                     if estado and str(estado) == "activo":
-                        g.add((respuesta_id, onto.contienePlan, plan_uri))
+                        g_resp.add((respuesta_id, onto.contienePlan, plan_uri))
                         planes_encontrados += 1
                         
                         # Copiar todos los datos del plan a la respuesta
                         for s1, p1, o1 in planes_db.triples((plan_uri, None, None)):
-                            g.add((s1, p1, o1))
+                            g_resp.add((s1, p1, o1))
+                
+                # Añadir explícitamente los datos de las ciudades
+                for ciudad_prop in [onto.llegaA, onto.saleDe]:
+                    ciudad_uri = planes_db.value(subject=plan_uri, predicate=ciudad_prop)
+                    if ciudad_uri:
+                        # Añadir relación plan-ciudad
+                        g_resp.add((plan_uri, ciudad_prop, ciudad_uri))
+                        
+                        # Añadir datos de la ciudad
+                        for s, p, o in planes_db.triples((ciudad_uri, None, None)):
+                            g_resp.add((s, p, o))
+                        
+                        # Añadir explícitamente el nombre de la ciudad
+                        nombre_ciudad = planes_db.value(subject=ciudad_uri, predicate=onto.NombreCiudad)
+                        if nombre_ciudad:
+                            logger.info(f"[DEPURACIÓN] Añadiendo nombre de ciudad: {ciudad_uri} -> {nombre_ciudad}")
+                            g_resp.add((ciudad_uri, onto.NombreCiudad, nombre_ciudad))
                 
                 logger.info(f"Consultados {planes_encontrados} planes activos")
                 
                 mss_cnt += 1
-                return Response(build_message(g, ACL.inform,
+                return Response(build_message(g_resp, ACL.inform,
                                sender=AgenteMantenedorPlanes.uri,
                                receiver=msgdic['sender'],
                                content=respuesta_id,
@@ -993,6 +1194,212 @@ def verificar_planes():
             </body>
         </html>
         """
+
+@app.route("/simular_mal_clima")
+def simular_mal_clima():
+    """
+    Simula condiciones climáticas adversas para probar la sustitución de actividades
+    """
+    # Obtener parámetros (o usar valores por defecto)
+    ciudad = request.args.get('ciudad', 'Madrid')
+    fecha = request.args.get('fecha', datetime.datetime.now().strftime('%Y-%m-%d'))
+    
+    # Sobrescribir la función consultar_clima temporalmente para esta ejecución
+    def consultar_clima_simulado(ciudad_param, fecha_param):
+        logger.info(f"[SIMULACIÓN] Generando clima adverso simulado para {ciudad_param} en fecha {fecha_param}")
+        return {
+            'temporal_perjudicial': True,
+            'temperatura': 5.0,
+            'descripcion': "Lluvia intensa y viento (SIMULADO)",
+            'es_simulacion': True
+        }
+    
+    # Guardar la función original
+    consultar_clima_original = globals()['consultar_clima']
+    
+    try:
+        # Reemplazar con nuestra función simulada
+        globals()['consultar_clima'] = consultar_clima_simulado
+        
+        # Registrar que estamos en modo simulación
+        logger.warning(f"[SIMULACIÓN] Iniciando simulación de mal clima para {ciudad} en fecha {fecha}")
+        
+        # Ejecutar la verificación de actividades con nuestra función simulada
+        verificar_actividades_exteriores()
+        
+        # Restaurar la función original
+        globals()['consultar_clima'] = consultar_clima_original
+        
+        return """
+        <html>
+            <head>
+                <title>Simulación de Mal Clima</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 20px; }
+                    h1 { color: #2c3e50; }
+                    .success { color: #27ae60; }
+                    .warning { color: #e67e22; background: #fff3cd; padding: 10px; border-radius: 5px; }
+                    .btn { display: inline-block; padding: 10px 15px; background: #3498db; 
+                          color: white, text-decoration: none; border-radius: 4px; margin-top: 20px; }
+                </style>
+            </head>
+            <body>
+                <h1>Simulación de Mal Clima</h1>
+                <div class="warning">
+                    <p><strong>MODO SIMULACIÓN:</strong> Se ha simulado condiciones climáticas adversas para la ciudad de 
+                    <strong>""" + ciudad + """</strong> en fecha <strong>""" + fecha + """</strong>.</p>
+                </div>
+                <p class="success">La verificación con clima adverso simulado se ha completado.</p>
+                <p>Revisa los logs del servidor para ver los detalles de las actividades modificadas.</p>
+                <a href="/planes" class="btn">Ver Planes Activos</a>
+            </body>
+        </html>
+        """
+    except Exception as e:
+        # Asegurar que restauramos la función original en caso de error
+        globals()['consultar_clima'] = consultar_clima_original
+        return f"""
+        <html>
+            <head>
+                <title>Error en Simulación</title>
+                <style>
+                    body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                    h1 {{ color: #2c3e50; }}
+                    .error {{ color: #c0392b; }}
+                    .btn {{ display: inline-block; padding: 10px 15px; background: #3498db; 
+                          color: white, text-decoration: none, border-radius: 4px; margin-top: 20px; }}
+                </style>
+            </head>
+            <body>
+                <h1>Error en Simulación</h1>
+                <p class="error">Ocurrió un error durante la simulación: {str(e)}</p>
+                <a href="/planes" class="btn">Volver a Planes Activos</a>
+            </body>
+        </html>
+        """
+
+def reconstruir_estructura_plan(plan_uri):
+    """
+    Reconstruye la estructura de días, franjas y actividades de un plan
+    si está incompleta o inconsistente
+    """
+    global planes_db
+    
+    logger.info(f"[RECONSTRUCCIÓN] Iniciando reconstrucción para plan: {plan_uri}")
+    plan_modificado = False
+    
+    # 1. Identificar todos los días del plan
+    dias = list(planes_db.objects(subject=plan_uri, predicate=onto.estaCompuestoPor))
+    logger.info(f"[RECONSTRUCCIÓN] Encontrados {len(dias)} días en el plan")
+    
+    for dia_uri in dias:
+        # Obtener etiqueta del día para logs
+        dia_label = planes_db.value(subject=dia_uri, predicate=RDFS.label)
+        
+        # 2. Verificar si el día tiene franjas horarias
+        franjas = list(planes_db.objects(subject=dia_uri, predicate=onto.incluyeFranja))
+        logger.info(f"[RECONSTRUCCIÓN] Día {dia_label}: encontradas {len(franjas)} franjas")
+        
+        # 3. Verificar actividades directamente asociadas al día
+        actividades_dia = list(planes_db.objects(subject=dia_uri, predicate=onto.seRealizan))
+        logger.info(f"[RECONSTRUCCIÓN] Día {dia_label}: encontradas {len(actividades_dia)} actividades directas")
+        
+        # 4. Buscar todas las actividades en el grafo que puedan pertenecer a este plan
+        todas_actividades = []
+        for s, p, o in planes_db.triples((None, RDF.type, onto.Actividad)):
+            todas_actividades.append(s)
+        
+        logger.info(f"[RECONSTRUCCIÓN] Total de actividades en la base de datos: {len(todas_actividades)}")
+        
+        # 5. Si no hay franjas o no hay suficientes actividades, reconstruir
+        franjas_vacias = True
+        if franjas:
+            # Verificar si todas las franjas están vacías
+            for franja_uri in franjas:
+                if list(planes_db.objects(subject=franja_uri, predicate=onto.seRealizan)):
+                    franjas_vacias = False
+                    break
+
+        if not franjas or (len(actividades_dia) == 0 and len(franjas) == 0) or franjas_vacias:
+            # Si no hay actividades directas, buscar por fecha
+            fecha_plan = None
+            for s, p, o in planes_db.triples((plan_uri, onto.fecha_inicio, None)):
+                fecha_plan = str(o)
+                break
+                
+            if not fecha_plan:
+                continue
+                
+            # Extraer fecha del día actual
+            fecha_dia = None
+            if dia_label:
+                # Intentar extraer fecha del label (formato: "Día X: YYYY-MM-DD")
+                try:
+                    fecha_dia = str(dia_label).split(":")[-1].strip()
+                except:
+                    pass
+            
+            if not fecha_dia:
+                fecha_dia = fecha_plan  # Usar fecha del plan como respaldo
+            
+            logger.info(f"[RECONSTRUCCIÓN] Reconstruyendo día {dia_label} con fecha {fecha_dia}")
+            
+            # Buscar actividades que coincidan con la fecha del día
+            actividades_por_fecha = []
+            for act_uri in todas_actividades:
+                for s, p, o in planes_db.triples((act_uri, onto.fecha, None)):
+                    if fecha_dia in str(o):
+                        actividades_por_fecha.append(act_uri)
+                        break
+            
+            logger.info(f"[RECONSTRUCCIÓN] Encontradas {len(actividades_por_fecha)} actividades por fecha para {fecha_dia}")
+            
+            if not actividades_por_fecha:
+                # Si no se encuentran por fecha, usar todas las actividades disponibles
+                logger.warning(f"[RECONSTRUCCIÓN] No se encontraron actividades por fecha, usando todas disponibles")
+                actividades_por_fecha = todas_actividades[:9]  # Limitar a 9 actividades (3 por franja)
+            
+            # Crear diccionario para agrupar actividades por franja
+            franjas_dict = {"mañana": [], "tarde": [], "noche": []}
+            
+            # Primero, intentar agrupar por la propiedad franjaHoraria de las actividades
+            for act_uri in actividades_por_fecha:
+                franjas_asignadas = False
+                for franja_literal in planes_db.objects(subject=act_uri, predicate=URIRef(f"{onto}franjaHoraria")):
+                    franja_nombre = str(franja_literal)
+                    if franja_nombre in franjas_dict:
+                        franjas_dict[franja_nombre].append(act_uri)
+                        franjas_asignadas = True
+                
+                # Si no tiene franjaHoraria asignada, distribuir equitativamente
+                if not franjas_asignadas:
+                    # Determinar la franja con menos actividades
+                    franja_min = min(franjas_dict.keys(), key=lambda k: len(franjas_dict[k]))
+                    franjas_dict[franja_min].append(act_uri)
+            
+            logger.info(f"[RECONSTRUCCIÓN] Distribución de actividades: mañana={len(franjas_dict['mañana'])}, tarde={len(franjas_dict['tarde'])}, noche={len(franjas_dict['noche'])}")
+            
+            # Crear franjas horarias para cada grupo y vincularlas al día
+            for franja_nombre, actividades in franjas_dict.items():
+                if actividades:
+                    franja_id = URIRef(f'franja_{franja_nombre}_{str(uuid.uuid4())}')
+                    planes_db.add((franja_id, RDF.type, onto.FranjaHoraria))
+                    planes_db.add((franja_id, RDFS.label, Literal(franja_nombre)))
+                    planes_db.add((dia_uri, onto.incluyeFranja, franja_id))
+                    
+                    # Vincular actividades a la franja
+                    for act_uri in actividades:
+                        planes_db.add((franja_id, onto.seRealizan, act_uri))
+                    
+                    logger.info(f"[RECONSTRUCCIÓN] Creada franja {franja_nombre} con {len(actividades)} actividades")
+                    plan_modificado = True
+    
+    # Guardar cambios solo si se hicieron modificaciones
+    if plan_modificado:
+        planes_db.serialize(DB_FILE, format="xml")
+        logger.info(f"[RECONSTRUCCIÓN] Completada reconstrucción del plan: {plan_uri}")
+    else:
+        logger.info(f"[RECONSTRUCCIÓN] No fue necesario reconstruir el plan: {plan_uri}")
 
 if __name__ == '__main__':
     try:
