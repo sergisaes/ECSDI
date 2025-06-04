@@ -98,7 +98,7 @@ planes_db.bind('onto', onto)
 planes_db.bind('xsd', XSD)
 
 # Archivo para la base de datos de planes
-PLANES_DB_FILE = "planes_creados.rdf"
+PLANES_DB_FILE = "databases/planes_creados.rdf"
 
 # Cargar planes existentes si existe el archivo
 try:
