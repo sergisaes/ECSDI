@@ -1157,6 +1157,9 @@ def procesar_respuesta_transportes(grafo_respuesta, respuesta_uri, peticion_orig
     if peticion_original:
         g.add((respuesta_id, onto.respuestaA, peticion_original))
     
+    # Añadir estado activo al plan
+    g.add((plan_id, onto.estado, Literal("terminado")))
+    
     # Construir mensaje completo
     mss_cnt += 1
     return build_message(g, ACL.inform,
@@ -1258,6 +1261,9 @@ def procesar_peticion_plan(origen, destino, fecha_ida, fecha_vuelta, precio_max,
     
     for s, p, o in grafo_transportes.triples((mejor_vuelta['uri'], None, None)):
         g.add((mejor_vuelta['uri'], p, o))
+    
+    # Añadir estado activo al plan
+    g.add((plan_id, onto.estado, Literal("terminado")))
     
     # Construir mensaje completo
     mss_cnt += 1
@@ -1666,9 +1672,10 @@ def test_interface():
             </body>
         </html>
         '''.format(precio_transporte, precio_alojamiento, precio_actividades, precio_total)
-        
-        return html
 
+        return html
+        
+        
 @app.route("/status")
 def status():
     """
@@ -1964,7 +1971,7 @@ def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, pr
             dia_id = URIRef(f'dia_{dia}_{str(uuid.uuid4())}')
             g.add((dia_id, RDF.type, onto.PlanDe1Dia))
             g.add((dia_id, RDFS.label, Literal(f"Día {dia}: {datos_dia['fecha']}")))
-            g.add((plan_id, onto.estaCompuestoPor, dia_id))
+            g.add((respuesta_completa_id, onto.estaCompuestoPor, dia_id))
             
             for franja, actividades in datos_dia['franjas'].items():
                 for act in actividades:
@@ -1992,6 +1999,9 @@ def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, pr
     for s, p, o in grafo_alojamientos.triples((mejor_alojamiento['uri'], None, None)):
         g.add((s, p, o))
     
+    # Marcar inicialmente como no terminado (el plan recién se crea)
+    g.add((plan_id, onto.estado, Literal("terminado")))
+
     # Construir mensaje completo siguiendo la especificación FIPA ACL
     mss_cnt += 1
     return build_message(g, ACL.inform,
@@ -2026,6 +2036,51 @@ def crear_respuesta_error(mensaje_error, content=None, sender=None):
                         receiver=sender if sender else AgentePlanes.uri,
                         content=respuesta_id,
                         msgcnt=mss_cnt).serialize(format='xml')
+
+@app.route("/get_planes")
+def get_planes():
+    """
+    Proporciona los planes en formato RDF para que otros agentes puedan consultarlos
+    """
+    # Crear un grafo con todos los planes existentes
+    g_planes = Graph()
+    g_planes.bind('rdf', RDF)
+    g_planes.bind('rdfs', RDFS)
+    g_planes.bind('onto', onto)
+    g_planes.bind('xsd', XSD)
+    
+    # Buscar todos los planes en el sistema
+    for plan in dsgraph.subjects(RDF.type, onto.Plan):
+        # Añadir el plan al grafo de respuesta
+        g_planes.add((plan, RDF.type, onto.Plan))
+        
+        # Añadir todas las propiedades directas
+        for s, p, o in dsgraph.triples((plan, None, None)):
+            g_planes.add((s, p, o))
+            
+            # Si el objeto es un recurso, añadir sus propiedades también
+            if isinstance(o, URIRef):
+                for s2, p2, o2 in dsgraph.triples((o, None, None)):
+                    g_planes.add((s2, p2, o2))
+
+    # Devolver el grafo en formato turtle
+    return Response(g_planes.serialize(format='turtle'), mimetype='text/turtle')
+    
+
+    
+    for s, p, o in g.triples((plan_id, None, None)):
+            dsgraph.add((s, p, o))
+            
+            # Si el objeto es un recurso, guardar también sus propiedades
+            if isinstance(o, URIRef):
+                for s2, p2, o2 in g.triples((o, None, None)):
+                    dsgraph.add((s2, p2, o2))
+
+    logger.info(f"Plan {plan_id} guardado en el grafo global dsgraph")
+
+    # Devolver el grafo en formato turtle
+    return Response(g_planes.serialize(format='turtle'), mimetype='text/turtle')
+
 if __name__ == '__main__':
     try:
         # Iniciar el comportamiento de registro en el directorio
@@ -2054,3 +2109,40 @@ if __name__ == '__main__':
         if 'ab2' in locals() and ab2.is_alive():
             ab2.terminate()
         logger.info('Agente terminado debido a un error')
+
+@app.route("/marcar_terminado", methods=['POST'])
+def marcar_plan_terminado():
+    """
+    Marca un plan como terminado para que pueda ser valorado
+    """
+    plan_id = request.form.get('plan_id')
+    
+    if not plan_id:
+        return "Error: Plan ID requerido", 400
+    
+    plan_uri = URIRef(plan_id)
+    
+    # Verificar que el plan existe
+    if (plan_uri, RDF.type, onto.Plan) not in dsgraph:
+        return "Error: Plan no encontrado", 404
+    
+    # Actualizar estado
+    for s, p, o in dsgraph.triples((plan_uri, onto.estado, None)):
+        dsgraph.remove((s, p, o))
+    
+    dsgraph.add((plan_uri, onto.estado, Literal("terminado")))
+    
+    return f"""
+    <html>
+        <head>
+            <title>Plan Terminado</title>
+            <style>body {{ font-family: Arial, sans-serif; margin: 20px; }}</style>
+            <meta http-equiv="refresh" content="3;url=/test">
+        </head>
+        <body>
+            <h1>Plan marcado como terminado</h1>
+            <p>El plan {plan_id} ha sido marcado como terminado.</p>
+            <p>Ahora puede ser valorado por el usuario.</p>
+        </body>
+    </html>
+    """

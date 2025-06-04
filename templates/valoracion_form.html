@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Valora tu viaje</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        .rating-container { display: flex; flex-direction: row-reverse; justify-content: flex-end; }
+        .rating-container input { display: none; }
+        .rating-container label { cursor: pointer; font-size: 30px; color: #ddd; margin-right: 5px; }
+        .rating-container input:checked ~ label { color: #ffcc00; }
+        .rating-container label:hover, .rating-container label:hover ~ label { color: #ffcc00; }
+        textarea { width: 100%; padding: 10px; height: 100px; border: 1px solid #ddd; border-radius: 4px; resize: vertical; }
+        button { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        .actividades { margin-top: 20px; }
+        .actividad { padding: 10px; border-left: 4px solid #3498db; margin-bottom: 10px; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Valoración de tu viaje a {{ destino }}</h1>
+        
+        <div class="actividades">
+            <h2>Actividades realizadas en este viaje:</h2>
+            {% for actividad in actividades %}
+            <div class="actividad">
+                <strong>{{ actividad.nombre }}</strong> ({{ actividad.tipo }})
+            </div>
+            {% endfor %}
+        </div>
+        
+        <form action="/valorar" method="post">
+            <input type="hidden" name="plan_uri" value="{{ plan_uri }}">
+            <input type="hidden" name="usuario_uri" value="{{ usuario_uri }}">
+            
+            <div class="form-group">
+                <label>¿Cómo valoras tu experiencia general?</label>
+                <div class="rating-container">
+                    <input type="radio" id="star5" name="puntuacion" value="5" required>
+                    <label for="star5">★</label>
+                    <input type="radio" id="star4" name="puntuacion" value="4">
+                    <label for="star4">★</label>
+                    <input type="radio" id="star3" name="puntuacion" value="3">
+                    <label for="star3">★</label>
+                    <input type="radio" id="star2" name="puntuacion" value="2">
+                    <label for="star2">★</label>
+                    <input type="radio" id="star1" name="puntuacion" value="1">
+                    <label for="star1">★</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="comentario">Comentarios o sugerencias:</label>
+                <textarea id="comentario" name="comentario" placeholder="Cuéntanos qué te gustó y qué podría mejorar..."></textarea>
+            </div>
+            
+            <button type="submit">Enviar valoración</button>
+        </form>
+    </div>
+</body>
+</html>
