@@ -2,6 +2,13 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+<file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_dc3c08bb-e7e0-4044-a675-18abd7c3f39b> a onto:Plan ;
+    onto:Precio "470.10707128013354"^^xsd:float ;
+    onto:PrecioTotal "470.10707128013354"^^xsd:float ;
+    onto:estado "listo" ;
+    onto:fechaCreacion "2025-06-04T22:29:46.194818"^^xsd:dateTime ;
+    rdfs:comment "Viaje de Barcelona a Madrid del 2025-06-06 al 2025-06-08" .
+
 <file:///mnt/c/Users/arnau/Desktop/ECSDI/Entrega3/ECSDI/plan_0f3fc813-6f99-4fe5-a537-3cc75b1b3eaa> a onto:Plan ;
     onto:Precio "429.6"^^xsd:float ;
     onto:PrecioTotal "429.6"^^xsd:float ;
@@ -16,10 +23,10 @@
     onto:fechaCreacion "2025-06-04T00:35:38.793344"^^xsd:dateTime ;
     rdfs:comment "Viaje de Barcelona a Madrid del 2025-06-26 al 2025-06-29" .
 
-<plan_dc3c08bb-e7e0-4044-a675-18abd7c3f39b> a onto:Plan ;
-    onto:Precio "470.10707128013354"^^xsd:float ;
-    onto:PrecioTotal "470.10707128013354"^^xsd:float ;
+<plan_4566ca48-4eea-454d-bfec-b9a556c21ea7> a onto:Plan ;
+    onto:Precio "294.6597100609334"^^xsd:float ;
+    onto:PrecioTotal "294.6597100609334"^^xsd:float ;
     onto:estado "listo" ;
-    onto:fechaCreacion "2025-06-04T22:29:46.194818"^^xsd:dateTime ;
-    rdfs:comment "Viaje de Barcelona a Madrid del 2025-06-06 al 2025-06-08" .
+    onto:fechaCreacion "2025-06-04T23:05:29.990165"^^xsd:dateTime ;
+    rdfs:comment "Viaje de Barcelona a Madrid del 2025-06-11 al 2025-06-12" .
 
