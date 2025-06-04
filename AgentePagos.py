@@ -302,17 +302,23 @@ def verificar_pagos_pendientes():
             # Verificar si ya está en nuestra base de datos
             tiene_pago = False
             for s1, p1, o1 in pagos_db.triples((None, onto.paraPlan, s)):
-                tiene_pago = True
-                break
+                # Si ya tiene algún pago asociado, verificar si está completo
+                estado_pago = pagos_db.value(subject=s1, predicate=onto.estado)
+                if estado_pago and str(estado_pago) == "Completado":
+                    tiene_pago = True
+                    break
             
             if not tiene_pago:
-                # Solo importar a la base de datos para mostrar en la interfaz
+                # Eliminar entradas previas del mismo plan (si existen)
+                for s2, p2, o2 in pagos_db.triples((s, None, None)):
+                    pagos_db.remove((s2, p2, o2))
+                
+                # Importar datos del plan
                 for s2, p2, o2 in planes_graph.triples((s, None, None)):
                     pagos_db.add((s2, p2, o2))
                     
                 logger.info(f"Plan {s} importado para pago manual")
         
-        # No procesar automáticamente
     except Exception as e:
         if "No such file or directory" in str(e):
             logger.info("No se encontró archivo de planes aceptados. Esperando...")
@@ -368,22 +374,32 @@ def test_interface():
     Interfaz web para probar el agente de pagos
     """
     if request.method == 'GET':
+        # Forzar actualización de planes pendientes
+        verificar_pagos_pendientes()
+        
         # Encontrar todos los planes pendientes
         planes_pendientes = []
         for s, p, o in pagos_db.triples((None, onto.estado, Literal("listo"))):
             precio = pagos_db.value(subject=s, predicate=onto.PrecioTotal)
             comentario = pagos_db.value(subject=s, predicate=RDFS.comment)
+            fecha_creacion = pagos_db.value(subject=s, predicate=onto.fechaCreacion)
+            
             planes_pendientes.append({
                 'uri': str(s),
                 'precio': float(precio) if precio else 0,
-                'descripcion': str(comentario) if comentario else 'Sin descripción'
+                'descripcion': str(comentario) if comentario else 'Sin descripción',
+                'fecha': str(fecha_creacion).split('T')[0] if fecha_creacion else 'Sin fecha'
             })
+        
+        # Ordenar planes por fecha de creación, más recientes primero
+        planes_pendientes.sort(key=lambda x: x['fecha'], reverse=True)
         
         planes_html = ''.join([f'''
         <tr>
             <td>{p['uri']}</td>
             <td>{p['descripcion']}</td>
             <td>{p['precio']:.2f}€</td>
+            <td>{p['fecha']}</td>
             <td>
                 <form method="post" action="/test">
                     <input type="hidden" name="plan_id" value="{p['uri']}">
@@ -398,7 +414,7 @@ def test_interface():
         </tr>
         ''' for p in planes_pendientes])
         
-        # Añadir una sección de planes pendientes antes de la tabla de pagos registrados
+        # Actualizar la tabla para incluir fecha
         return '''
         <html>
             <head>
@@ -467,6 +483,7 @@ def test_interface():
                         <th>Plan ID</th>
                         <th>Descripción</th>
                         <th>Importe</th>
+                        <th>Fecha</th>
                         <th>Acciones</th>
                     </tr>
                     ''' + planes_html + '''

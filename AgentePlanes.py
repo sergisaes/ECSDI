@@ -2298,33 +2298,50 @@ def test_interface():
                             <div class="actividades-lista">
     '''
 
+    html = '''
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Plan de Viaje</title>
+        <style>
+            .seccion { margin-bottom: 30px; }
+            .precio { font-weight: bold; color: green; }
+            .total { font-size: 1.2em; }
+            .back-btn { margin-right: 10px; display: inline-block; margin-top: 10px; }
+            .dia-actividades { margin-top: 20px; }
+            .franja-horaria { margin-left: 20px; }
+            .lista-actividades { list-style: none; padding-left: 0; }
+        </style>
+    </head>
+    <body>
+        <div class="contenido">
+    '''
+
     if plan_actividades:
-            for dia in range(1, dias_estancia + 1):
-                if dia in plan_actividades:
-                    tiene_actividades = False
-                    
-                    # Contar total de actividades para este día
-                    actividades_dia = 0
-                    for franja in plan_actividades[dia]['franjas'].values():
-                        actividades_dia += len(franja)
-                        
-                    if actividades_dia > 0:
-                        tiene_actividades = True
-                        html += f'''
-                        <div class="dia-actividades">
-                            <h3>Día {dia} - {plan_actividades[dia]['fecha']}</h3>
-                        '''
-                        
-                        for franja in ["mañana", "tarde", "noche"]:
-                            if franja in plan_actividades[dia]['franjas'] and plan_actividades[dia]['franjas'][franja]:
+        for dia in range(1, dias_estancia + 1):
+            if dia in plan_actividades:
+                tiene_actividades = False
+
+                actividades_dia = 0
+                for franja in plan_actividades[dia]['franjas'].values():
+                    actividades_dia += len(franja)
+
+                if actividades_dia > 0:
+                    tiene_actividades = True
+                    html += f'''
+                    <div class="dia-actividades">
+                        <h3>Día {dia} - {plan_actividades[dia]['fecha']}</h3>
+                    '''
+                    for franja in ["mañana", "tarde", "noche"]:
+                        if franja in plan_actividades[dia]['franjas'] and plan_actividades[dia]['franjas'][franja]:
+                            html += f'''
+                            <div class="franja-horaria">
+                                <h4>Franja: {franja}</h4>
+                                <ul class="lista-actividades">
+                            '''
+                            for act in plan_actividades[dia]['franjas'][franja]:
                                 html += f'''
-                                <div class="franja-horaria">
-                                    <h4>Franja: {franja}</h4>
-                                    <ul class="lista-actividades">
-                                '''
-                                
-                                for act in plan_actividades[dia]['franjas'][franja]:
-                                    html += f'''
                                     <li>
                                         <strong>{act['nombre']}</strong>
                                         <span class="precio"> - {act.get('precio', 0):.2f}€</span>
@@ -2334,56 +2351,60 @@ def test_interface():
                                         </p>
                                         {f'<p class="actividad-desc">{act["descripcion"]}</p>' if act.get('descripcion') else ''}
                                     </li>
-                                    '''
-                                
-                                html += '''
-                                    </ul>
-                                </div>
                                 '''
-                        
-                        html += '''
-                        </div>
-                        '''
-                    
-                   
-                    if not tiene_actividades:
-                        html += f'''
-
-                        <div class="dia-actividades">
-                            <h3>Día {dia} - {plan_actividades[dia]['fecha']}</h3>
-                            <p>No hay actividades planificadas para este día.</p>
-                        </div>
-                        '''
+                            html += '''
+                                </ul>
+                            </div>
+                            '''
+                    html += '''
+                    </div>
+                    '''
+                if not tiene_actividades:
+                    html += f'''
+                    <div class="dia-actividades">
+                        <h3>Día {dia} - {plan_actividades[dia]['fecha']}</h3>
+                        <p>No hay actividades planificadas para este día.</p>
+                    </div>
+                    '''
     else:
-            html += '''
-            <p>No se pudieron encontrar actividades para este destino.</p>
-            '''
+        html += '''
+        <p>No se pudieron encontrar actividades para este destino.</p>
+        '''
 
-    html += '''
-                    </div>
-                    
-                    <div class="seccion">
-                        <h2>Resumen de Precios</h2>
-                        <p>Vuelos: <span class="precio">{:.2f}€</span></p>
-                        <p>Alojamiento: <span class="precio">{:.2f}€</span></p>
-                        <p>Actividades: <span class="precio">{:.2f}€</span></p>
-                        <p class="total">Precio total: <span class="precio">{:.2f}€</span></p>
-                    </div>
-                    
- 
-                    <div class="seccion">
-                        <h2>Acciones</h2>
-                        <p><strong>ID del plan:</strong> {plan_id_str}</p>
-                        <a href="/verificar_plan/{plan_id_str}" class="back-btn" target="_blank">Verificar Plan en Mantenedor</a>
-                        <a href="/plan/{plan_id_str}" class="back-btn" target="_blank">Ver Detalles del Plan</a>
-                        <a href="/test" class="back-btn">Volver</a>
-                    </div>
-                </div>
-            </body>
-        </html>
-        '''.format(precio_transporte, precio_alojamiento, precio_actividades, precio_total, plan_id_str=plan_id_str)
+    # Añadir el resumen de precios y acciones
+    html += f'''
+        </div>
         
+        <div class="seccion">
+            <h2>Resumen de Precios</h2>
+            <p>Vuelos: <span class="precio">{precio_transporte}€</span></p>
+            <p>Alojamiento: <span class="precio">{precio_alojamiento}€</span></p>
+            <p>Actividades: <span class="precio">{precio_actividades}€</span></p>
+            <p class="total">Precio total: <span class="precio">{precio_total}€</span></p>
+            <form method="post" action="/aceptar_plan">
+                <input type="hidden" name="plan_id" value="{plan_id_str}">
+                <input type="hidden" name="precio_total" value="{precio_total}">
+                <input type="hidden" name="origen" value="{origen}">
+                <input type="hidden" name="destino" value="{destino}">
+                <input type="hidden" name="fecha_ida" value="{fecha_ida}">
+                <input type="hidden" name="fecha_vuelta" value="{fecha_vuelta}">
+                <button type="submit" class="pay-button" style="padding: 12px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px;">Aceptar Plan</button>
+            </form>
+        </div>
+
+        <div class="seccion">
+            <h2>Acciones</h2>
+            <p><strong>ID del plan:</strong> {plan_id_str}</p>
+            <a href="/verificar_plan/{plan_id_str}" class="back-btn" target="_blank">Verificar Plan en Mantenedor</a>
+            <a href="/plan/{plan_id_str}" class="back-btn" target="_blank">Ver Detalles del Plan</a>
+            <a href="/test" class="back-btn">Volver</a>
+        </div>
+    </body>
+    </html>
+    '''
+
     return html
+
         
         
 @app.route("/status")
@@ -3081,11 +3102,6 @@ def guardar_plan_aceptado(plan_id, precio_total, origen, destino, fecha_ida, fec
         logger.error(f"Error al guardar el plan aceptado: {e}")
         logger.error(traceback.format_exc())
         return False
-
-
-HTML 
-
-<p>Vuelos: <span class="precio">{0:.2f}€</span></p>Add commentMore actions <p>Alojamiento: <span class="precio">{1:.2f}€</span></p> <p>Actividades: <span class="precio">{2:.2f}€</span></p> <p class="total">Precio total: <span class="precio">{3:.2f}€</span></p> <form method="post" action="/aceptar_plan"> <input type="hidden" name="plan_id" value="{4}"> <input type="hidden" name="precio_total" value="{3:.2f}"> <input type="hidden" name="origen" value="{5}"> <input type="hidden" name="destino" value="{6}"> <input type="hidden" name="fecha_ida" value="{7}"> <input type="hidden" name="fecha_vuelta" value="{8}"> <button type="submit" class="pay-button" style="padding: 12px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 15px;">Aceptar Plan</button> </form>
 
 
 
