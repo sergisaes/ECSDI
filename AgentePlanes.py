@@ -725,7 +725,7 @@ def solicitar_actividad_franja(ciudad, fecha_str, franja, precio_max_dia, agente
             for s, p, o in g_resp.triples((None, RDF.type, onto.RespuestaActividad)):
                 tiene_actividades = True
                 break
-                
+            
             if tiene_actividades:
                 # Extraer las actividades
                 actividades_franja = []
@@ -739,37 +739,48 @@ def solicitar_actividad_franja(ciudad, fecha_str, franja, precio_max_dia, agente
                         'precio': 0,
                         'tipo': 'General',
                         'ubicacion': ciudad,
-                        'descripcion': ''
+                        'descripcion': '',
+                        'es_interior': False,  # Default value
+                        'es_exterior': False   # Default value
                     }
                     
                     # Nombre/etiqueta
                     for s2, p2, o2 in g_resp.triples((actividad_uri, RDFS.label, None)):
                         actividad_data['nombre'] = str(o2)
-                    
+            
                     # Precio
                     for s2, p2, o2 in g_resp.triples((actividad_uri, onto.Precio, None)):
                         actividad_data['precio'] = float(o2)
-                    
+                        logger.info(f"Encontrado precio: {float(o2)}€ para actividad {actividad_data['nombre']}")
+            
                     # Tipo de actividad
                     actividad_data['tipo'] = 'General'
                     for tipo in ['Aventura', 'Cultural', 'Exterior', 'Gastronomica', 'Interior', 'Naturaleza']:
                         tipo_uri = getattr(onto, tipo)
                         if (actividad_uri, RDF.type, tipo_uri) in g_resp:
                             actividad_data['tipo'] = tipo
+                            logger.info(f"Actividad {actividad_data['nombre']} clasificada como {tipo}")
                             break
-                    
+            
                     # Descripción
                     for s2, p2, o2 in g_resp.triples((actividad_uri, RDFS.comment, None)):
                         actividad_data['descripcion'] = str(o2)
-                    
-                    # Ubicación
-                    actividad_data['ubicacion'] = ciudad
-                    for s2, p2, o2 in g_resp.triples((actividad_uri, onto.Ubicacion, None)):
-                        actividad_data['ubicacion'] = str(o2)
-                    
+            
+                    # Check if it's an indoor activity
+                    if (actividad_uri, RDF.type, onto.Interior) in g_resp:
+                        actividad_data['es_interior'] = True
+                        actividad_data['tipo_ubicacion'] = 'Interior'
+                        logger.info(f"Actividad {actividad_data['nombre']} es de interior")
+                        
+                    # Check if it's an outdoor activity
+                    if (actividad_uri, RDF.type, onto.Exterior) in g_resp:
+                        actividad_data['es_exterior'] = True
+                        actividad_data['tipo_ubicacion'] = 'Exterior'
+                        logger.info(f"Actividad {actividad_data['nombre']} es de exterior")
+            
                     # Añadir a la lista de esta franja
                     actividades_franja.append(actividad_data)
-                
+        
                 logger.info(f"Encontradas {len(actividades_franja)} actividades para franja {franja} - {fecha_str}")
                 return actividades_franja, g_resp
             else:
@@ -1138,7 +1149,7 @@ def procesar_respuesta_transportes(grafo_respuesta, respuesta_uri, peticion_orig
     mejor_ida, mejor_vuelta = evaluar_transportes(grafo_respuesta, respuesta_uri)
     
     if not mejor_ida or not mejor_vuelta:
-        logger.warning("No se pudieron encontrar transportes adecuados")
+        logger.warning("No se encontraron transportes adecuados")
         # Crear respuesta de error
         g = Graph()
         g.bind('rdf', RDF)
@@ -1380,6 +1391,15 @@ def test_interface():
                     .checkbox-item { margin-right: 15px; margin-bottom: 10px; }
                     button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
                     h2 { margin-top: 30px; }
+                    .ubicacion {{
+                        display: inline-block;
+                        padding: 2px 6px;
+                        border-radius: 3px;
+                        font-size: 0.9em;
+                    }}
+                    .ubicacion.Interior {{ background-color: #e1f5fe; color: #01579b; }}
+                    .ubicacion.Exterior {{ background-color: #e8f5e9; color: #2e7d32; }}
+                    .ubicacion.No {{ background-color: #fff3e0; color: #e65100; }}
                 </style>
             </head>
             <body>
@@ -1593,6 +1613,15 @@ def test_interface():
                     .actividades-lista {{ list-style-type: none; padding: 0; }}
                     .actividad-tipo {{ font-style: italic; color: #777; }}
                     .actividad-desc {{ margin: 5px 0; }}
+                    .ubicacion {{
+                        display: inline-block;
+                        padding: 2px 6px;
+                        border-radius: 3px;
+                        font-size: 0.9em;
+                    }}
+                    .ubicacion.Interior {{ background-color: #e1f5fe; color: #01579b; }}
+                    .ubicacion.Exterior {{ background-color: #e8f5e9; color: #2e7d32; }}
+                    .ubicacion.No {{ background-color: #fff3e0; color: #e65100; }}
                 </style>
             </head>
             <body>
@@ -1670,7 +1699,11 @@ def test_interface():
                                     html += f'''
                                     <li>
                                         <strong>{act['nombre']}</strong>
-                                        <span class="precio"> - {act.get('precio', 0):.2f}€</span>                                        <p class="actividad-tipo">Tipo: {act['tipo']} ({act['ubicacion']})</p>
+                                        <span class="precio"> - {act.get('precio', 0):.2f}€</span>
+                                        <p class="actividad-tipo">
+                                            Tipo: {act['tipo']} 
+                                            <span class="ubicacion {act.get('tipo_ubicacion', 'No')}">{act.get('tipo_ubicacion', 'No especificada')}</span>
+                                        </p>
                                         {f'<p class="actividad-desc">{act["descripcion"]}</p>' if act.get('descripcion') else ''}
                                     </li>
                                     '''
@@ -1684,8 +1717,10 @@ def test_interface():
                         </div>
                         '''
                     
+                   
                     if not tiene_actividades:
                         html += f'''
+
                         <div class="dia-actividades">
                             <h3>Día {dia} - {plan_actividades[dia]['fecha']}</h3>
                             <p>No hay actividades planificadas para este día.</p>
@@ -1995,12 +2030,12 @@ def procesar_peticion_plan_completo(origen, destino, fecha_ida, fecha_vuelta, pr
     g.add((plan_id, onto.tieneAlojamiento, mejor_alojamiento['uri']))
     
     # Añadir origen, destino y fechas
-    origen_uri = URIRef(f'ciudad_origen_{str(uuid.uuid4())}')
+    origen_uri = URIRef(f'ciudad_origen_' + str(uuid.uuid4()))
     g.add((origen_uri, RDF.type, onto.Ciudad))
     g.add((origen_uri, onto.NombreCiudad, Literal(origen)))
     g.add((plan_id, onto.saleDe, origen_uri))
     
-    destino_uri = URIRef(f'ciudad_destino_{str(uuid.uuid4())}')
+    destino_uri = URIRef(f'ciudad_destino_' + str(uuid.uuid4()))
     g.add((destino_uri, RDF.type, onto.Ciudad))
     g.add((destino_uri, onto.NombreCiudad, Literal(destino)))
     g.add((plan_id, onto.llegaA, destino_uri))
@@ -2226,16 +2261,18 @@ def get_planes():
     for plan in dsgraph.subjects(RDF.type, onto.Plan):
         # Añadir el plan al grafo de respuesta
         g_planes.add((plan, RDF.type, onto.Plan))
+
+        logger.info("entra dins de plan")
         
         # Añadir todas las propiedades directas
         for s, p, o in dsgraph.triples((plan, None, None)):
             g_planes.add((s, p, o))
             
-            # Si el objeto es un recurso, añadir sus propiedades también
+            # Si el objeto es un recurso, guardar también sus propiedades
             if isinstance(o, URIRef):
                 for s2, p2, o2 in dsgraph.triples((o, None, None)):
                     g_planes.add((s2, p2, o2))
-
+    
     # Devolver el grafo en formato turtle
     return Response(g_planes.serialize(format='turtle'), mimetype='text/turtle')
     

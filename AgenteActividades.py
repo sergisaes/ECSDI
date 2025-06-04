@@ -289,6 +289,23 @@ def buscar_actividades_amadeus(ciudad_nombre, fecha=None, tipo_actividad=None, p
             precio = None
             if 'price' in activity and 'amount' in activity['price']:
                 precio = float(activity['price']['amount'])
+                logger.info(f"Actividad {activity.get('name')} - precio: {precio}€")
+            else:
+                logger.info(f"Actividad {activity.get('name')} - no tiene precio definido")
+
+            # Determinar el tipo de actividad basado en el contenido
+            tipo_actividad_detectado = determinar_tipo_actividad(
+                activity.get('name', ''),
+                activity.get('shortDescription', '')
+            )
+
+            # Si no hay precio, generar uno por defecto según el tipo
+            if precio is None:
+                precio = obtener_precio_por_defecto(
+                    tipo_actividad if tipo_actividad else tipo_actividad_detectado,
+                    activity.get('name', ''),
+                    activity.get('shortDescription', '')
+                )
 
             # Si hay límite de precio y el precio supera el máximo, ignorar
             if precio_max is not None and precio is not None and precio > precio_max:
@@ -311,7 +328,8 @@ def buscar_actividades_amadeus(ciudad_nombre, fecha=None, tipo_actividad=None, p
                 'uri': URIRef(f"http://www.amadeus.com/activity/{activity['id']}"),
                 'id': activity['id'],
                 'nombre': activity.get('name', 'Sin nombre'),
-                'tipo': tipo_actividad,
+                # Usar el tipo detectado si no se especifica uno en la búsqueda
+                'tipo': tipo_actividad if tipo_actividad else tipo_actividad_detectado,
                 'precio': precio,
                 'descripcion': activity.get('shortDescription', ''),
                 'booking_link': activity.get('bookingLink', ''),
@@ -389,11 +407,19 @@ def procesar_peticion_actividades(ciudad_uri, ciudad_nombre, fecha, franja_horar
         g.add((act['uri'], RDF.type, onto.Actividad))
         if act['tipo']:
             g.add((act['uri'], RDF.type, act['tipo']))
+            
+        # Añadir clasificación Interior/Exterior
+        if act['tipo_ubicacion'] == "Interior":
+            g.add((act['uri'], RDF.type, onto.Interior))
+        elif act['tipo_ubicacion'] == "Exterior":
+            g.add((act['uri'], RDF.type, onto.Exterior))
+            
         g.add((act['uri'], RDFS.label, Literal(act['nombre'])))
         
         # Añadir precio
         if act['precio'] is not None:
             g.add((act['uri'], onto.Precio, Literal(act['precio'], datatype=XSD.float)))
+            logger.info(f"Añadido precio {act['precio']}€ para actividad {act['nombre']}")
         
         # Añadir descripción si existe
         if act['descripcion']:
@@ -646,7 +672,8 @@ def test_interface():
                 
                 # Mostrar tipo de ubicación
                 html += f'''
-                    <p><strong>Ubicación:</strong> <span class="ubicacion">{act['tipo_ubicacion']}</span></p>
+                    <p><strong>Ubicación:</strong> <span class="ubicacion {act['tipo_ubicacion']}">{act['tipo_ubicacion']}</span></p>
+                    <p><strong>Tipo de actividad:</strong> <span class="tipo-actividad">{str(act['tipo']).split('#')[-1]}</span></p>
                 '''
                 
                 html += f'''
@@ -661,6 +688,51 @@ def test_interface():
         '''
         
         return html
+
+
+def obtener_precio_por_defecto(tipo_actividad, nombre, descripcion):
+    """
+    Determina un precio por defecto razonable basado en el tipo de actividad
+    y su descripción cuando no se proporciona un precio en Amadeus
+    
+    :param tipo_actividad: URIRef con el tipo de actividad
+    :param nombre: Nombre de la actividad
+    :param descripcion: Descripción de la actividad
+    :return: Precio por defecto en euros
+    """
+    # Precios base por tipo de actividad
+    precios_base = {
+        onto.Cultural: 15.0,
+        onto.Aventura: 35.0,
+        onto.Gastronomica: 25.0,
+        onto.Naturaleza: 20.0
+    }
+    
+    # Extraer el tipo como string
+    tipo_str = str(tipo_actividad).split('#')[-1]
+    
+    # Iniciar con el precio base según el tipo
+    precio = precios_base.get(tipo_actividad, 15.0)
+    
+    # Ajustar el precio según palabras clave en nombre o descripción
+    texto = (nombre + " " + (descripcion or "")).lower()
+    
+    # Incrementar precio para actividades premium
+    if any(word in texto for word in ["premium", "vip", "exclusive", "lujo", "gourmet"]):
+        precio += 15.0
+    
+    # Incrementar precio para tours largos o completos
+    if any(word in texto for word in ["completo", "full", "día completo", "full day"]):
+        precio += 10.0
+    
+    # Incrementar para experiencias especiales
+    if any(word in texto for word in ["especial", "único", "experiencia"]):
+        precio += 8.0
+        
+    # Registrar el precio asignado
+    logger.info(f"Asignando precio por defecto de {precio:.2f}€ para actividad {tipo_str}: {nombre[:30]}...")
+    
+    return precio
 
 
 def determinar_tipo_ubicacion(nombre, descripcion):
@@ -701,6 +773,56 @@ def determinar_tipo_ubicacion(nombre, descripcion):
     
     # Por defecto, si no se puede determinar, asumimos que es interior
     return "Interior"
+
+
+def determinar_tipo_actividad(nombre, descripcion):
+    """
+    Determina el tipo de actividad basándose en palabras clave
+    en el nombre y la descripción.
+    
+    :param nombre: Nombre de la actividad
+    :param descripcion: Descripción de la actividad
+    :return: URIRef con el tipo de actividad
+    """
+    texto = (nombre + " " + (descripcion or "")).lower()
+    
+    # Palabras clave para cada tipo de actividad
+    keywords = {
+        'Cultural': [
+            "museo", "museum", "galería", "gallery", "teatro", "theatre", "theater",
+            "exposición", "exhibition", "palacio", "palace", "catedral", "cathedral",
+            "monumento", "monument", "histórico", "historic", "iglesia", "church",
+            "arquitectura", "architecture", "biblioteca", "library", "arte", "art"
+        ],
+        'Aventura': [
+            "aventura", "adventure", "escalada", "climbing", "rafting", "kayak",
+            "canoa", "canoe", "tirolina", "zipline", "paracaidismo", "skydiving",
+            "buceo", "diving", "surf", "montaña", "mountain", "expedición", "expedition",
+            "adrenalina", "adrenaline", "extremo", "extreme", "bicicleta", "bicycle", "paseo",
+            "atracciones", "entrenamiento", "discoteca", "casino"
+        ],
+        'Gastronomica': [
+            "gastronomía", "gastronomy", "comida", "food", "cena", "dinner", "almuerzo", "lunch",
+            "restaurante", "restaurant", "bar", "café", "vino", "wine", "degustación", "tasting",
+            "cocina", "cooking", "culinario", "culinary", "gourmet", "tapas", "taberna", "dinner",
+            "vegana", "chocolateria", "breakfast", "meal", "pancake", "vegan"
+        ],
+        'Naturaleza': [
+            "naturaleza", "nature", "parque", "park", "jardín", "garden", "bosque", "forest",
+            "montaña", "mountain", "río", "river", "lago", "lake", "playa", "beach",
+            "reserva", "reserve", "paisaje", "landscape", "flora", "fauna", "senderismo", "hiking",
+            "trekking", "safari", "eco", "natural", "montes"
+        ]
+    }
+    
+    # Comprobar cada conjunto de palabras clave
+    for tipo, palabras in keywords.items():
+        for palabra in palabras:
+            if palabra in texto:
+                return getattr(onto, tipo)
+    
+    # Por defecto, Cultural
+    return onto.Cultural
 
 
 def agentbehavior1(cola):

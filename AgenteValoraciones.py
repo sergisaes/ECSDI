@@ -3,8 +3,15 @@
 *** Agente de Valoraciones (con RDF/OWL) ***
 
 Este agente:
-1. Valora planes de usuarios, instanciando valoraciones en RDF.
-2. Genera recomendaciones proactivas basadas en valoraciones RDF.
+1. Recibe notificaciones del AgenteMantenedor sobre planes que necesitan valoración
+2. Solicita valoración al usuario mediante una interfaz web
+3. Registra las valoraciones de los usuarios en RDF
+4. Genera recomendaciones personalizadas basadas en perfiles colaborativos
+
+Interacción con AgenteMantenedor:
+- Recibe: NotificacionPlanTerminado (plan + usuario)
+- Responde: ConfirmacionSolicitudValoracion
+- Flujo: AgenteMantenedor → AgenteValoraciones → Usuario → Valoración → Perfiles → Recomendaciones
 
 @author: Arnau i Laura
 """
@@ -79,7 +86,6 @@ print("Usuarios en el grafo:")
 for s in g_store.subjects(RDF.type, URIRef("http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Usuario")):
     print(f"- {s}")
 
-# Reemplazar la sección de perfilado individual por un sistema colaborativo
 
 # Sistema de perfiles colaborativos
 class PerfilColaborativo:
@@ -208,6 +214,34 @@ def comunicacion():
 
     content = props['content']
     tipo = g_msg.value(subject=content, predicate=RDF.type)
+
+    # Manejo de peticiones del AgenteMantenedor
+    if tipo == onto.NotificacionPlanTerminado:
+        plan = g_msg.value(subject=content, predicate=onto.planAValorar)
+        usuario = g_msg.value(subject=content, predicate=onto.paraUsuario)
+        
+        # Registrar solicitud de valoración
+        g_valoraciones.add((plan, onto.valoracionSolicitada, Literal(True)))
+        g_valoraciones.add((plan, onto.fechaSolicitudValoracion, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+        
+        # Generar enlace para valoración
+        enlace_valoracion = f"http://{hostname}:{port}/form_valoracion?plan={plan}&usuario={usuario}"
+        logger.info(f"Solicitud recibida del AgenteMantenedor para valorar plan {plan} por usuario {usuario}")
+        logger.info(f"Enlace de valoración: {enlace_valoracion}")
+        
+        # Confirmar recepción al AgenteMantenedor
+        g_resp = Graph()
+        resp_id = URIRef(f"http://www.semanticweb.org/ontologia/confirmacion/{uuid.uuid4()}")
+        g_resp.add((resp_id, RDF.type, onto.ConfirmacionSolicitudValoracion))
+        g_resp.add((resp_id, onto.planConfirmado, plan))
+        
+        mss_cnt += 1
+        return Response(build_message(g_resp, ACL.inform, 
+                                    sender=AgenteValoraciones.uri, 
+                                    receiver=props['sender'], 
+                                    content=resp_id,
+                                    msgcnt=mss_cnt).serialize(format='xml'),
+                      mimetype='text/xml')
 
     if tipo == onto.PeticionValoracion:
         usuario = g_msg.value(subject=content, predicate=onto.realizadaPorUsuario)
@@ -626,77 +660,47 @@ class Capacidades:
     @staticmethod
     def valorar_capacidad():
         """
-        Capacidad: Solicitud de valoraciones de planes terminados
+        Capacidad: Monitoreo de solicitudes de valoración
+        
+        Esta capacidad ahora complementa al AgenteMantenedor, procesando
+        las solicitudes de valoración pendientes y enviando recordatorios.
         """
-        logger.info("Activando capacidad: Valorar planes")
+        logger.info("Monitoreando solicitudes de valoración pendientes")
         
-        # Cargar planes desde el grafo externo
-        if not cargar_planes():
-            logger.warning("No se pudo cargar los planes para valoración")
-            return
+        # Contar solicitudes pendientes
+        solicitudes_pendientes = 0
         
-        # Contar planes pendientes de valoración
-        planes_encontrados = 0
+        # Verificar solicitudes que llevan más de 24 horas sin respuesta
+        umbral_tiempo = datetime.datetime.now() - datetime.timedelta(days=1)
         
-        # Buscar planes en el grafo de planes
-        for plan in g_planes.subjects(RDF.type, onto.Plan):
-            # Verificar si el plan está terminado
-            estado = g_planes.value(subject=plan, predicate=onto.estado)
-            if not estado or str(estado).lower() != "terminado":
-                continue  # Si no está terminado, ignorar este plan
-                
-            # Verificar si el plan ya ha sido valorado en nuestro grafo de valoraciones
+        for plan, _, _ in g_valoraciones.triples((None, onto.valoracionSolicitada, Literal(True))):
+            # Verificar si ya fue valorado
             ya_valorado = False
-            valoracion_solicitada = False
-            
-            # Comprobar si ya fue valorado
             for val in g_valoraciones.subjects(RDF.type, onto.Valoracion):
                 if (val, onto.sobrePlan, plan) in g_valoraciones:
                     ya_valorado = True
                     break
-            
-            # Comprobar si ya se solicitó valoración
-            if (plan, onto.valoracionSolicitada, Literal(True)) in g_valoraciones:
-                valoracion_solicitada = True
-            
-            # Si ya se valoró o ya se solicitó valoración, continuar con el siguiente plan
-            if ya_valorado or valoracion_solicitada:
-                continue
-            
-            # Obtener usuario
-            usuario = g_planes.value(plan, onto.usuario)
-            if not usuario:
-                continue
-            
-            # Obtener destino para mostrar información más relevante
-            destino = None
-            ciudad_destino = None
-            destino = g_planes.value(subject=plan, predicate=onto.llegaA)
-            if destino:
-                ciudad_destino = g_planes.value(subject=destino, predicate=onto.NombreCiudad)
-            
-            # Generar enlace para valoración
-            enlace_valoracion = f"http://{hostname}:{port}/form_valoracion?plan={plan}&usuario={usuario}"
-            
-            logger.info(f"Solicitando valoración para plan TERMINADO {plan} a usuario {usuario}")
-            if ciudad_destino:
-                logger.info(f"Viaje a {ciudad_destino}")
-            
-            logger.info(f"Enlace de valoración: {enlace_valoracion}")
-            
-            # Registrar que se ha solicitado la valoración
-            g_valoraciones.add((plan, onto.valoracionSolicitada, Literal(True)))
-            g_valoraciones.add((plan, onto.fechaSolicitudValoracion, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
-            
-            planes_encontrados += 1
         
-        # Guardar el estado de las solicitudes de valoración
-        guardar_valoraciones()
+            if ya_valorado:
+                continue
+                
+            # Verificar cuándo se solicitó la valoración
+            fecha_solicitud_lit = g_valoraciones.value(subject=plan, predicate=onto.fechaSolicitudValoracion)
+            if fecha_solicitud_lit:
+                try:
+                    fecha_solicitud = datetime.datetime.fromisoformat(str(fecha_solicitud_lit))
+                    if fecha_solicitud < umbral_tiempo:
+                        # Enviar recordatorio
+                        usuario = g_planes.value(plan, onto.usuario)
+                        if usuario:
+                            logger.info(f"Enviando recordatorio de valoración para plan {plan} a usuario {usuario}")
+                            # Aquí iría el código para enviar un recordatorio
+                except:
+                    pass
             
-        if planes_encontrados:
-            logger.info(f"Se solicitaron valoraciones para {planes_encontrados} planes terminados")
-        else:
-            logger.info("No se encontraron nuevos planes terminados para valorar")
+            solicitudes_pendientes += 1
+        
+        logger.info(f"Solicitudes de valoración pendientes: {solicitudes_pendientes}")
     
     @staticmethod
     def recomendar_viaje_capacidad():
@@ -768,16 +772,17 @@ class SistemaPercepcion:
     
     @staticmethod
     def _bucle_valoraciones():
-        """Percepción temporal para la capacidad de valoración"""
-        # Pequeña espera inicial para permitir que se carguen los planes primero
+        """Percepción temporal adaptada para el trabajo con AgenteMantenedor"""
+        # Espera inicial 
         time.sleep(5)
         
         while True:
             try:
+                # Esta capacidad ahora monitorea las solicitudes en vez de buscar planes
                 Capacidades.valorar_capacidad()
             except Exception as e:
-                logger.error(f"Error en capacidad de valoración: {e}")
-            
+                logger.error(f"Error en monitoreo de valoraciones: {e}")
+        
             time.sleep(TIEMPO_ENTRE_VALORACIONES)
     
     @staticmethod
