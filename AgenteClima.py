@@ -45,7 +45,7 @@ args = parser.parse_args()
 
 # Configuración del host y puerto
 if args.port is None:
-    port = 9002  # Puerto distinto al AgenteActividades
+    port = 9013  # Puerto distinto al AgenteActividades
 else:
     port = args.port
 
