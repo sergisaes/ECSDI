@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+   xmlns:onto="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+>
+  <rdf:Description rdf:about="plan_e103ba91-99b8-43f7-8007-242d558eb7da">
+    <onto:fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</onto:fecha_inicio>
+    <onto:estado>activo</onto:estado>
+    <onto:saleDe rdf:resource="ciudad_origen_e0f800f1-5b39-438d-98d8-1d8f0657a761"/>
+    <onto:fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-06</onto:fecha_fin>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <onto:llegaA rdf:resource="ciudad_destino_00010de8-48b5-4f1b-abc8-a35b8ce51032"/>
+    <onto:Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">182.7261300875401</onto:Precio>
+    <onto:estaCompuestoPor rdf:resource="dia_1_5f7ce153-bdfe-482a-9614-2b27c4e1e6b3"/>
+    <onto:hasTransport rdf:resource="vuelo_ida_123601b0-d0c2-46ef-852b-04a8dfc13222"/>
+    <onto:tieneAlojamiento rdf:resource="hotel_HNMADFTC_5293a2ef-a8f7-4686-b63c-ac05a71caa59"/>
+    <onto:transporteVuelta rdf:resource="vuelo_vuelta_dda282b4-3bf2-4272-ab09-aba6ea255186"/>
+    <onto:fechaCreacion rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-06-04T04:25:37.274275</onto:fechaCreacion>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_46199646-ad1d-4700-bd60-1ab9dac62022">
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6378223"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/13313"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6378142"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6379095"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28264"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6379348"/>
+    <rdfs:label>Día 2: 2025-06-06</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_f2563141-5ead-493d-89fd-46a62dc7c7a1">
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6378142"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/150994"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/13313"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/3044967"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6379095"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
+    <rdfs:label>Día 2: 2025-06-06</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_012b4aba-be8c-4850-a197-84b92ad27a95">
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/81085"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6378223"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28264"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/19925"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1591703"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6379348"/>
+    <rdfs:label>Día 3: 2025-06-07</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_5860f789-b0b0-4a3b-b9b4-13847c0c6675">
+    <onto:transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_508b50d8-01be-42a2-8126-99840fb050c2"/>
+    <onto:fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</onto:fecha_inicio>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <onto:saleDe rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_1569fd72-873b-4456-82d6-4c6b824979f2"/>
+    <onto:Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">503.72162421471194</onto:Precio>
+    <onto:tieneAlojamiento rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/hotel_OIMADWKY_8962cd4d-c3c5-406f-b8e9-fca3c2a719a7"/>
+    <onto:fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</onto:fecha_fin>
+    <onto:llegaA rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_54a591c9-4d9f-4209-96cb-e45abd2eb2af"/>
+    <onto:estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_8bced976-e87f-432d-b743-99bf00ec21b1"/>
+    <onto:estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_7b6611e3-1a53-4df2-adf9-93263cc2591a"/>
+    <onto:estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_06231719-917c-436e-a8a5-64593b207c22"/>
+    <onto:estado>creado</onto:estado>
+    <onto:hasTransport rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_ida_6a457ab8-780a-449f-914d-504dcb0d6cd2"/>
+    <onto:fechaCreacion rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-06-04T04:16:09.496159</onto:fechaCreacion>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_06231719-917c-436e-a8a5-64593b207c22">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <rdfs:label>Día 3: 2025-06-07</rdfs:label>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/19925"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1591703"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/81085"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_ca021367-9a33-4e07-8fc9-d30b57351042">
+    <onto:llegaA rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_c76b790b-b917-44d1-bd5a-96e00df014a8"/>
+    <onto:saleDe rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_40e346d0-a2e7-47ce-99fa-65b6b8b39dd8"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <onto:hasTransport rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_ida_53add677-4a69-4f63-b274-c969a334547e"/>
+    <onto:estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_dfbd3a6b-525c-45f7-959f-2c7e6142f938"/>
+    <onto:estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_801ca323-cc51-4b04-9731-d707926df91c"/>
+    <onto:estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_012b4aba-be8c-4850-a197-84b92ad27a95"/>
+    <onto:fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</onto:fecha_fin>
+    <onto:Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">502.60205846767667</onto:Precio>
+    <onto:estado>creado</onto:estado>
+    <onto:fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</onto:fecha_inicio>
+    <onto:tieneAlojamiento rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/hotel_KYMADCIS_e98d372a-d0bf-4d2e-aaf4-feb6b3bae7d8"/>
+    <onto:transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_718ddc7d-e350-4232-aeb4-7be8d9807ca3"/>
+    <onto:fechaCreacion rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-06-04T04:11:06.146130</onto:fechaCreacion>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_7656376e-9740-420a-afc9-f8dee62abc54">
+    <onto:fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</onto:fecha_inicio>
+    <onto:estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_f2563141-5ead-493d-89fd-46a62dc7c7a1"/>
+    <onto:estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_d6cda7b7-eb0b-4075-8ba0-1d1c58907520"/>
+    <onto:estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_36afee9a-ca63-448c-ae28-fd5bea22e946"/>
+    <onto:transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_d72f48ff-6523-4a11-ba27-32c7fdf8b760"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <onto:llegaA rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_4318c161-785f-4b1e-a6aa-23c1fb05db8f"/>
+    <onto:estado>creado</onto:estado>
+    <onto:tieneAlojamiento rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/hotel_OIMADMGT_17a45baa-984d-409a-9b7f-5b83017e6a26"/>
+    <onto:hasTransport rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_ida_9de87132-0c5d-4787-9079-b8af476aedaa"/>
+    <onto:saleDe rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_3f20281d-31ed-4e6f-a7df-aa4d5539ecb1"/>
+    <onto:fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-08</onto:fecha_fin>
+    <onto:Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">509.5720786653999</onto:Precio>
+    <onto:fechaCreacion rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-06-04T03:45:00.567501</onto:fechaCreacion>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_3_d6cda7b7-eb0b-4075-8ba0-1d1c58907520">
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/25007"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/81085"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6378223"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1591703"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/19925"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/17822"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6379348"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/3044965"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28264"/>
+    <rdfs:label>Día 3: 2025-06-07</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_36afee9a-ca63-448c-ae28-fd5bea22e946">
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/4731654"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1370525"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28265"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28273"/>
+    <rdfs:label>Día 1: 2025-06-05</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_8bced976-e87f-432d-b743-99bf00ec21b1">
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/3044967"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28265"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/150994"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1370525"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28273"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/4731654"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <rdfs:label>Día 1: 2025-06-05</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_801ca323-cc51-4b04-9731-d707926df91c">
+    <rdfs:label>Día 1: 2025-06-05</rdfs:label>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/4731654"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1370525"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28265"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28273"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_1569fd72-873b-4456-82d6-4c6b824979f2">
+    <onto:NombreCiudad>Barcelona</onto:NombreCiudad>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/plan_e18f2559-da34-455c-a120-0abb2fc2adae">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Plan"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanGeneral"/>
+    <onto:hasTransport rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_ida_8fb39b30-37fa-4a6e-94d6-836598b6d5aa"/>
+    <onto:estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_46199646-ad1d-4700-bd60-1ab9dac62022"/>
+    <onto:estaCompuestoPor rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_cda3c8c5-c93c-4edd-bf69-6853d5149c0b"/>
+    <onto:estado>creado</onto:estado>
+    <onto:llegaA rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_01e885a1-7bbb-4e97-94f6-91b5b610ec37"/>
+    <onto:saleDe rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_f9e452f0-db39-4d5b-9545-1b829c4a871b"/>
+    <onto:fecha_inicio rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-05</onto:fecha_inicio>
+    <onto:Precio rdf:datatype="http://www.w3.org/2001/XMLSchema#float">425.7015368859005</onto:Precio>
+    <onto:tieneAlojamiento rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/hotel_OIMADSXT_6ed82b93-a39e-4874-9e58-1cd196c20cdc"/>
+    <onto:fecha_fin rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2025-06-07</onto:fecha_fin>
+    <onto:transporteVuelta rdf:resource="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/vuelo_vuelta_845d731e-e32b-428b-89d6-b0234a8f343e"/>
+    <onto:fechaCreacion rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-06-04T03:50:07.386629</onto:fechaCreacion>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_f9e452f0-db39-4d5b-9545-1b829c4a871b">
+    <onto:NombreCiudad>Barcelona</onto:NombreCiudad>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_1_cda3c8c5-c93c-4edd-bf69-6853d5149c0b">
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/150994"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1370525"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28265"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/3044967"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/4731654"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28273"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <rdfs:label>Día 1: 2025-06-05</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_40e346d0-a2e7-47ce-99fa-65b6b8b39dd8">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <onto:NombreCiudad>Barcelona</onto:NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_7b6611e3-1a53-4df2-adf9-93263cc2591a">
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6378223"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6379095"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28264"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6378142"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6379348"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/13313"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+    <rdfs:label>Día 2: 2025-06-06</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/dia_2_dfbd3a6b-525c-45f7-959f-2c7e6142f938">
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6378142"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/150994"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/13313"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/6379095"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/3044967"/>
+    <rdfs:label>Día 2: 2025-06-06</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="ciudad_destino_00010de8-48b5-4f1b-abc8-a35b8ce51032">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <onto:NombreCiudad>Madrid</onto:NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_01e885a1-7bbb-4e97-94f6-91b5b610ec37">
+    <onto:NombreCiudad>Madrid</onto:NombreCiudad>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="dia_1_5f7ce153-bdfe-482a-9614-2b27c4e1e6b3">
+    <rdfs:label>Día 1: 2025-06-05</rdfs:label>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28273"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1370525"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/141848"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/150994"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/4731654"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1484783"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/1229911"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/3044967"/>
+    <onto:seRealizan rdf:resource="http://www.amadeus.com/activity/28265"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/PlanDe1Dia"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_4318c161-785f-4b1e-a6aa-23c1fb05db8f">
+    <onto:NombreCiudad>Madrid</onto:NombreCiudad>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_54a591c9-4d9f-4209-96cb-e45abd2eb2af">
+    <onto:NombreCiudad>Madrid</onto:NombreCiudad>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="ciudad_origen_e0f800f1-5b39-438d-98d8-1d8f0657a761">
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+    <onto:NombreCiudad>Barcelona</onto:NombreCiudad>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_destino_c76b790b-b917-44d1-bd5a-96e00df014a8">
+    <onto:NombreCiudad>Madrid</onto:NombreCiudad>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///C:/Users/Sergi/Desktop/3r/ECSDI/Practica/Agentes/ciudad_origen_3f20281d-31ed-4e6f-a7df-aa4d5539ecb1">
+    <onto:NombreCiudad>Barcelona</onto:NombreCiudad>
+    <rdf:type rdf:resource="http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/Ciudad"/>
+  </rdf:Description>
+</rdf:RDF>
