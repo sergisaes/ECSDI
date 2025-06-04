@@ -1,0 +1,18 @@
+@prefix onto: <http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<file:///mnt/c/Users/arnau/Desktop/ECSDI/Entrega3/ECSDI/plan_0f3fc813-6f99-4fe5-a537-3cc75b1b3eaa> a onto:Plan ;
+    onto:Precio "429.6"^^xsd:float ;
+    onto:PrecioTotal "429.6"^^xsd:float ;
+    onto:estado "pagado" ;
+    onto:fechaCreacion "2025-06-04T00:45:35.671093"^^xsd:dateTime ;
+    rdfs:comment "Viaje de Barcelona a Madrid del 2025-06-27 al 2025-06-29" .
+
+<file:///mnt/c/Users/arnau/Desktop/ECSDI/Entrega3/ECSDI/plan_9f67f2c0-658d-4d08-9f55-1346831776e8> a onto:Plan ;
+    onto:Precio "506.2"^^xsd:float ;
+    onto:PrecioTotal "506.2"^^xsd:float ;
+    onto:estado "pagado" ;
+    onto:fechaCreacion "2025-06-04T00:35:38.793344"^^xsd:dateTime ;
+    rdfs:comment "Viaje de Barcelona a Madrid del 2025-06-26 al 2025-06-29" .
+
