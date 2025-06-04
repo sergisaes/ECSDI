@@ -21,6 +21,10 @@ import traceback
 import requests
 import os
 import concurrent.futures
+import requests
+import json
+
+from ontologiaviajes import query_sparql, update_sparql
 
 from rdflib import Namespace, Graph, Literal, URIRef
 from rdflib.namespace import RDF, RDFS, XSD, FOAF
@@ -124,6 +128,72 @@ cola1 = Queue()
 
 # Flask app
 app = Flask(__name__)
+
+def verificar_planes_fuseki():
+    """
+    Sincroniza los planes 'activos' o 'listo' de Fuseki a la base de datos local.
+    """
+    try:
+        query = """
+        PREFIX onto: <http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/>
+        SELECT ?plan ?p ?o
+        WHERE {
+            ?plan onto:estado ?estado .
+            FILTER(?estado = "activo" || ?estado = "listo")
+            ?plan ?p ?o .
+        }
+        """
+        results = query_sparql("planes_aceptados", query)
+        if not results or "results" not in results:
+            logger.info("No se encontraron planes activos/listos en Fuseki")
+            return
+
+        planes_importados = set()
+        for binding in results["results"]["bindings"]:
+            plan_uri = URIRef(binding["plan"]["value"])
+            predicate = URIRef(binding["p"]["value"])
+            obj_value = binding["o"]["value"]
+            obj_type = binding["o"]["type"]
+
+            if obj_type == "uri":
+                obj = URIRef(obj_value)
+            elif obj_type == "literal":
+                if "datatype" in binding["o"]:
+                    datatype = URIRef(binding["o"]["datatype"])
+                    obj = Literal(obj_value, datatype=datatype)
+                else:
+                    obj = Literal(obj_value)
+            else:
+                obj = Literal(obj_value)
+
+            planes_db.add((plan_uri, predicate, obj))
+            planes_importados.add(plan_uri)
+        logger.info(f"Importados {len(planes_importados)} planes de Fuseki")
+    except Exception as e:
+        logger.error(f"Error al consultar planes de Fuseki: {e}")
+
+def actualizar_estado_plan_fuseki(plan_uri, nuevo_estado):
+    """
+    Actualiza el estado de un plan en Fuseki.
+    """
+    update_query = f"""
+    PREFIX onto: <http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/>
+    DELETE {{
+      <{plan_uri}> onto:estado ?estado .
+    }}
+    INSERT {{
+      <{plan_uri}> onto:estado "{nuevo_estado}" .
+    }}
+    WHERE {{
+      <{plan_uri}> onto:estado ?estado .
+    }}
+    """
+    try:
+        update_sparql("planes_aceptados", update_query)
+        logger.info(f"Estado del plan {plan_uri} actualizado a '{nuevo_estado}' en Fuseki")
+    except Exception as e:
+        logger.warning(f"No se pudo actualizar el estado del plan en Fuseki: {e}")
+
 
 def guardar_plan_en_db(plan_uri, grafo_plan):
     """
@@ -2885,7 +2955,7 @@ def registrar_plan_en_mantenedor(plan_id, g):
 
 def guardar_plan_aceptado(plan_id, precio_total, origen, destino, fecha_ida, fecha_vuelta):
     """
-    Guarda un plan aceptado por el usuario para que el AgentePagos pueda procesarlo
+    Guarda un plan aceptado por el usuario en el servidor Fuseki para que el AgentePagos pueda procesarlo
     
     :param plan_id: Identificador del plan
     :param precio_total: Precio total del plan
@@ -2896,55 +2966,81 @@ def guardar_plan_aceptado(plan_id, precio_total, origen, destino, fecha_ida, fec
     :return: True si se ha guardado correctamente
     """
     try:
-        # Crear grafo para almacenar el plan
-        planes_db = Graph()
-        planes_db.bind('rdf', RDF)
-        planes_db.bind('rdfs', RDFS)
-        planes_db.bind('onto', onto)
-        planes_db.bind('xsd', XSD)
-        
-        # Intentar cargar datos existentes
-        try:
-            planes_db.parse("planes_aceptados.ttl", format="turtle")
-        except:
-            # Si el archivo no existe, se creará uno nuevo
-            logger.info("Creando nuevo archivo de planes aceptados")
-        
-        # Crear el plan
+        # Crear el plan URI
         plan_uri = URIRef(f'plan_{plan_id}')
         
-        # Verificar si ya existe
-        for s, p, o in planes_db.triples((plan_uri, None, None)):
-            # Ya existe, actualizamos
-            logger.info(f"El plan {plan_id} ya existe, actualizando")
+        # Verificar si el plan ya existe en Fuseki
+        query = f"""
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX onto: <http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/>
+        
+        ASK {{ <{plan_uri}> rdf:type onto:Plan }}
+        """
+        
+        result = query_sparql("planes_aceptados", query)
+        if result and result.get("boolean", False):
+            logger.info(f"El plan {plan_id} ya existe en Fuseki")
             return True
         
-        # Añadir datos básicos del plan
-        planes_db.add((plan_uri, RDF.type, onto.Plan))
-        planes_db.add((plan_uri, onto.Precio, Literal(precio_total, datatype=XSD.float)))
-        planes_db.add((plan_uri, onto.PrecioTotal, Literal(precio_total, datatype=XSD.float)))
-        planes_db.add((plan_uri, onto.estado, Literal("listo")))
+        # Crear la operación de inserción SPARQL
+        update_query = f"""
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        PREFIX onto: <http://www.semanticweb.org/arnau/ontologies/2025/3/Entrega2/>
         
-        # Ciudades
-        planes_db.add((plan_uri, RDFS.comment, 
-                     Literal(f"Viaje de {origen} a {destino} del {fecha_ida} al {fecha_vuelta}")))
+        INSERT DATA {{
+          <{plan_uri}> rdf:type onto:Plan ;
+                      onto:Precio "{precio_total}"^^xsd:float ;
+                      onto:PrecioTotal "{precio_total}"^^xsd:float ;
+                      onto:estado "listo" ;
+                      rdfs:comment "Viaje de {origen} a {destino} del {fecha_ida} al {fecha_vuelta}" ;
+                      onto:fechaCreacion "{datetime.datetime.now().isoformat()}"^^xsd:dateTime .
+        }}
+        """
         
-        # Fecha de creación
-        planes_db.add((plan_uri, onto.fechaCreacion, 
-                     Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+        # Ejecutar la actualización en Fuseki
+        update_sparql("planes_aceptados", update_query)
+        logger.info(f"Plan {plan_id} guardado en Fuseki como aceptado con precio {precio_total}€")
         
-        # Guardar en archivo
-        with open("planes_aceptados.ttl", 'wb') as f:
-            serialized_data = planes_db.serialize(format='turtle')
-            if isinstance(serialized_data, str):
-                serialized_data = serialized_data.encode('utf-8')
-            f.write(serialized_data)
+        # Por compatibilidad, también mantenemos una copia local del plan
+        try:
+            planes_db = Graph()
+            planes_db.bind('rdf', RDF)
+            planes_db.bind('rdfs', RDFS)
+            planes_db.bind('onto', onto)
+            planes_db.bind('xsd', XSD)
             
-        logger.info(f"Plan {plan_id} guardado como aceptado con precio {precio_total}€")
+            # Intentar cargar datos existentes
+            try:
+                planes_db.parse("planes_aceptados.ttl", format="turtle")
+            except:
+                logger.info("Creando nuevo archivo de planes aceptados local para respaldo")
+            
+            # Añadir datos básicos del plan
+            planes_db.add((plan_uri, RDF.type, onto.Plan))
+            planes_db.add((plan_uri, onto.Precio, Literal(precio_total, datatype=XSD.float)))
+            planes_db.add((plan_uri, onto.PrecioTotal, Literal(precio_total, datatype=XSD.float)))
+            planes_db.add((plan_uri, onto.estado, Literal("listo")))
+            planes_db.add((plan_uri, RDFS.comment, Literal(f"Viaje de {origen} a {destino} del {fecha_ida} al {fecha_vuelta}")))
+            planes_db.add((plan_uri, onto.fechaCreacion, Literal(datetime.datetime.now().isoformat(), datatype=XSD.dateTime)))
+            
+            # Guardar copia local
+            with open("planes_aceptados.ttl", 'wb') as f:
+                serialized_data = planes_db.serialize(format='turtle')
+                if isinstance(serialized_data, str):
+                    serialized_data = serialized_data.encode('utf-8')
+                f.write(serialized_data)
+                
+            logger.info(f"Copia local del plan {plan_id} guardada como respaldo")
+        except Exception as e:
+            logger.warning(f"Error al guardar copia local del plan: {e}")
+            # No fallamos por esto, ya que el plan se guardó correctamente en Fuseki
+            
         return True
         
     except Exception as e:
-        logger.error(f"Error al guardar el plan aceptado: {e}")
+        logger.error(f"Error al guardar el plan aceptado en Fuseki: {e}")
         logger.error(traceback.format_exc())
         return False
 
