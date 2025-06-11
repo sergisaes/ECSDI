@@ -953,15 +953,15 @@ def test():
             
             <h2>Planes pendientes de valorar ({len(planes_pendientes)})</h2>
             <div class="planes-list">
-                {'' if planes_pendientes else '<p>No hay planes pendientes de valoración</p>'}
-                {''.join([f'''
-                <div class="plan-item">
-                    <p><strong>Plan:</strong> {plan['uri']}</p>
-                    <p><strong>Usuario:</strong> {plan['usuario']}</p>
-                    <p><strong>Destino:</strong> {plan['destino']}</p>
-                    <p><a href="{plan['enlace']}" class="valorar-btn">Valorar este plan</a></p>
-                </div>
-                ''' for plan in planes_pendientes])}
+                {'' if not planes_pendientes else ''.join([
+                    f"<div class='plan-item'>"
+                    f"<p><strong>Plan:</strong> {plan['uri']}</p>"
+                    f"<p><strong>Usuario:</strong> {plan['usuario']}</p>"
+                    f"<p><strong>Destino:</strong> {plan['destino']}</p>"
+                    f"<p><a href='{plan['enlace']}' class='valorar-btn'>Valorar este plan</a></p>"
+                    f"</div>"
+                    for plan in planes_pendientes
+                ])}
             </div>
             
             <h2>Acciones</h2>
